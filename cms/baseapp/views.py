@@ -3,5 +3,8 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def index(request):
-	return render(request, 'index.html',None)
+def base(request):
+	return render(request, 'base.html', None)
+
+def map(request):
+	return render(request, 'map.html', None)
