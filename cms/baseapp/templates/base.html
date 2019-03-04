@@ -64,14 +64,19 @@
       <div class="my-3 my-md-5">
         <div class="container">
           {% block content %}
-          <button type="button" class="btn btn-primary btn-block">Add New Incident</button>
+          
           <div class="page-header">
             <h1 class="page-title">List Of Incidents</h1>
+          </div>
+          <div class="btn-list text-right">
           </div>
           <div class="col-12">
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Incidents</h3>
+                <div class="card-options">
+                  <a href="{% url 'new_incident_form' %}" class="btn btn-primary btn-sm">Add New Incident</a>
+                </div>
                 <!-- add button for creating incident -->
               </div>
               <div class="table-responsive">
@@ -79,12 +84,11 @@
                   <thead>
                     <tr>
                       <th class="w-1">No.</th>
-                      <th>Invoice Subject</th>
-                      <th>Client</th>
-                      <th>VAT No.</th>
+                      <th>Region</th>
+                      <th>Incident Type</th>
+                      <th>Description</th>
                       <th>Created</th>
                       <th>Status</th>
-                      <th>Price</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -92,9 +96,9 @@
                   <tbody>
                     <tr>
                       <td><span class="text-muted">001401</span></td>
-                      <td><a href="invoice.html" class="text-inherit">Design Works</a></td>
+                      <td><a href="invoice.html" class="text-inherit">Jurong East</a></td>
                       <td>
-                        Carlson Limited
+                        Dengue Outbreak
                       </td>
                       <td>
                         87956621
@@ -103,9 +107,9 @@
                         15 Dec 2017
                       </td>
                       <td>
-                        <span class="status-icon bg-success"></span> Paid
+                        <span class="status-icon bg-success"></span> Closed
                       </td>
-                      <td>$887</td>
+                      
                       <td class="text-right">
                         <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
                         <div class="dropdown">
@@ -122,9 +126,9 @@
                     
                     <tr>
                       <td><span class="text-muted">001402</span></td>
-                      <td><a href="invoice.html" class="text-inherit">UX Wireframes</a></td>
+                      <td><a href="invoice.html" class="text-inherit">Pioneer</a></td>
                       <td>
-                        Adobe
+                        Terrorist 
                       </td>
                       <td>
                         87956421
@@ -133,9 +137,8 @@
                         12 Apr 2017
                       </td>
                       <td>
-                        <span class="status-icon bg-warning"></span> Pending
+                        <span class="status-icon bg-warning"></span> Handling
                       </td>
-                      <td>$1200</td>
                       <td class="text-right">
                         <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
                         <div class="dropdown">
@@ -151,9 +154,9 @@
                     </tr>
                     <tr>
                       <td><span class="text-muted">001403</span></td>
-                      <td><a href="invoice.html" class="text-inherit">New Dashboard</a></td>
+                      <td><a href="invoice.html" class="text-inherit">Pasir Ris</a></td>
                       <td>
-                        Bluewolf
+                        Haze 
                       </td>
                       <td>
                         87952621
@@ -162,9 +165,9 @@
                         23 Oct 2017
                       </td>
                       <td>
-                        <span class="status-icon bg-warning"></span> Pending
+                        <span class="status-icon bg-warning"></span> Handling
                       </td>
-                      <td>$534</td>
+                    
                       <td class="text-right">
                         <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
                         <div class="dropdown">
@@ -180,9 +183,9 @@
                     </tr>
                     <tr>
                       <td><span class="text-muted">001404</span></td>
-                      <td><a href="invoice.html" class="text-inherit">Landing Page</a></td>
+                      <td><a href="invoice.html" class="text-inherit">Yishun</a></td>
                       <td>
-                        Salesforce
+                        Dengue Outbreak
                       </td>
                       <td>
                         87953421
@@ -191,9 +194,9 @@
                         2 Sep 2017
                       </td>
                       <td>
-                        <span class="status-icon bg-secondary"></span> Due in 2 Weeks
+                        <span class="status-icon bg-danger"></span> Reported
                       </td>
-                      <td>$1500</td>
+                   
                       <td class="text-right">
                         <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
                         <div class="dropdown">
@@ -209,9 +212,9 @@
                     </tr>
                     <tr>
                       <td><span class="text-muted">001405</span></td>
-                      <td><a href="invoice.html" class="text-inherit">Marketing Templates</a></td>
+                      <td><a href="invoice.html" class="text-inherit">Lavender</a></td>
                       <td>
-                        Printic
+                        Terrorist
                       </td>
                       <td>
                         87956621
@@ -220,9 +223,9 @@
                         29 Jan 2018
                       </td>
                       <td>
-                        <span class="status-icon bg-danger"></span> Paid Today
+                        <span class="status-icon bg-danger"></span> Reported
                       </td>
-                      <td>$648</td>
+            
                       <td class="text-right">
                         <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
                         <div class="dropdown">
@@ -238,9 +241,9 @@
                     </tr>
                     <tr>
                       <td><span class="text-muted">001406</span></td>
-                      <td><a href="invoice.html" class="text-inherit">Sales Presentation</a></td>
+                      <td><a href="invoice.html" class="text-inherit">Bishan</a></td>
                       <td>
-                        Tabdaq
+                        Haze
                       </td>
                       <td>
                         87956621
@@ -249,9 +252,9 @@
                         4 Feb 2018
                       </td>
                       <td>
-                        <span class="status-icon bg-secondary"></span> Due in 3 Weeks
+                        <span class="status-icon bg-danger"></span> Reported
                       </td>
-                      <td>$300</td>
+               
                       <td class="text-right">
                         <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
                         <div class="dropdown">

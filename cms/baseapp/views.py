@@ -8,3 +8,6 @@ def base(request):
 
 def map(request):
 	return render(request, 'map.html', None)
+
+def new_incident_form(request):
+	return render(request, 'new_incident_form.html', None)
