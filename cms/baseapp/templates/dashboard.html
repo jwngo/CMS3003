@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Incident List</h1>
+</div>
+<div class="btn-list text-right">
+</div>
+<div class="col-12">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Incidents</h3>
+      <div class="card-options">
+        <a href="{% url 'new_incident_form' %}" class="btn btn-primary btn">Add New Incident</a>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table card-table table-vcenter text-nowrap">
+        <thead>
+          <tr>
+            <th class="w-1">No.</th>
+            <th>Region</th>
+            <th>Incident Type</th>
+            <th>Created</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="text-muted">001401</span></td>
+            <td>Jurong East</td>
+            <td>
+              Dengue Outbreak
+            </td>
+            <td>
+              15 Dec 2017
+            </td>
+            <td>
+              <span class="status-icon bg-success"></span> Closed
+            </td>
+
+            <td class="text-right">
+              <a href="{% url 'incident_manage' %}" class="btn btn-secondary btn">Details</a>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="text-muted">001402</span></td>
+            <td>Pioneer</td>
+            <td>
+              Terrorist
+            </td>
+            <td>
+              12 Apr 2017
+            </td>
+            <td>
+              <span class="status-icon bg-warning"></span> Handling
+            </td>
+            <td class="text-right">
+              <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
+            </td>
+
+          </tr>
+          <tr>
+            <td><span class="text-muted">001403</span></td>
+            <td>Pasir Ris</td>
+            <td>
+              Haze
+            </td>
+            <td>
+              23 Oct 2017
+            </td>
+            <td>
+              <span class="status-icon bg-warning"></span> Handling
+            </td>
+
+            <td class="text-right">
+              <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="text-muted">001404</span></td>
+            <td>Yishun</td>
+            <td>
+              Dengue Outbreak
+            </td>
+            <td>
+              2 Sep 2017
+            </td>
+            <td>
+              <span class="status-icon bg-danger"></span> Reported
+            </td>
+            <td class="text-right">
+              <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
+            </td>
+
+          </tr>
+          <tr>
+            <td><span class="text-muted">001405</span></td>
+            <td>Lavender</td>
+            <td>
+              Terrorist
+            </td>
+            <td>
+              29 Jan 2018
+            </td>
+            <td>
+              <span class="status-icon bg-danger"></span> Reported
+            </td>
+
+            <td class="text-right">
+              <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="text-muted">001406</span></td>
+            <td>Bishan</td>
+            <td>
+              Haze
+            </td>
+            <td>
+              4 Feb 2018
+            </td>
+            <td>
+              <span class="status-icon bg-danger"></span> Reported
+            </td>
+
+            <td class="text-right">
+              <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

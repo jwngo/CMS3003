@@ -43,16 +43,17 @@
   <script src="{% static './assets/plugins/input-mask/plugin.js' %}"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
+<!-- header -->
 <div class="header py-4">
   <div class="container">
     <div class="d-flex">
-      <a href="{% url 'base' %}" class="header-brand">Crisis Management</a>
+      <a href="{% url 'dashboard' %}" class="header-brand">Crisis Management</a>
       <div class="d-flex order-lg-2 ml-auto">
         <div class="dropdown">
           <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-            <span class="avatar" style="background-image: url(./demo/faces/female/25.jpg)"></span>
+            <span class="avatar" style="background-image: url('/static/assets/images/strawhat.png')"></span>
             <span class="ml-2 d-none d-lg-block">
-              <span class="text-default">Jane Pearson</span>
+              <span class="text-default">Straw Hat</span>
               <small class="text-muted d-block mt-1">Administrator</small>
             </span>
           </a>
@@ -86,6 +87,7 @@
     </div>
   </div>
 </div>
+
 <body>
   <div class="page">
     <div class="page-main">
@@ -96,7 +98,7 @@
               <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
                 {% block activeTab %}
                 <li class="nav-item">
-                  <a href="{% url 'base' %}" class="nav-link active"><i class="fe fe-home"></i>Dashboard</a>
+                  <a href="{% url 'dashboard' %}" class="nav-link active"><i class="fe fe-home"></i>Dashboard</a>
                 </li>
                 <li class="nav-item">
                   <a href="{% url 'map' %}" class="nav-link"><i class="fe fe-map"></i>Map</a>
@@ -109,143 +111,6 @@
         <div class="my-3 my-md-5">
           <div class="container">
             {% block content %}
-            
-            <div class="page-header">
-              <h1 class="page-title">List Of Incidents</h1>
-            </div>
-            <div class="btn-list text-right">
-            </div>
-            <div class="col-12">
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Incidents</h3>
-                  <div class="card-options">
-                    <a href="{% url 'new_incident_form' %}" class="btn btn-primary btn">Add New Incident</a>
-                  </div>
-                </div>
-                <div class="table-responsive">
-                  <table class="table card-table table-vcenter text-nowrap">
-                    <thead>
-                      <tr>
-                        <th class="w-1">No.</th>
-                        <th>Region</th>
-                        <th>Incident Type</th>
-                        <th>Created</th>
-                        <th>Status</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><span class="text-muted">001401</span></td>
-                        <td>Jurong East</td>
-                        <td>
-                          Dengue Outbreak
-                        </td>
-                        <td>
-                          15 Dec 2017
-                        </td>
-                        <td>
-                          <span class="status-icon bg-success"></span> Closed
-                        </td>
-                        
-                        <td class="text-right">
-                          <a href="{% url 'incident_manage' %}" class="btn btn-secondary btn">Details</a>
-                          
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><span class="text-muted">001402</span></td>
-                        <td>Pioneer</td>
-                        <td>
-                          Terrorist
-                        </td>
-                        <td>
-                          12 Apr 2017
-                        </td>
-                        <td>
-                          <span class="status-icon bg-warning"></span> Handling
-                        </td>
-                        <td class="text-right">
-                          <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
-                        </td>
-                        
-                      </tr>
-                      <tr>
-                        <td><span class="text-muted">001403</span></td>
-                        <td>Pasir Ris</td>
-                        <td>
-                          Haze
-                        </td>
-                        <td>
-                          23 Oct 2017
-                        </td>
-                        <td>
-                          <span class="status-icon bg-warning"></span> Handling
-                        </td>
-                        
-                        <td class="text-right">
-                          <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><span class="text-muted">001404</span></td>
-                        <td>Yishun</td>
-                        <td>
-                          Dengue Outbreak
-                        </td>
-                        <td>
-                          2 Sep 2017
-                        </td>
-                        <td>
-                          <span class="status-icon bg-danger"></span> Reported
-                        </td>
-                        
-                        <td class="text-right">
-                          <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
-                        </td>
-                        
-                      </tr>
-                      <tr>
-                        <td><span class="text-muted">001405</span></td>
-                        <td>Lavender</td>
-                        <td>
-                          Terrorist
-                        </td>
-                        <td>
-                          29 Jan 2018
-                        </td>
-                        <td>
-                          <span class="status-icon bg-danger"></span> Reported
-                        </td>
-                        
-                        <td class="text-right">
-                          <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><span class="text-muted">001406</span></td>
-                        <td>Bishan</td>
-                        <td>
-                          Haze
-                        </td>
-                        <td>
-                          4 Feb 2018
-                        </td>
-                        <td>
-                          <span class="status-icon bg-danger"></span> Reported
-                        </td>
-                        
-                        <td class="text-right">
-                          <a href="javascript:void(0)" class="btn btn-secondary btn">Details</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
             {% endblock %}
           </div>
         </div>

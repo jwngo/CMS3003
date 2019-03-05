@@ -4,8 +4,8 @@ import json
 
 # Create your views here.
 
-def base(request):
-	return render(request, 'base.html', None)
+def dashboard(request):
+	return render(request, 'dashboard.html', None)
 
 def map(request):
 	return render(request, 'map.html', None)
