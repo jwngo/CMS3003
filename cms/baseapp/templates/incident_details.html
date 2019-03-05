@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Manage#123456 - StrawHat CMS</title>
+<title>#123456 Details - StrawHat CMS</title>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
 <div class="col-12">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">#123456</h3>
+      <h3 class="card-title">#123456 @ 32 Tanglin Halt Road #04-204 Singapore 142032</h3>
     </div>
     <div class="card-body">
       <div class="row">
@@ -26,19 +26,6 @@
           </div>
         </div>
         <!-- end map -->
-        <hr>
-        <!-- location of incident -->
-        <div class="col-12">
-          <div class="row">
-            <div class="col-12">
-              <h4>Location:</h4>
-            </div>
-            <div class="col-12">
-              <p>32 Tanglin Halt Road #04-204 Singapore 142032</p>
-            </div>
-          </div>
-        </div>
-        <!-- end location -->
         <hr>
         <!-- type of incident badge -->
         <div class="col-12">
@@ -59,16 +46,17 @@
         <hr>
         <!-- Reporters -->
         <div class="col-12">
-          <h4>Reporters</h4>
+          <h4>Reporters:</h4>
         </div>
         <!-- 1st card -->
         <div class="col-4">
           <div class="card">
+            <div class="card-status bg-red"></div>
             <div class="card-header">
               <h3 class="card-title">Robert Quay</h3>
               <div class="card-options">
                 <div class="dropdown">
-                  <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
                   <div class="dropdown-menu">
                     <a href="#" class="dropdown-item">Handling</a>
                     <a href="#" class="dropdown-item">Closed</a>
@@ -76,21 +64,23 @@
                 </div>
               </div>
             </div>
+            <div class="card-alert alert alert-danger mb-0">
+              Reported
+            </div>
             <div class="card-body">
               <p>Assistance Requested: </p>
               <div class="tags">
                 <span class="tag tag-red">Ambulance</span>
+                <span class="tag tag-indigo">Da Police</span>
               </div>
-              <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Handling</a>
-                    <a href="#" class="dropdown-item">Closed</a>
-                  </div>
+              <hr>
+              <p>Unit Dispatched:</p>
+              <div class="tags">
+                <span class="tag tag-red">Ambulance #1234</span>
+              </div>
               <hr>
               <p>Description: </p>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus suscipit deleniti consequuntur ea pariatur quo placeat.</p>
-            </div>
-            <div class="alert alert-danger" role="alert">
-              Reported
             </div>
           </div>
         </div>
@@ -99,10 +89,11 @@
         <div class="col-4">
           <div class="card">
             <div class="card-header">
+              <div class="card-status bg-primary"></div>
               <h3 class="card-title">Yueying Ooi</h3>
               <div class="card-options">
                 <div class="dropdown">
-                  <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
                   <div class="dropdown-menu">
                       <a href="#" class="dropdown-item">Handling</a>
                       <a href="#" class="dropdown-item">Closed</a>
@@ -110,18 +101,23 @@
                 </div>
               </div>
             </div>
+            <div class="card-alert alert alert-primary mb-0">
+              Handling
+            </div>
             <div class="card-body">
               <p>Assistance Requested: </p>
               <div class="tags">
                 <span class="tag tag-orange">Fire Truck</span>
               </div>
               <hr>
+              <p>Unit Dispatched:</p>
+              <div class="tags">
+                <span class="tag tag-orange">FireTruck #1234</span>
+              </div>
+              <hr>
               <p>Description: </p>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus suscipit
                 deleniti consequuntur ea pariatur quo placeat.</p>
-            </div>
-            <div class="alert alert-primary" role="alert">
-              Handling
             </div>
           </div>
         </div>
@@ -129,11 +125,12 @@
         <!-- 3st card -->
         <div class="col-4">
           <div class="card">
+            <div class="card-status bg-success"></div>
             <div class="card-header">
               <h3 class="card-title">Robert Quay</h3>
               <div class="card-options">
                 <div class="dropdown">
-                  <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
                   <div class="dropdown-menu">
                     <a href="#" class="dropdown-item">Handling</a>
                     <a href="#" class="dropdown-item">Closed</a>
@@ -141,18 +138,22 @@
                 </div>
               </div>
             </div>
+            <div class="card-alert alert alert-success mb-0">
+              Closed
+            </div>
             <div class="card-body">
               <p>Assistance Requested: </p>
               <div class="tags">
                 <span class="tag tag-indigo">Da Police</span>
               </div>
               <hr>
+              <p>Unit Dispatched:</p>
+              <div class="tags">
+              </div>
+              <hr>
               <p>Description: </p>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus suscipit
                 deleniti consequuntur ea pariatur quo placeat.</p>
-            </div>
-            <div class="alert alert-success" role="alert">
-              Closed
             </div>
           </div>
         </div>

@@ -14,4 +14,4 @@ def new_incident_form(request):
 	return render(request, 'new_incident_form.html', None)
 
 def incident_details(request):
-	return render(request, 'incident_manage.html', None)
+	return render(request, 'incident_details.html', None)
