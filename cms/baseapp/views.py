@@ -15,3 +15,6 @@ def new_incident_form(request):
 
 def incident_details(request):
 	return render(request, 'incident_details.html', None)
+
+def manage_incident(request):
+	return render(request, 'manage_incident.html', None)
