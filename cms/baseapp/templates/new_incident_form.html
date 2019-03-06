@@ -6,7 +6,8 @@
 
 {% block content %}
 <div class="col-12">
-  <form class="card">
+  <form class="card" method="post">
+    {% csrf_token %}
     <div class="card-body">
       <h3 class="card-title">New Incident</h3>
       <div class="row">

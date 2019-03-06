@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Login - StrawHat CMS</title>
+{% endblock %}
+
+{% block login_page %}
+<body class="">
+  <div class="page">
+    <div class="page-single">
+      <div class="container">
+        <div class="row">
+          <div class="col col-login mx-auto">
+            <div class="text-center mb-3">
+            </div>
+            <form class="card" action="{% url 'login' %}" method="post">
+              {% csrf_token %}
+              
+              {% if form.errors %}
+              <div class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert"></button>
+                Your username and password didn't match. Please try again.
+              </div>
+              {% endif %}
+
+              <div class="card-body p-6">
+                <div class="card-title">
+                  Login to <img src="{% static './assets/images/strawhat.png' %}" class="h-6" alt=""> CMS
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="id_username">Username</label>
+                  <!-- <input type="text" class="form-control" id="id_username" name="username" required=""
+                    autofocus="" placeholder="Enter Username"> -->
+                  <input type="text" name="username" autofocus="" required="" id="id_username" class="form-control"
+                    placeholder="Enter Username">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="id_password">Password</label>
+                  <!-- <input type="password" class="form-control" id="id_password" name="username" required=""
+                   placeholder="Password"> -->
+                  <input type="password" name="password" required="" id="id_password" class="form-control"
+                    placeholder="Enter Password">
+                </div>
+                <div class="form-footer">
+                  <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
