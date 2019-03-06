@@ -43,7 +43,7 @@ cd cms
 python manage.py runserver
 ``` 
 
-When commiting, please make a **pull request** instead of 
+After commiting, please make a **pull request** instead of 
 ```bash 
 git push origin master
 ``` 
