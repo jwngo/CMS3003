@@ -31,7 +31,7 @@
         <div class="col-12">
           <h4>Type of Incident:</h4>
         </div>
-        <div class="col-12">
+        <div class="col-6">
           <span class="stamp stamp-md bg-orange">
             <p>Fire</p>
           </span>
@@ -41,6 +41,10 @@
           <span class="stamp stamp-md bg-red">
             <p>Terrorist</p>
           </span>
+        </div>
+        <div class="col-6 text-right">
+        <!-- change url to new_report_form -->
+          <a href="{% url 'new_incident_form' %}" class="btn btn-outline-primary"><i class="fe fe-plus mr-2"></i>Add New Report</a>
         </div>
         <!-- end type of incident -->
         <hr>
@@ -95,8 +99,8 @@
                 <div class="dropdown">
                   <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
                   <div class="dropdown-menu">
-                      <a href="#" class="dropdown-item">Handling</a>
-                      <a href="#" class="dropdown-item">Closed</a>
+                    <a href="#" class="dropdown-item">Handling</a>
+                    <a href="#" class="dropdown-item">Closed</a>
                   </div>
                 </div>
               </div>
@@ -118,70 +122,70 @@
               <p>Description: </p>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus suscipit
                 deleniti consequuntur ea pariatur quo placeat.</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- end 2st card -->
-        <!-- 3st card -->
-        <div class="col-4">
-          <div class="card">
-            <div class="card-status bg-success"></div>
-            <div class="card-header">
-              <h3 class="card-title">Robert Quay</h3>
-              <div class="card-options">
-                <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
-                  <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Handling</a>
-                    <a href="#" class="dropdown-item">Closed</a>
+          <!-- end 2st card -->
+          <!-- 3st card -->
+          <div class="col-4">
+            <div class="card">
+              <div class="card-status bg-success"></div>
+              <div class="card-header">
+                <h3 class="card-title">Robert Quay</h3>
+                <div class="card-options">
+                  <div class="dropdown">
+                    <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                    <div class="dropdown-menu">
+                      <a href="#" class="dropdown-item">Handling</a>
+                      <a href="#" class="dropdown-item">Closed</a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card-alert alert alert-success mb-0">
-              Closed
-            </div>
-            <div class="card-body">
-              <p>Assistance Requested: </p>
-              <div class="tags">
-                <span class="tag tag-indigo">Da Police</span>
+              <div class="card-alert alert alert-success mb-0">
+                Closed
               </div>
-              <hr>
-              <p>Unit Dispatched:</p>
-              <div class="tags">
+              <div class="card-body">
+                <p>Assistance Requested: </p>
+                <div class="tags">
+                  <span class="tag tag-indigo">Da Police</span>
+                </div>
+                <hr>
+                <p>Unit Dispatched:</p>
+                <div class="tags">
+                </div>
+                <hr>
+                <p>Description: </p>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus suscipit
+                  deleniti consequuntur ea pariatur quo placeat.</p>
+                </div>
               </div>
-              <hr>
-              <p>Description: </p>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus suscipit
-                deleniti consequuntur ea pariatur quo placeat.</p>
             </div>
+            <!-- end 3st card -->
           </div>
         </div>
-        <!-- end 3st card -->
       </div>
     </div>
-  </div>
-</div>
-
-<!-- gmaps script -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap" async
-  defer></script>
-<script>
-  var singapore = { lat: 1.3521, lng: 103.8198 }
-  var markerPosition = { lat: 1.30244, lng: 103.798 }
-  
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: singapore,
-      zoom: 12
-    });
     
-    var marker = new google.maps.Marker({
-      position: markerPosition,
-      map: map,
-      title: 'My House'
-    });
-  }
-</script>
-<!-- end gmaps script -->
-{% endblock %}
+    <!-- gmaps script -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap" async
+    defer></script>
+    <script>
+      var singapore = { lat: 1.3521, lng: 103.8198 }
+      var markerPosition = { lat: 1.30244, lng: 103.798 }
+      
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: singapore,
+          zoom: 12
+        });
+        
+        var marker = new google.maps.Marker({
+          position: markerPosition,
+          map: map,
+          title: 'My House'
+        });
+      }
+    </script>
+    <!-- end gmaps script -->
+    {% endblock %}
