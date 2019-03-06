@@ -18,3 +18,6 @@ def incident_details(request):
 
 def manage_incident(request):
 	return render(request, 'manage_incident.html', None)
+
+def subscribe(request):
+	return render(request, 'subscribe.html', None)
