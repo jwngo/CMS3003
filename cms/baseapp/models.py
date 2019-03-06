@@ -24,12 +24,6 @@ class Incident(models.Model):
         ('Terrorist', 'Terrorist'),
         ('Haze', 'Haze')
     )
-    ASSISTANCE_TYPE = (
-        ('Ambulance', 'Ambulance'),
-        ('Fire Fighting', 'Fire Fighting'),
-        ('Rescue & Evacuation', 'Rescue & Evacuation'),
-        ('Gas Leak Control', 'Gas Leak Control')
-    )
 
     incident_type= models.CharField(max_length=100, choices=INCIDENT_TYPE)
     managedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
