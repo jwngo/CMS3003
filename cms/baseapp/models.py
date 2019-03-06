@@ -19,10 +19,17 @@ class Incident(models.Model):
         ('North-East Region', 'North-East Region'),
         ('West Region', 'West Region')
     )
+    INCIDENT_TYPE = (
+        ('Dengue Outbreak', 'Dengue Outbreak'),
+        ('Terrorist', 'Terrorist'),
+        ('Haze', 'Haze')
+    )
+
+    incident_type= models.CharField(max_length=100, choices=INCIDENT_TYPE)
     managedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     status = models.CharField(max_length=100, choices=STATUS)
     level = models.CharField(max_length=100, choices=LEVEL)
-    descrition = models.TextField()
+    description = models.TextField()
 
 # class Reporter(models.Model):
     firstName = models.CharField(max_length=100, default='')
