@@ -43,7 +43,9 @@
   <script src="{% static './assets/plugins/input-mask/plugin.js' %}"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
+
 <!-- header -->
+{% block login_page %}
 <div class="header py-4">
   <div class="container">
     <div class="d-flex">
@@ -60,6 +62,7 @@
          <!-- add jQuery/javascript for logging out --> 
           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
             <a class="dropdown-item" href="#">
+
               <i class="dropdown-icon fe fe-log-out"></i> Sign out
             </a>
           </div>
@@ -102,3 +105,4 @@
     </div>
   </div>
 </body>
+{% endblock %}
