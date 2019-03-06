@@ -15,7 +15,7 @@
           <div class="col col-login mx-auto">
             <div class="text-center mb-3">
             </div>
-            <form class="card" action="{% url 'login' %}" method="post">
+            <form class="card" method="post">
               {% csrf_token %}
               
               {% if form.errors %}
@@ -31,15 +31,11 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="id_username">Username</label>
-                  <!-- <input type="text" class="form-control" id="id_username" name="username" required=""
-                    autofocus="" placeholder="Enter Username"> -->
                   <input type="text" name="username" autofocus="" required="" id="id_username" class="form-control"
                     placeholder="Enter Username">
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="id_password">Password</label>
-                  <!-- <input type="password" class="form-control" id="id_password" name="username" required=""
-                   placeholder="Password"> -->
                   <input type="password" name="password" required="" id="id_password" class="form-control"
                     placeholder="Enter Password">
                 </div>

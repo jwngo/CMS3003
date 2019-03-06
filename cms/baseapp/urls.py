@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('map/', views.map, name='map'),
+    path('map/', views.incidents_map, name='map'),
     path('new_incident/', views.new_incident_form, name='new_incident_form'),
     path('incident_details/', views.incident_details, name='incident_details'),
     path('manage_incident/', views.manage_incident, name='manage_incident'),

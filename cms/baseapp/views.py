@@ -7,7 +7,7 @@ import json
 def dashboard(request):
 	return render(request, 'dashboard.html', None)
 
-def map(request):
+def incidents_map(request):
 	return render(request, 'map.html', None)
 
 def new_incident_form(request):
@@ -20,4 +20,12 @@ def manage_incident(request):
 	return render(request, 'manage_incident.html', None)
 
 def subscribe(request):
+	# handle subscription details
+	if request.method == 'POST':
+		data = request.POST.copy()
+		name = data.get('name')
+		number = data.get('number')
+		region = data.get('region')
+		print(name, number, region)
+
 	return render(request, 'subscribe.html', None)
