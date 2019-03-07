@@ -24,7 +24,6 @@ class Incident(models.Model):
         ('Terrorist', 'Terrorist'),
         ('Haze', 'Haze')
     )
-
     incident_type= models.CharField(max_length=100, choices=INCIDENT_TYPE)
     managedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     area = models.CharField(max_length=100)
