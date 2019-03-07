@@ -26,9 +26,11 @@ class Incident(models.Model):
     )
     incident_type= models.CharField(max_length=100, choices=INCIDENT_TYPE)
     managedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    area = models.CharField(max_length=100)
     region = models.CharField(max_length=100, choices=REGION)
-    status = models.CharField(max_length=100, choices=STATUS)
+    status = models.CharField(max_length=100, choices=STATUS, default='Reported')
     level = models.CharField(max_length=100, choices=LEVEL)
+    address = models.TextField()
 
 class Report(models.Model):
     incident =  models.ForeignKey(Incident, on_delete=models.CASCADE)
