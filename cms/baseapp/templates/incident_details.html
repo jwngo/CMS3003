@@ -128,34 +128,35 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- end 2st card -->
-      <!-- 3st card -->
-      <div class="col-md-6 col-xl-4">
-        <div class="card">
-          <div class="card-status bg-success"></div>
-          <div class="card-header">
-            <h3 class="card-title">Robert Quay</h3>
-            <div class="card-options">
-              <div class="dropdown">
-                <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
-                <div class="dropdown-menu">
-                  <a href="#" class="dropdown-item">Handling</a>
-                  <a href="#" class="dropdown-item">Closed</a>
+        <!-- end 2nd card -->
+        <!-- 3rd card -->
+        <div class="col-md-6 col-xl-4">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-status bg-primary"></div>
+              <h3 class="card-title">Yueying Ooi</h3>
+              <div class="card-options">
+                <div class="dropdown">
+                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                  <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Handling</a>
+                    <a href="#" class="dropdown-item">Closed</a>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="card-alert alert alert-success mb-0">
-              Closed
+            <div class="card-alert alert alert-primary mb-0">
+              Handling
             </div>
             <div class="card-body">
               <p>Assistance Requested: </p>
               <div class="tags">
-                <span class="tag tag-indigo">Da Police</span>
+                <span class="tag tag-orange">Fire Truck</span>
               </div>
               <hr>
               <p>Unit Dispatched:</p>
               <div class="tags">
+                <span class="tag tag-orange">FireTruck #1234</span>
               </div>
               <hr>
               <p>Description: </p>
@@ -169,27 +170,26 @@
       </div>
     </div>
   </div>
-</div>
 
-<!-- gmaps script -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap" async
-  defer></script>
-<script>
-  var singapore = { lat: 1.3521, lng: 103.8198 }
-  var markerPosition = { lat: 1.30244, lng: 103.798 }
+  <!-- gmaps script -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap"
+    async defer></script>
+  <script>
+    var singapore = { lat: 1.3521, lng: 103.8198 }
+    var markerPosition = { lat: 1.30244, lng: 103.798 }
 
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: singapore,
-      zoom: 12
-    });
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: singapore,
+        zoom: 12
+      });
 
-    var marker = new google.maps.Marker({
-      position: markerPosition,
-      map: map,
-      title: 'My House'
-    });
-  }
-</script>
-<!-- end gmaps script -->
-{% endblock %}
+      var marker = new google.maps.Marker({
+        position: markerPosition,
+        map: map,
+        title: 'My House'
+      });
+    }
+  </script>
+  <!-- end gmaps script -->
+  {% endblock %}

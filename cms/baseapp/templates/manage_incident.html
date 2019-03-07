@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Manage #123456 - StrawHat CMS</title>
+<title>Manage - StrawHat CMS</title>
 {% endblock %}
 
 {% block content %}
+<div class="col-12">
+  <form class="card" method="post">
+    {% csrf_token %}
+    <div class="card-body">
+      <div class="card-title">
+        #IncidentNumber#ReportNumber
+      </div>
+    </div>
+  </form>
+</div>
 {% endblock %}
