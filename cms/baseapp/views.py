@@ -19,7 +19,6 @@ def new_incident_form(request):
 def incident_details(request, incident_id):
 	data = Report.objects.filter(incident=incident_id)
 	reports = {'reports' : data}
-	print(reports)
 	return render(request, 'incident_details.html', reports)
 
 def manage_incident(request):

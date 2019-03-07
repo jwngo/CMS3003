@@ -31,6 +31,7 @@ class Incident(models.Model):
     status = models.CharField(max_length=100, choices=STATUS, default='Reported')
     level = models.CharField(max_length=100, choices=LEVEL)
     address = models.TextField()
+    postal_code = models.IntegerField(max_length=6)
 
 class Report(models.Model):
     incident =  models.ForeignKey(Incident, on_delete=models.CASCADE)
@@ -46,6 +47,7 @@ class Assistance(models.Model):
         ('Fire-Fighting', 'Fire-Fighting'),
         ('Gas Leak Control', 'Gas Leak Control')
     )
+    dispatch_id = models.CharField(max_length=100, default='')
     report = models.ForeignKey(Report, on_delete=models.CASCADE)
     assistanceType = models.CharField(max_length=100, choices=ASSISTANCE_TYPE)
 
