@@ -2,12 +2,19 @@
 """
 function: send_sms(sms_body, to_phone_no)
 
+
+
 parameter:
 sms_body: string
 to_phone_no: string , in format of E.164 formatting [+][country code][phone number including area code] e.g."+6591330112"
     
+
+
 important:
 now can only send to "+6591330112", since i only verified this number in twilio website
+error:
+Trial accounts cannot send messages to unverified numbers; verify  at twilio.com/user/account/phone-numbers/verified, or purchase a Twilio number to send messages to unverified numbers.
+
 
 account_sid
 auth_token
