@@ -11,6 +11,8 @@ django = "*"
 pylint = "*"
 channels = "*"
 channels-redis = "*"
+requests = "*"
+twilio = "*"
 
 [requires]
 python_version = "3.7"
