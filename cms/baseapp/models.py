@@ -31,7 +31,8 @@ class Incident(models.Model):
     level = models.CharField(max_length=100, choices=LEVEL)
     description = models.TextField()
 
-# class Reporter(models.Model):
+class Reporter(models.Model):
+    incident =  models.ForeignKey(Incident, on_delete=models.CASCADE)
     firstName = models.CharField(max_length=100, default='')
     lastName = models.CharField(max_length=100, default='')
     phoneNumber = models.IntegerField()
