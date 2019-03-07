@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4b6548119109c9c91a8b1161344712172e8d4936a3cac82dd69fd76bcce5e94f"
+            "sha256": "ad94efb96a91211f0439a92767df86afa01d0ba7c54fccd50c2729d41b596606"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -248,6 +248,13 @@
             ],
             "version": "==1.9.0"
         },
+        "pyjwt": {
+            "hashes": [
+                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
+                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
+            ],
+            "version": "==1.7.1"
+        },
         "pylint": {
             "hashes": [
                 "sha256:5d77031694a5fb97ea95e828c8d10fc770a1df6eb3906067aaed42201a8a6a09",
@@ -255,6 +262,13 @@
             ],
             "index": "pypi",
             "version": "==2.3.1"
+        },
+        "pysocks": {
+            "hashes": [
+                "sha256:3fe52c55890a248676fd69dc9e3c4e811718b777834bcaab7a8125cf9deac672"
+            ],
+            "markers": "python_version >= '3.0'",
+            "version": "==1.6.8"
         },
         "pytz": {
             "hashes": [
@@ -277,6 +291,14 @@
                 "sha256:d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
             ],
             "version": "==1.12.0"
+        },
+        "twilio": {
+            "hashes": [
+                "sha256:22dbcf6ab9bf031e59eb9b3922e0f1a20546330b511aea926febe18443c90b10",
+                "sha256:7a3061d27e38ed34123379561a27b0ca6233d57d8f3dae9a1881245bae5773da"
+            ],
+            "index": "pypi",
+            "version": "==6.25.1"
         },
         "twisted": {
             "hashes": [
