@@ -27,15 +27,16 @@ class Incident(models.Model):
 
     incident_type= models.CharField(max_length=100, choices=INCIDENT_TYPE)
     managedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    region = models.CharField(max_length=100, choices=REGION)
     status = models.CharField(max_length=100, choices=STATUS)
     level = models.CharField(max_length=100, choices=LEVEL)
-    description = models.TextField()
 
-class Reporter(models.Model):
+class Report(models.Model):
     incident =  models.ForeignKey(Incident, on_delete=models.CASCADE)
-    firstName = models.CharField(max_length=100, default='')
-    lastName = models.CharField(max_length=100, default='')
+    reporterFirstName = models.CharField(max_length=100, default='')
+    reporterLastName = models.CharField(max_length=100, default='')
     phoneNumber = models.IntegerField()
+    description = models.TextField()
 
 class Assistance(models.Model):
     ASSISTANCE_TYPE = (
@@ -44,7 +45,7 @@ class Assistance(models.Model):
         ('Fire-Fighting', 'Fire-Fighting'),
         ('Gas Leak Control', 'Gas Leak Control')
     )
-    incident = models.ForeignKey(Incident, on_delete=models.CASCADE)
+    incident = models.ForeignKey(Report, on_delete=models.CASCADE)
     assistanceType = models.CharField(max_length=100, choices=ASSISTANCE_TYPE)
 
 class PublicSubcriber(models.Model):
@@ -55,8 +56,12 @@ class PublicSubcriber(models.Model):
         ('North-East Region', 'North-East Region'),
         ('West Region', 'West Region')
     )
-    phoneNumber = models.IntegerField(primary_key=True)
+    phoneNumber = models.IntegerField(unique=True)
     region = models.CharField(max_length=100, choices=REGION)
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     email = models.EmailField()
+
+class GovernmentAgent(models.Model):
+    name = models.CharField(max_length=100)
+    phoneNumber = models.IntegerField(unique=True)
