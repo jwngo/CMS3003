@@ -2,7 +2,7 @@
 """
 API is provided by http://api.data.gov.sg/v1/environment/2-hour-weather-forecast
 -----------------------------------------------------------------------------------------
-function: getWeather(time)
+function: getAllWeather(time)
 parameter:
     time needs to be a string
     It can be in either one of the following formats:
@@ -18,46 +18,41 @@ return:
     A python object that contains weather forecasts for multiple areas in Singapore
     Structure of the object:
         {
-            "area_metadata": [
-                {
-                  "name": "Ang Mo Kio",
-                  "label_location": {
-                    "latitude": 1.375,
-                    "longitude": 103.839
-                  }
-                },
-                {
-                  "name": "Bedok",
-                  "label_location": {
-                    "latitude": 1.321,
-                    "longitude": 103.924
-                  }
-                }
-            ],
-            "items": [
-                {
-                  "update_timestamp": "2019-03-07T11:08:53+08:00",
-                  "timestamp": "2019-03-07T11:00:00+08:00",
-                  "valid_period": {
-                    "start": "2019-03-07T11:00:00+08:00",
-                    "end": "2019-03-07T13:00:00+08:00"
-                  },
-                  "forecasts": [
-                    {
-                      "area": "Ang Mo Kio",
-                      "forecast": "Partly Cloudy (Day)"
-                    },
-                    {
-                      "area": "Bedok",
-                      "forecast": "Partly Cloudy (Day)"
-                    }
-                ]
-            }
-        ],
-        "api_info": {
+          "api_info": {
             "status": "healthy"
+          },
+          "area_metadata": [
+            {
+              "name": "string",
+              "label_location": {
+                "longitude": 0,
+                "latitude": 0
+              }
+            }
+          ],
+          "items": [
+            {
+              "update_timestamp": "2019-03-07T07:56:25.548Z",
+              "timestamp": "2019-03-07T07:56:25.548Z",
+              "valid_period": {
+                "start": "2019-03-07T07:56:25.548Z",
+                "end": "2019-03-07T07:56:25.548Z"
+              },
+              "forecasts": [
+                {
+                  "area": "string",
+                  "forecast": "string"
+                }
+              ]
+            }
+          ]
         }
     }
+---------------------------------------------------------------------------------------
+function: getWeatherByLocation(time, area)
+parameter: both time and area are strings
+return:
+        {'AreaName': 'Forecast'}
 -----------------------------------------------------------------------------------------
 Requirments:
     requests installed
@@ -65,17 +60,28 @@ Requirments:
 
 import requests
 
-def getWeather(time):
+def getAllWeather(time):
     if(len(time) < 11):
         parameters = {"date": time};
     else:
-        parameters = {"data_time: time"};
+        parameters = {"data_time": time};
     response = requests.get("http://api.data.gov.sg/v1/environment/2-hour-weather-forecast", params=parameters)
     data = response.json()
     if(response.status_code != 200):
         print(data["message"])
     else:
         return data
+    
+
+def getWeatherByLocation(time, area):
+    locationData = {};
+    data = getAllWeather(time);
+    for forcast in data["items"][0]["forecasts"] :
+        if(forcast["area"] == area):
+            locationData[area] = forcast["forecast"];
+    if not locationData:
+        print("Area not found.");
+    return locationData;
 
 #test
-#print(getWeather("2019-03-01"));
+print(getWeatherByLocation("2019-03-01T00:00:00", "Bedok"));
