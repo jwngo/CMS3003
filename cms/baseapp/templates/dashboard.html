@@ -11,7 +11,8 @@
     <div class="card-header">
       <h3 class="card-title">Incidents</h3>
       <div class="card-options">
-        <a href="{% url 'new_incident_form' %}" class="btn btn-outline-primary"><i class="fe fe-plus mr-2"></i>Add New Incident</a>
+        <a href="{% url 'new_incident_form' %}" class="btn btn-outline-primary"><i class="fe fe-plus mr-2"></i>Add New
+          Incident</a>
       </div>
     </div>
     <div class="table-responsive">
@@ -27,117 +28,31 @@
             <th></th>
           </tr>
         </thead>
+        {% for incident in incidents %}
         <tbody>
           <tr>
-            <td><span class="text-muted">001401</span></td>
-            <td>Jurong East</td>
-            <td> <span class="status-icon bg-warning"></span> CAT 2</td>
+            <td><span class="text-muted">{{ incident.id }}</span></td>
+            <td>{{ incident.region }}</td>
+            <td> <span class="status-icon bg-warning"></span>{{ incident.level }}</td>
+            <td>{{ incident.incident_type }}</td>
             <td>
-              Dengue Outbreak
+              Hardcoded
             </td>
+            {% if incident.status == 'Reported' %}
             <td>
-              15 Dec 2017
+              <span class="status-icon bg-danger"></span> Reported
             </td>
-            <td>
-              <span class="status-icon bg-success"></span> Closed
-            </td>
-
-            <td class="text-right">
-              <a href="{% url 'incident_details' %}" class="btn btn-outline-info btn">Details</a>
-            </td>
-          </tr>
-
-          <tr>
-            <td><span class="text-muted">001402</span></td>
-            <td>Pioneer</td>
-            <td><span class="status-icon bg-danger"></span> CAT 1</td>
-            <td>
-              Terrorist
-            </td>
-            <td>
-              12 Apr 2017
-            </td>
+            {% elif incident.status == 'Handling' %}
             <td>
               <span class="status-icon bg-warning"></span> Handling
             </td>
+            {% endif %}
             <td class="text-right">
-              <a href="javascript:void(0)" class="btn btn-outline-info btn">Details</a>
-            </td>
-
-          </tr>
-          <tr>
-            <td><span class="text-muted">001403</span></td>
-            <td>Pasir Ris</td>
-            <td> <span class="status-icon bg-warning"></span> CAT 2</td>
-            <td>
-              Haze
-            </td>
-            <td>
-              23 Oct 2017
-            </td>
-            <td>
-              <span class="status-icon bg-warning"></span> Handling
-            </td>
-
-            <td class="text-right">
-              <a href="javascript:void(0)" class="btn btn-outline-info btn">Details</a>
-            </td>
-          </tr>
-          <tr>
-            <td><span class="text-muted">001404</span></td>
-            <td>Yishun</td>
-            <td> <span class="status-icon bg-warning"></span> CAT 2</td>
-            <td>
-              Dengue Outbreak
-            </td>
-            <td>
-              2 Sep 2017
-            </td>
-            <td>
-              <span class="status-icon bg-danger"></span> Reported
-            </td>
-            <td class="text-right">
-              <a href="javascript:void(0)" class="btn btn-outline-info btn">Details</a>
-            </td>
-
-          </tr>
-          <tr>
-            <td><span class="text-muted">001405</span></td>
-            <td>Lavender</td>
-            <td><span class="status-icon bg-danger"></span> CAT 1</td>
-            <td>
-              Terrorist
-            </td>
-            <td>
-              29 Jan 2018
-            </td>
-            <td>
-              <span class="status-icon bg-danger"></span> Reported
-            </td>
-
-            <td class="text-right">
-              <a href="javascript:void(0)" class="btn btn-outline-info btn">Details</a>
-            </td>
-          </tr>
-          <tr>
-            <td><span class="text-muted">001406</span></td>
-            <td>Bishan</td>
-            <td> <span class="status-icon bg-warning"></span> CAT 2</td>
-            <td>
-              Haze
-            </td>
-            <td>
-              4 Feb 2018
-            </td>
-            <td>
-              <span class="status-icon bg-danger"></span> Reported
-            </td>
-
-            <td class="text-right">
-              <a href="javascript:void(0)" class="btn btn-outline-info btn">Details</a>
+              <a href="{% url 'incident_details' incident.id %}" class="btn btn-outline-info btn">Details</a>
             </td>
           </tr>
         </tbody>
+        {% endfor %}
       </table>
     </div>
   </div>
