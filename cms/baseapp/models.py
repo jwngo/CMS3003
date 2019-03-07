@@ -46,7 +46,7 @@ class Assistance(models.Model):
         ('Fire-Fighting', 'Fire-Fighting'),
         ('Gas Leak Control', 'Gas Leak Control')
     )
-    incident = models.ForeignKey(Report, on_delete=models.CASCADE)
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
     assistanceType = models.CharField(max_length=100, choices=ASSISTANCE_TYPE)
 
 class PublicSubcriber(models.Model):
