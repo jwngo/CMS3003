@@ -59,6 +59,7 @@ Requirments:
 """
 
 import requests
+from pprint import pprint
 
 def getAllWeather(time):
     if(len(time) < 11):
@@ -83,5 +84,5 @@ def getWeatherByLocation(time, area):
         print("Area not found.");
     return locationData;
 
-#test
-print(getWeatherByLocation("2019-03-01T00:00:00", "Bedok"));
+
+pprint(getWeather("2019-03-07T15:00:00"));
