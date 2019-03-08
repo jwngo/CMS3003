@@ -54,7 +54,8 @@
 
             <td>{{ incident.incident_type }}</td>
             <td>
-              Hardcoded
+              <div class="row">{{ incident.created_at|date:"d M" }}</div>
+              <div class="row">{{ incident.created_at|time }}</div>
             </td>
             
             {% if incident.status == 'Reported' %}
