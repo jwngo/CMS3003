@@ -17,10 +17,20 @@
     </div>
     <div class="table-responsive">
       <table class="table card-table table-vcenter text-nowrap">
+        
+        {% if incidents|length == 0 %}
+        <thead>
+          <tbody>
+            <tr>
+              <td class="text-center">No incidents =)</td>
+            </tr>
+          </tbody>
+        </thead>
+        {% else %}
         <thead>
           <tr>
-            <th class="w-1">No.</th>
-            <th>Region</th>
+            <th class="w-1">ID</th>
+            <th>Area</th>
             <th>Level</th>
             <th>Incident Type</th>
             <th>Created</th>
@@ -28,16 +38,25 @@
             <th></th>
           </tr>
         </thead>
+        {% endif %}
+
         {% for incident in incidents %}
         <tbody>
           <tr>
-            <td><span class="text-muted">{{ incident.id }}</span></td>
-            <td>{{ incident.region }}</td>
+            <td><span class="text-muted text-centre">{{ incident.id }}</span></td>
+            <td>{{ incident.area }}</td>
+            
+            {% if incident.level == 'CAT2' %}
             <td> <span class="status-icon bg-warning"></span>{{ incident.level }}</td>
+            {% else %}
+            <td> <span class="status-icon bg-red"></span>{{ incident.level }}</td>
+            {% endif %}
+
             <td>{{ incident.incident_type }}</td>
             <td>
               Hardcoded
             </td>
+            
             {% if incident.status == 'Reported' %}
             <td>
               <span class="status-icon bg-danger"></span> Reported
@@ -47,12 +66,14 @@
               <span class="status-icon bg-warning"></span> Handling
             </td>
             {% endif %}
+            
             <td class="text-right">
               <a href="{% url 'incident_details' incident.id %}" class="btn btn-outline-info btn">Details</a>
             </td>
           </tr>
         </tbody>
         {% endfor %}
+
       </table>
     </div>
   </div>
