@@ -32,7 +32,8 @@ class Incident(models.Model):
     level = models.CharField(max_length=100, choices=LEVEL)
     address = models.TextField()
     postal_code = models.IntegerField()
-    num_casualties = models.IntegerField(default=0) 
+    num_casualties = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Report(models.Model):
     incident =  models.ForeignKey(Incident, on_delete=models.CASCADE)
@@ -40,6 +41,7 @@ class Report(models.Model):
     reporterLastName = models.CharField(max_length=100, default='')
     phoneNumber = models.IntegerField()
     description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Assistance(models.Model):
     ASSISTANCE_TYPE = (
@@ -65,6 +67,7 @@ class PublicSubcriber(models.Model):
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class GovernmentAgent(models.Model):
     name = models.CharField(max_length=100)
