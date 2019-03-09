@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>New Report - StrawHat CMS</title>
+{% endblock %}
+
+{% block content %}
+<div class="col-12">
+  <form class="card" method="post">
+    {% csrf_token %}
+    <div class="card-body">
+      <h3 class="card-title">New Report</h3>
+      <div class="row">
+        <div class="col-12">
+          <!-- type of incident -->
+          <!-- <div class="form-group">
+            <label class="form-label">Type Of Incident</label>
+            <div class="selectgroup selectgroup-items">
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Fire" class="selectgroup-input">
+                <span class="selectgroup-button">Fire</span>
+              </label>
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Haze" class="selectgroup-input">
+                <span class="selectgroup-button">Haze</span>
+              </label>
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Terrorist" class="selectgroup-input">
+                <span class="selectgroup-button">Terrorist</span>
+              </label>
+            </div>
+          </div> -->
+        </div>
+        <!-- type of assistance requested -->
+        <div class="col-12">
+          <!-- type of incident -->
+          <div class="form-group">
+            <label class="form-label">Assitance Requested</label>
+            <div class="selectgroup selectgroup-item">
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Ambulance" class="selectgroup-input">
+                <span class="selectgroup-button">Ambulance</span>
+                <input type="number" class="mt-1 form-control" placeholder="# of Ambulance Required">
+              </label>
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Firefigher" class="selectgroup-input">
+                <span class="selectgroup-button">Fire Fighting</span>
+                <input type="number" class="mt-1 form-control" placeholder="# of FireTruck Required">
+              </label>
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Rescue" class="selectgroup-input">
+                <span class="selectgroup-button">Police</span>
+                <input type="number" class="mt-1 form-control" placeholder="# of PoliceCar Required">
+              </label>
+              <label class="selectgroup-item">
+                <input type="checkbox" name="value" value="Gasleak" class="selectgroup-input">
+                <span class="selectgroup-button">Gask Leak Control</span>
+                <input type="number" class="mt-1 form-control" placeholder="# of Ambulance Required">
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- reporter details -->
+        <div class="col-6">
+          <div class="form-group">
+            <label class="form-label">Reporter Name</label>
+            <input type="text" class="form-control" placeholder="Name Of Reporter">
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" placeholder="Reporter Phone Number">
+          </div>
+        </div>
+        <!-- location of incident -->
+        <div class="col-9">
+          <div class="form-group">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" placeholder="Location Of Incident">
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-group">
+            <label class="form-label">Postal Code</label>
+            <input type="text" class="form-control" placeholder="6 digit postal code">
+          </div>
+        </div>
+      </div>
+      <!-- description  -->
+      <div class="form-group">
+        <label class="form-label">Description Of Incident</label>
+        <textarea rows="4" class="form-control" placeholder="As Descriptive As Possible" value="Mike"></textarea>
+      </div>
+      <!-- card footer -->
+      <div class="card-footer text-right">
+        <div class="d-flex">
+          <a href="{% url 'dashboard' %}" class="btn btn-link">Cancel</a>
+          <button type="submit" class="btn btn-primary ml-auto">Send data</button>
+        </div>
+      </div>
+  </form>
+</div>
+{% endblock %}
