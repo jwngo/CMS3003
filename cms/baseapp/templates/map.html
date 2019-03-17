@@ -39,6 +39,13 @@
       center: singapore,
       zoom: 12
     });
+    {% for incident in incidents %} 
+    marker = new google.maps.Marker({
+      position : {lat: 1.3389455, lng: 103.744522}, 
+      map: map, 
+      title: 'Hello World!'
+    });
+    {% endfor %}
     // Loading dengue clusters data
     map.data.loadGeoJson(
       "{% static './assets/denguehotspots.json' %}"
