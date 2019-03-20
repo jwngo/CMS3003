@@ -24,7 +24,9 @@ def subscribe(request):
 
 # incident related
 def incidents_map(request):
-	return render(request, 'map.html', None)
+	data = Incident.objects.values()
+	incidents = {'incidents': data}
+	return render(request, 'map.html', incidents)
 
 def new_incident_form(request):
 	if request.method == 'POST':
