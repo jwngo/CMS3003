@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
+{% block firebase %}
+<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCmcGWsAm4yK4W_oQuf2afPCkFSzSv5Azs",
+    authDomain: "ssadproject-1551665312466.firebaseapp.com",
+    databaseURL: "https://ssadproject-1551665312466.firebaseio.com",
+    projectId: "ssadproject-1551665312466",
+    storageBucket: "ssadproject-1551665312466.appspot.com",
+    messagingSenderId: "190368796066"
+  };
+  firebase.initializeApp(config);
+  var db = firebase.firestore();
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="page-header">
   <h1 class="page-title">Incident List</h1>
@@ -16,7 +33,7 @@
       </div>
     </div>
     <div class="table-responsive">
-      <table class="table card-table table-vcenter text-nowrap">
+      <table id="table" class="table card-table table-vcenter text-nowrap">
         
         {% if incidents|length == 0 %}
         <thead>
@@ -44,15 +61,17 @@
         <tbody>
           <tr>
             <td><span class="text-muted text-centre">{{ incident.id }}</span></td>
+            
             <td>{{ incident.area }}</td>
             
             {% if incident.level == 'CAT2' %}
-            <td> <span class="status-icon bg-warning"></span>{{ incident.level }}</td>
+            <td><span class="status-icon bg-warning"></span>{{ incident.level }}</td>
             {% else %}
-            <td> <span class="status-icon bg-red"></span>{{ incident.level }}</td>
+            <td><span class="status-icon bg-red"></span>{{ incident.level }}</td>
             {% endif %}
 
             <td>{{ incident.incident_type }}</td>
+            
             <td>
               <div class="row">{{ incident.created_at|date:"d M" }}</div>
               <div class="row">{{ incident.created_at|time }}</div>
@@ -79,4 +98,54 @@
     </div>
   </div>
 </div>
+
+<script>
+  db.collection("incidents")
+    .onSnapshot(function (querySnapshot) {
+
+      $('#table').empty()
+
+      querySnapshot.forEach(function (doc) {
+        var id = doc.data().id;
+        var incident_area = doc.data().incident_area;
+        var incidnet_level = doc.data().incident_level;
+        var incident_type = doc.data().incident_type;
+        var incident_created_at_date = doc.data().incident_created_at_date;
+        var incident_created_at_time = doc.data().incident_created_at_time;
+        var incident_status = doc.data().incident_status;
+        
+        if (incidnet_level === 'CAT2') {
+          incident_level = '<td><span class="status-icon bg-warning"></span>'+incidnet_level+'</td>';
+        } else {
+          incidnet_level = '<td><span class="status-icon bg-red"></span>'+incidnet_level+'</td>';
+        }
+
+        if (incident_status === 'Reported') {
+          incident_status = '<td><span class="status-icon bg-danger"></span>'+incident_status+'</td>';
+        } else {
+          incident_status = '<td><span class="status-icon bg-warning"></span>' + incident_status + '</td>';
+        }
+        
+        var url_mask = "{% url 'incident_details' incident_id=1234 %}".replace(/1234/, id.toString());
+        var details_button = '<td class="text-right">'
+        + '<a href='+url_mask+' class="btn btn-outline-info btn">Details</a>'
+        + '</td>'
+        
+        var incident = '<tr>'
+        + '<td><span class="text-muted text-centre">'+id+'</span></td>'
+        + '<td>'+incident_area+'</td>'
+        + incident_level
+        + '<td>' + incident_type + '</td>'
+        + '<td><div class="row">'+incident_created_at_date+'</div>'
+        + '<div class="row">'+incident_created_at_time+'</div>'+'</td>'
+        + incident_status
+        + details_button
+        +'</tr>'
+
+        console.log("Current data: "+ id + incidnet_level + incident_type + incident_status);
+        $('#table')
+        .append(incident);
+      });
+    });
+</script>
 {% endblock %}
