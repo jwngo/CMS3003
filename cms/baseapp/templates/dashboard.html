@@ -108,16 +108,16 @@
       querySnapshot.forEach(function (doc) {
         var id = doc.data().id;
         var incident_area = doc.data().incident_area;
-        var incidnet_level = doc.data().incident_level;
+        var incident_level = doc.data().incident_level;
         var incident_type = doc.data().incident_type;
         var incident_created_at_date = doc.data().incident_created_at_date;
         var incident_created_at_time = doc.data().incident_created_at_time;
         var incident_status = doc.data().incident_status;
         
-        if (incidnet_level === 'CAT2') {
-          incident_level = '<td><span class="status-icon bg-warning"></span>'+incidnet_level+'</td>';
+        if (incident_level === 'CAT2') {
+          incident_level = '<td><span class="status-icon bg-warning"></span>'+incident_level+'</td>';
         } else {
-          incidnet_level = '<td><span class="status-icon bg-red"></span>'+incidnet_level+'</td>';
+          incident_level = '<td><span class="status-icon bg-red"></span>'+incident_level+'</td>';
         }
 
         if (incident_status === 'Reported') {
@@ -142,7 +142,7 @@
         + details_button
         +'</tr>'
 
-        console.log("Current data: "+ id + incidnet_level + incident_type + incident_status);
+        console.log("Current data: "+ id + incident_level + incident_type + incident_status);
         $('#table')
         .append(incident);
       });
