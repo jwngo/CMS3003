@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import *
 from django.http import HttpResponseRedirect
-from .form_controls import saveIncidentToDB
+from .firebase import saveIncidentToFirebase
 import json
 
 # Create your views here.
@@ -30,7 +30,8 @@ def incidents_map(request):
 
 def new_incident_form(request):
 	if request.method == 'POST':
-		saveIncidentToDB(request)
+		saveIncidentToFirebase(request)
+		return render(request, 'dashboard.html', None)
 
 	return render(request, 'new_incident_form.html', None)
 
