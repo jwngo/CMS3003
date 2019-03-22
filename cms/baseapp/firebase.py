@@ -1,8 +1,8 @@
 from .models import *
 
-def saveIncidentToDB(request):
+def saveIncidentToFirebase(request):
   data = request.POST.copy()
-  incident_type = data.getlist('type_of_incident')
+  i_type = data.getlist('type_of_incident')
   num_of_casualties = data.get('num_of_casualties')
   assitance_requested = data.getlist('assitance_requested')
   num_ambulance = data.get('num_ambulance_requested')
@@ -16,9 +16,4 @@ def saveIncidentToDB(request):
   i_description = data.get('i_description')
   managedBy = request.user.username
 
-  incident = Incident.objects.create(
-    incident_type = incident_type,
-    managedBy = managedBy,
-  )
   
-  print(incident)

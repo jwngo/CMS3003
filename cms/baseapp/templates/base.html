@@ -4,6 +4,20 @@
 
 <head>
   {% block firebase %}
+  <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCmcGWsAm4yK4W_oQuf2afPCkFSzSv5Azs",
+      authDomain: "ssadproject-1551665312466.firebaseapp.com",
+      databaseURL: "https://ssadproject-1551665312466.firebaseio.com",
+      projectId: "ssadproject-1551665312466",
+      storageBucket: "ssadproject-1551665312466.appspot.com",
+      messagingSenderId: "190368796066"
+    };
+    firebase.initializeApp(config);
+    var db = firebase.firestore();
+  </script>
   {% endblock %}
   <meta charset="UTF-8">
   <meta name="viewport"
