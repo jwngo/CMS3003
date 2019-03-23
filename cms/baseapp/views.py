@@ -1,15 +1,13 @@
 from django.shortcuts import render
-from .models import *
 from django.http import HttpResponseRedirect
-from .firebase import saveIncidentToFirebase
+from .APImodules.FirebaseAPIManager import saveIncidentToFirebase, saveReportToFirebase
+from .models import Report
 import json
 
 # Create your views here.
 
 def dashboard(request):
-	data = Incident.objects.values()
-	incidents = {'incidents': data}
-	return render(request, 'dashboard.html', incidents)
+	return render(request, 'dashboard.html', None)
 
 def subscribe(request):
 	# handle subscription details

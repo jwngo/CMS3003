@@ -17,14 +17,14 @@
     </div>
     <div class="table-responsive">
       <table id="table" class="table card-table table-vcenter text-nowrap">
-        
-        {% if incidents|length == 0 %}
+
+        <!-- {% if incidents|length == 0 %}
         <thead>
-          <tbody>
-            <tr>
-              <td class="text-center">No incidents</td>
-            </tr>
-          </tbody>
+        <tbody>
+          <tr>
+            <td class="text-center">No incidents</td>
+          </tr>
+        </tbody>
         </thead>
         {% else %}
         <thead>
@@ -44,9 +44,9 @@
         <tbody>
           <tr>
             <td><span class="text-muted text-centre">{{ incident.id }}</span></td>
-            
+
             <td>{{ incident.area }}</td>
-            
+
             {% if incident.level == 'CAT2' %}
             <td><span class="status-icon bg-warning"></span>{{ incident.level }}</td>
             {% else %}
@@ -54,12 +54,12 @@
             {% endif %}
 
             <td>{{ incident.incident_type }}</td>
-            
+
             <td>
               <div class="row">{{ incident.created_at|date:"d M" }}</div>
               <div class="row">{{ incident.created_at|time }}</div>
             </td>
-            
+
             {% if incident.status == 'Reported' %}
             <td>
               <span class="status-icon bg-danger"></span> Reported
@@ -69,13 +69,13 @@
               <span class="status-icon bg-warning"></span> Handling
             </td>
             {% endif %}
-            
+
             <td class="text-right">
               <a href="{% url 'incident_details' incident.id %}" class="btn btn-outline-info btn">Details</a>
             </td>
           </tr>
         </tbody>
-        {% endfor %}
+        {% endfor %} -->
 
       </table>
     </div>
@@ -85,50 +85,53 @@
 <script>
   db.collection("incidents")
     .onSnapshot(function (querySnapshot) {
-
       $('#table').empty()
 
-      querySnapshot.forEach(function (doc) {
-        var id = doc.data().id;
-        var incident_area = doc.data().incident_area;
-        var incident_level = doc.data().incident_level;
-        var incident_type = doc.data().incident_type;
-        var incident_created_at_date = doc.data().incident_created_at_date;
-        var incident_created_at_time = doc.data().incident_created_at_time;
-        var incident_status = doc.data().incident_status;
-        
-        if (incident_level === 'CAT2') {
-          incident_level = '<td><span class="status-icon bg-warning"></span>'+incident_level+'</td>';
-        } else {
-          incident_level = '<td><span class="status-icon bg-red"></span>'+incident_level+'</td>';
-        }
+      if (querySnapshot.empty === true) {
+        $('#table').append('<thead>< tbody ><tr><td class="text-center">No incidents</td></tr></tbody ></thead >')
+      } else {
+        $('#table').append('<thead><tr><th class="w-1">ID</th><th>Area</th><th>Level</th><th>Incident Type</th><th>Created</th><th>Status</th><th></th></tr></thead>')
+        querySnapshot.forEach(function (doc) {
+          var incident_id = doc.data().incident_id;
+          var incident_area = doc.data().incident_area;
+          var incident_level = doc.data().incident_level;
+          var incident_type = doc.data().incident_type;
+          var incident_created_at_date = doc.data().incident_created_at_date;
+          var incident_created_at_time = doc.data().incident_created_at_time;
+          var incident_status = doc.data().incident_status;
 
-        if (incident_status === 'Reported') {
-          incident_status = '<td><span class="status-icon bg-danger"></span>'+incident_status+'</td>';
-        } else {
-          incident_status = '<td><span class="status-icon bg-warning"></span>' + incident_status + '</td>';
-        }
-        
-        var url_mask = "{% url 'incident_details' incident_id=1234 %}".replace(/1234/, id.toString());
-        var details_button = '<td class="text-right">'
-        + '<a href='+url_mask+' class="btn btn-outline-info btn">Details</a>'
-        + '</td>'
-        
-        var incident = '<tr>'
-        + '<td><span class="text-muted text-centre">'+id+'</span></td>'
-        + '<td>'+incident_area+'</td>'
-        + incident_level
-        + '<td>' + incident_type + '</td>'
-        + '<td><div class="row">'+incident_created_at_date+'</div>'
-        + '<div class="row">'+incident_created_at_time+'</div>'+'</td>'
-        + incident_status
-        + details_button
-        +'</tr>'
+          if (incident_level === 'CAT2') {
+            incident_level = '<td><span class="status-icon bg-warning"></span>' + incident_level + '</td>';
+          } else {
+            incident_level = '<td><span class="status-icon bg-red"></span>' + incident_level + '</td>';
+          }
 
-        console.log("Current data: "+ id + incident_level + incident_type + incident_status);
-        $('#table')
-        .append(incident);
-      });
+          if (incident_status === 'Reported') {
+            incident_status = '<td><span class="status-icon bg-danger"></span>' + incident_status + '</td>';
+          } else {
+            incident_status = '<td><span class="status-icon bg-warning"></span>' + incident_status + '</td>';
+          }
+
+          var url_mask = "{% url 'incident_details' incident_id=1234 %}".replace(/1234/, incident_id.toString());
+          var details_button = '<td class="text-right">'
+            + '<a href=' + url_mask + ' class="btn btn-outline-info btn">Details</a>'
+            + '</td>'
+
+          var incident = '<tr>'
+            + '<td><span class="text-muted text-centre">' + incident_id + '</span></td>'
+            + '<td>' + incident_area + '</td>'
+            + incident_level
+            + '<td>' + incident_type + '</td>'
+            + '<td><div class="row">' + incident_created_at_date + '</div>'
+            + '<div class="row">' + incident_created_at_time + '</div>' + '</td>'
+            + incident_status
+            + details_button
+            + '</tr>'
+
+          console.log("Current data: " + incident_id + incident_level + incident_type + incident_status);
+          $('#table').append(incident);
+        });
+      }
     });
 </script>
 {% endblock %}
