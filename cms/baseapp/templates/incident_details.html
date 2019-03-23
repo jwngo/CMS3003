@@ -105,14 +105,36 @@
               <div class="card-body">
                 <p>Assistance Requested: </p>
                 <div class="tags">
-                  <span class="tag tag-red">Ambulance</span>
-                  <span class="tag tag-indigo">Da Police</span>
+                  {% for assistance in assistances %}
+                  {% if assistance.report_id == report.id and assistance.assistanceType == 'Emergency Ambulance' %}
+                  <span class="tag tag-red">Emergency Ambulance</span>
+                  {% elif assistance.report_id == report.id and assistance.assistanceType == 'Rescue and Evacuation' %}
+                  <span class="tag tag-indigo">Rescue and Evacuation</span>
+                  {% elif assistance.report_id == report.id and assistance.assistanceType == 'Fire-Fighting' %}
+                  <span class="tag tag-orange">Fire-Fighting</span>
+                  {% elif assistance.report_id == report.id and assistance.assistanceType == 'Gas Leak Control' %}
+                  <span class= "tag tag-yellow">Gas Leak Control</span>
+                  {% endif %}
+                  {% endfor %}
                 </div>
                 <hr>
                 <p>Unit Dispatched:</p>
+
+                <!-- deployed-assistances are those with non-null dispatch-id -->
+                <!-- dispatch-id should only be added through 'Manage' button -->
+
+                {% for assistance in deployed_assistances %}
+                {% if assistance.report_id == report.id and assistance.assistanceType == 'Rescue and Evacuation' %}
                 <div class="tags">
-                  <span class="tag tag-red">Ambulance #1234</span>
+                  <span class="tag tag-indigo"> {{assistance.assistanceType}} #{{assistance.dispatch_id}}</span>
                 </div>
+                {% elif assistance.report_id == report.id and assistance.assistanceType == 'Emergency Ambulance' %}
+                <div class="tags">
+                  <span class="tag tag-red"> {{assistance.assistanceType}} #{{assistance.dispatch_id}} </span>
+                </div>
+
+                {%endif%}
+                {% endfor %}
                 <hr>
                 <p>Description: </p>
                 <p>{{ report.description }}</p>
