@@ -3,8 +3,10 @@ from .models import *
 from django.http import HttpResponseRedirect
 from .firebase import saveIncidentToFirebase
 import json
-
+from .firebase import getFirebase
 # Create your views here.
+
+db = getFirebase()
 
 def dashboard(request):
 	data = Incident.objects.values()
@@ -36,6 +38,9 @@ def new_incident_form(request):
 	return render(request, 'new_incident_form.html', None)
 
 def incident_details(request, incident_id):
+	# firebase example
+	# incidentData = db.child("incidents").get() 
+	# return render(request, 'incident_details.html', {'incidentData': incidentData.val()})
 	data = Report.objects.filter(incident=incident_id)
 	reports = {'reports' : data}
 	return render(request, 'incident_details.html', reports)
