@@ -4,9 +4,11 @@ from firebase_admin import firestore
 from .models import *
 
 # Initialize firebase
-cred = credentials.Certificate('./ssadproject-1551665312466-c888723cff4c.json')
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+
+def getFirebase():
+  cred = credentials.Certificate('./ssadproject-1551665312466-c888723cff4c.json')
+  firebase_admin.initialize_app(cred)
+  return firestore.client()
 
 def saveIncidentToFirebase(request):
   data = request.POST.copy()

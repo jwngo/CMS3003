@@ -1,18 +1,26 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>#123456 Details - StrawHat CMS</title>
+{% for report in reports %}
+{% if forloop.first %}
+<title>#{{report.incident.id}} Details - StrawHat CMS</title>
+{%endif%}
+{%endfor%}
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1 class="page-title">Incident #123456</h1>
+  {% for report in reports %}
+  {% if forloop.first %}
+  <h1 class="page-title">Incident #{{report.incident.id}}</h1>
 </div>
 <div class="col-12">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">#123456 @ 32 Tanglin Halt Road #04-204 Singapore 142032</h3>
+      <h3 class="card-title">#{{report.incident.id}} @ {{report.incident.address}} {{report.incident.postal_code}}</h3>
     </div>
+    {%endif%}
+    {%endfor%}
     <div class="card-body">
       <div class="row">
         <!-- map -->
@@ -26,170 +34,117 @@
           </div>
         </div>
         <!-- end map -->
+        
         <hr>
         <!-- type of incident badge -->
         <div class="col-12">
           <h4>Type of Incident:</h4>
         </div>
         <div class="col-6">
+          {% for report in reports %}
+          {% if report.incident.incident_type == 'Fire' and forloop.first %}
           <span class="stamp stamp-md bg-orange">
             <p>Fire</p>
           </span>
+          {% elif report.incident.incident_type == 'Haze' %}
           <span class="stamp stamp-md bg-dark-gray">
             <p>Haze</p>
           </span>
+          {% elif report.incident.incident_type == 'Terrorist' and forloop.first %}
           <span class="stamp stamp-md bg-red">
             <p>Terrorist</p>
           </span>
+          {% elif report.incident.incident_type == 'Dengue Outbreak' and forloop.first %}
+          <span class="stamp stamp-md bg-yellow">
+            <p>Dengue Outbreak</p>
+          </span>
+          {% endif %}
+          {% endfor %}
         </div>
         <div class="col-6 text-right">
           <!-- change url to new_report_form -->
           <a href="{% url 'new_incident_form' %}" class="btn btn-outline-primary"><i class="fe fe-plus mr-2"></i>Add New
             Report</a>
-        </div>
-        <!-- end type of incident -->
-        <hr>
-        <!-- Reporters -->
-        <div class="col-12">
-          <h4>Reporters:</h4>
-        </div>
-        <!-- 1st card -->
-        <div class="col-md-6 col-xl-4">
-          <div class="card">
-            <div class="card-status bg-red"></div>
-            <div class="card-header">
-              <h3 class="card-title">Robert Quay</h3>
-              <div class="card-options">
-                <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
-                  <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Handling</a>
-                    <a href="#" class="dropdown-item">Closed</a>
+          </div>
+          <!-- end type of incident -->
+          <hr>
+          <!-- Reporters -->
+          <div class="col-12">
+            <h4>Reporters:</h4>
+          </div>
+          {% for report in reports %}
+          <!-- 1st card -->
+          <div class="col-md-6 col-xl-4">
+            <div class="card">
+              <div class="card-status bg-red"></div>
+              <div class="card-header">
+                <h3 class="card-title">{{ report.reporterFirstName }} {{ report.reporterLastName}}</h3>
+                <div class="card-options">
+                  <div class="dropdown">
+                    <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                    <div class="dropdown-menu">
+                      <a href="#" class="dropdown-item">Handling</a>
+                      <a href="#" class="dropdown-item">Closed</a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card-alert alert alert-danger mb-0">
-              Reported
-            </div>
-            <div class="card-body">
-              <p>Assistance Requested: </p>
-              <div class="tags">
-                <span class="tag tag-red">Ambulance</span>
-                <span class="tag tag-indigo">Da Police</span>
+              {% if report.incident.status == 'Reported' %}
+              <div class="card-alert alert alert-danger mb-0">
+                Reported
               </div>
-              <hr>
-              <p>Unit Dispatched:</p>
-              <div class="tags">
-                <span class="tag tag-red">Ambulance #1234</span>
+              {% elif report.incident.status == 'Handling' %}
+              <div class="card-alert alert alert-primary mb-0">
+                Handling
               </div>
-              <hr>
-              <p>Description: </p>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus
-                suscipit deleniti consequuntur ea pariatur quo placeat.</p>
-            </div>
-          </div>
-        </div>
-        <!-- end 1st card -->
-        <!-- 2st card -->
-        <div class="col-md-6 col-xl-4">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-status bg-primary"></div>
-              <h3 class="card-title">Yueying Ooi</h3>
-              <div class="card-options">
-                <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
-                  <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Handling</a>
-                    <a href="#" class="dropdown-item">Closed</a>
-                  </div>
+              {% elif report.incident.status == 'Closed' %}
+              <div class="card-alert alert alert-green mb-0">
+                Closed
+              </div>
+              {% endif %}
+              <div class="card-body">
+                <p>Assistance Requested: </p>
+                <div class="tags">
+                  <span class="tag tag-red">Ambulance</span>
+                  <span class="tag tag-indigo">Da Police</span>
                 </div>
-              </div>
-            </div>
-            <div class="card-alert alert alert-primary mb-0">
-              Handling
-            </div>
-            <div class="card-body">
-              <p>Assistance Requested: </p>
-              <div class="tags">
-                <span class="tag tag-orange">Fire Truck</span>
-              </div>
-              <hr>
-              <p>Unit Dispatched:</p>
-              <div class="tags">
-                <span class="tag tag-orange">FireTruck #1234</span>
-              </div>
-              <hr>
-              <p>Description: </p>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus
-                suscipit
-                deleniti consequuntur ea pariatur quo placeat.</p>
-            </div>
-          </div>
-        </div>
-        <!-- end 2nd card -->
-        <!-- 3rd card -->
-        <div class="col-md-6 col-xl-4">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-status bg-primary"></div>
-              <h3 class="card-title">Yueying Ooi</h3>
-              <div class="card-options">
-                <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
-                  <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Handling</a>
-                    <a href="#" class="dropdown-item">Closed</a>
-                  </div>
+                <hr>
+                <p>Unit Dispatched:</p>
+                <div class="tags">
+                  <span class="tag tag-red">Ambulance #1234</span>
                 </div>
+                <hr>
+                <p>Description: </p>
+                <p>{{ report.description }}</p>
               </div>
-            </div>
-            <div class="card-alert alert alert-primary mb-0">
-              Handling
-            </div>
-            <div class="card-body">
-              <p>Assistance Requested: </p>
-              <div class="tags">
-                <span class="tag tag-orange">Fire Truck</span>
-              </div>
-              <hr>
-              <p>Unit Dispatched:</p>
-              <div class="tags">
-                <span class="tag tag-orange">FireTruck #1234</span>
-              </div>
-              <hr>
-              <p>Description: </p>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, ratione sed magni accusamus
-                suscipit
-                deleniti consequuntur ea pariatur quo placeat.</p>
             </div>
           </div>
+          <!-- end 1st card -->
+          {% endfor %}
         </div>
-        <!-- end 3st card -->
       </div>
     </div>
-  </div>
-
-  <!-- gmaps script -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap"
+    
+    <!-- gmaps script -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap"
     async defer></script>
-  <script>
-    var singapore = { lat: 1.3521, lng: 103.8198 }
-    var markerPosition = { lat: 1.30244, lng: 103.798 }
-
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: singapore,
-        zoom: 12
-      });
-
-      var marker = new google.maps.Marker({
-        position: markerPosition,
-        map: map,
-        title: 'My House'
-      });
-    }
-  </script>
-  <!-- end gmaps script -->
-  {% endblock %}
+    <script>
+      var singapore = { lat: 1.3521, lng: 103.8198 }
+      var markerPosition = { lat: 1.30244, lng: 103.798 }
+      
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: singapore,
+          zoom: 12
+        });
+        
+        var marker = new google.maps.Marker({
+          position: markerPosition,
+          map: map,
+          title: 'My House'
+        });
+      }
+    </script>
+    <!-- end gmaps script -->
+    
+    {% endblock %}
