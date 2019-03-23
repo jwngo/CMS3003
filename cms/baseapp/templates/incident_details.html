@@ -119,10 +119,10 @@
                 </div>
                 <hr>
                 <p>Unit Dispatched:</p>
-
+                
                 <!-- deployed-assistances are those with non-null dispatch-id -->
                 <!-- dispatch-id should only be added through 'Manage' button -->
-
+                
                 {% for assistance_d in deployed_assistances %}
                 {% if assistance_d.report_id == report.id and assistance_d.assistanceType == 'Rescue and Evacuation' %}
                 <div class="tags">
@@ -136,6 +136,11 @@
                 <div class="tags">
                   <span class="tag tag-yellow"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
                 </div>
+                {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Fire-Fighting' %}
+                <div class="tags">
+                  <span class="tag tag-orange"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
+                </div>
+                
                 {%endif%}
                 {% endfor %}
                 <hr>
