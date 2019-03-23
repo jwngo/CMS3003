@@ -123,16 +123,19 @@
                 <!-- deployed-assistances are those with non-null dispatch-id -->
                 <!-- dispatch-id should only be added through 'Manage' button -->
 
-                {% for assistance in deployed_assistances %}
-                {% if assistance.report_id == report.id and assistance.assistanceType == 'Rescue and Evacuation' %}
+                {% for assistance_d in deployed_assistances %}
+                {% if assistance_d.report_id == report.id and assistance_d.assistanceType == 'Rescue and Evacuation' %}
                 <div class="tags">
-                  <span class="tag tag-indigo"> {{assistance.assistanceType}} #{{assistance.dispatch_id}}</span>
+                  <span class="tag tag-indigo"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}}</span>
                 </div>
-                {% elif assistance.report_id == report.id and assistance.assistanceType == 'Emergency Ambulance' %}
+                {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Emergency Ambulance' %}
                 <div class="tags">
-                  <span class="tag tag-red"> {{assistance.assistanceType}} #{{assistance.dispatch_id}} </span>
+                  <span class="tag tag-red"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
                 </div>
-
+                {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Gas Leak Control' %}
+                <div class="tags">
+                  <span class="tag tag-yellow"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
+                </div>
                 {%endif%}
                 {% endfor %}
                 <hr>
