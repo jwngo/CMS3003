@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from .APImodules.FirebaseAPIManager import saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase, getAssistancesFromFirebase
+from .APImodules.FirebaseAPIManager import saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase
 from .models import Report, Assistance
 from pprint import pprint
 import json
@@ -42,31 +42,16 @@ def new_incident_form(request):
 
 
 def incident_details(request, incident_id):
-  # # Firebase example
-	# # Incidents
-	# incident_data = getIncidentFromFirebase(incident_id)
-	
-	# # Reports
-	# reports_data = getReportsFromFirebase(incident_id)
-	# report_id = reports_data[1]['report_reporter_number']
+  incident = getIncidentFromFirebase(incident_id)
+  reports = getReportsFromFirebase(incident_id)
+  
+  # Wrapping the data in context
+  context = {
+    'incident': incident,
+    'reports': reports,
+  }
 
-	# # Assistances
-	# assistances_data = getAssistancesFromFirebase(incident_id, report_id)
-
-	# pprint(incident_data)
-	# pprint('--')
-	# pprint(reports_data)
-	# pprint('--')
-	# pprint(assistances_data)
-
-  # report_data = Report.objects.filter(incident=incident_id)
-  # assistance_data = Assistance.objects.values()
-  # deployed_assistance_data = Assistance.objects.filter(
-  #     dispatch_id__isnull=False).values()
-  # context = {'reports': report_data, 'assistances': assistance_data,
-  #            'deployed_assistances': deployed_assistance_data}
-
-	return render(request, 'incident_details.html', None)
+  return render(request, 'data.html', context)
 
 
 def manage_incident(request):
