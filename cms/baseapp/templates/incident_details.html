@@ -1,26 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{% for report in reports %}
-{% if forloop.first %}
-<title>#{{report.incident.id}} Details - StrawHat CMS</title>
-{%endif%}
-{%endfor%}
+<title>#{{incident.incident_id}} Details - StrawHat CMS</title>
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
-  {% for report in reports %}
-  {% if forloop.first %}
-  <h1 class="page-title">Incident #{{report.incident.id}}</h1>
+  <h1 class="page-title">Incident #{{incident.incident_id}}</h1>
 </div>
 <div class="col-12">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">#{{report.incident.id}} @ {{report.incident.address}} {{report.incident.postal_code}}</h3>
+      <h3 class="card-title">#{{incident.incident_id}} @ {{incident.incident_address}} {{incident.incident_postalcode}}</h3>
     </div>
-    {%endif%}
-    {%endfor%}
     <div class="card-body">
       <div class="row">
         <!-- map -->
@@ -41,20 +33,20 @@
           <h4>Type of Incident:</h4>
         </div>
         <div class="col-6">
-          {% for report in reports %}
-          {% if report.incident.incident_type == 'Fire' and forloop.first %}
+          {% for type in incident.incident_type %}
+          {% if type == 'Fire' %}
           <span class="stamp stamp-md bg-orange">
             <p>Fire</p>
           </span>
-          {% elif report.incident.incident_type == 'Haze' %}
+          {% elif type == 'Haze' %}
           <span class="stamp stamp-md bg-dark-gray">
             <p>Haze</p>
           </span>
-          {% elif report.incident.incident_type == 'Terrorist' and forloop.first %}
+          {% elif type == 'Terrorist' %}
           <span class="stamp stamp-md bg-red">
             <p>Terrorist</p>
           </span>
-          {% elif report.incident.incident_type == 'Dengue Outbreak' and forloop.first %}
+          {% elif type == 'Dengue Outbreak' %}
           <span class="stamp stamp-md bg-yellow">
             <p>Dengue Outbreak</p>
           </span>
@@ -72,13 +64,13 @@
           <div class="col-12">
             <h4>Reporters:</h4>
           </div>
-          {% for report in reports %}
+          {% for key, report in reports.items %}
           <!-- 1st card -->
           <div class="col-md-6 col-xl-4">
             <div class="card">
               <div class="card-status bg-red"></div>
               <div class="card-header">
-                <h3 class="card-title">{{ report.reporterFirstName }} {{ report.reporterLastName}}</h3>
+                <h3 class="card-title">{{ report.report_reporter_name }}</h3>
                 <div class="card-options">
                   <div class="dropdown">
                     <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
@@ -89,15 +81,15 @@
                   </div>
                 </div>
               </div>
-              {% if report.incident.status == 'Reported' %}
+              {% if report.report_status == 'Reported' %}
               <div class="card-alert alert alert-danger mb-0">
                 Reported
               </div>
-              {% elif report.incident.status == 'Handling' %}
+              {% elif report.report_status == 'Handling' %}
               <div class="card-alert alert alert-primary mb-0">
                 Handling
               </div>
-              {% elif report.incident.status == 'Closed' %}
+              {% elif report.report_status == 'Closed' %}
               <div class="card-alert alert alert-green mb-0">
                 Closed
               </div>
@@ -105,15 +97,15 @@
               <div class="card-body">
                 <p>Assistance Requested: </p>
                 <div class="tags">
-                  {% for assistance in assistances %}
-                  {% if assistance.report_id == report.id and assistance.assistanceType == 'Emergency Ambulance' %}
-                  <span class="tag tag-red">Emergency Ambulance</span>
-                  {% elif assistance.report_id == report.id and assistance.assistanceType == 'Rescue and Evacuation' %}
-                  <span class="tag tag-indigo">Rescue and Evacuation</span>
-                  {% elif assistance.report_id == report.id and assistance.assistanceType == 'Fire-Fighting' %}
-                  <span class="tag tag-orange">Fire-Fighting</span>
-                  {% elif assistance.report_id == report.id and assistance.assistanceType == 'Gas Leak Control' %}
-                  <span class= "tag tag-yellow">Gas Leak Control</span>
+                  {% for assistance in report.report_assistance_requested %}
+                  {% if assistance == 'Ambulance' %}
+                  <span class="tag tag-red">Ambulance</span>
+                  {% elif assistance == 'Police' %}
+                  <span class="tag tag-indigo">Police</span>
+                  {% elif assistance == 'Fire Fighting' %}
+                  <span class="tag tag-orange">Fire Fighting</span>
+                  {% elif assistance == 'Gasleak' %}
+                  <span class= "tag tag-yellow">Gasleak</span>
                   {% endif %}
                   {% endfor %}
                 </div>
@@ -145,7 +137,7 @@
                 {% endfor %}
                 <hr>
                 <p>Description: </p>
-                <p>{{ report.description }}</p>
+                <p>{{ report.report_description }}</p>
               </div>
             </div>
           </div>
@@ -159,8 +151,10 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq7oU7xRa3gGKvhvXJ5Y_oXZdPfgf64aU&callback=initMap"
     async defer></script>
     <script>
+      var markerLat = {{incident.incident_lat}}
+      var markerLng = {{incident.incident_lng}}
       var singapore = { lat: 1.3521, lng: 103.8198 }
-      var markerPosition = { lat: 1.30244, lng: 103.798 }
+      var markerPosition = { lat: markerLat, lng: markerLng }
       
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
