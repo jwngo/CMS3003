@@ -1,6 +1,6 @@
 
 """
-API is provided by http://api.data.gov.sg/v1/environment/2-hour-weather-forecast
+API is provided by https://data.gov.sg/dataset/weather-forecast
 -----------------------------------------------------------------------------------------
 function: getAllWeather(time)
 parameter:
@@ -63,9 +63,9 @@ from pprint import pprint
 
 def getAllWeather(time):
     if(len(time) < 11):
-        parameters = {"date": time};
+        parameters = {"date": time}
     else:
-        parameters = {"data_time": time};
+        parameters = {"data_time": time}
     response = requests.get("http://api.data.gov.sg/v1/environment/2-hour-weather-forecast", params=parameters)
     data = response.json()
     if(response.status_code != 200):
@@ -75,14 +75,14 @@ def getAllWeather(time):
     
 
 def getWeatherByLocation(time, area):
-    locationData = {};
-    data = getAllWeather(time);
+    locationData = {}
+    data = getAllWeather(time)
     for forcast in data["items"][0]["forecasts"] :
         if(forcast["area"] == area):
-            locationData[area] = forcast["forecast"];
+            locationData[area] = forcast["forecast"]
     if not locationData:
-        print("Area not found.");
-    return locationData;
+        print("Area not found.")
+    return locationData
 
 
-pprint(getWeather("2019-03-07T15:00:00"));
+pprint(getAllWeather("2019-03-07T15:00:00"))
