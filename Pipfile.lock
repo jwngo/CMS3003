@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "439023e6b706931e1a516d103ce799cdea82bc9a95af5babbb12e28ff3fcbc90"
+            "sha256": "4d3e4f83af8c5bac92e2c37b4fcc04adb89579fda23d784dedc87993b090b029"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -150,11 +150,11 @@
                 "grpc"
             ],
             "hashes": [
-                "sha256:25e20c24395439dffcdb6e364cc6adb9b28a9e28d516ef5a51b9266ae0894a44",
-                "sha256:b1fce5000657dfa4d2ed3a7c94addf9c74fc3e632c7b0e8611b0e8519d1e610a"
+                "sha256:16b14c0492154110d869a08be22d27440010057fd826205303c7edaa1c3cd71e",
+                "sha256:9f8ef10c924d8a9f50d9156eea7cd779929f27aa23b855ad0abe05424553b66f"
             ],
             "markers": "platform_python_implementation != 'PyPy'",
-            "version": "==1.8.1"
+            "version": "==1.8.2"
         },
         "google-auth": {
             "hashes": [
@@ -194,9 +194,9 @@
         },
         "googleapis-common-protos": {
             "hashes": [
-                "sha256:d56ca712f67fff216d3be9eeeb8360ca59066d0365ba70b137b9e1801813747e"
+                "sha256:627ec53fab43d06c1b5c950e217fa9819e169daf753111a7f244e94bf8fb3384"
             ],
-            "version": "==1.5.8"
+            "version": "==1.5.9"
         },
         "grpcio": {
             "hashes": [
@@ -556,6 +556,13 @@
             ],
             "version": "==2.2.5"
         },
+        "autopep8": {
+            "hashes": [
+                "sha256:33d2b5325b7e1afb4240814fe982eea3a92ebea712869bfd08b3c0393404248c"
+            ],
+            "index": "pypi",
+            "version": "==1.4.3"
+        },
         "isort": {
             "hashes": [
                 "sha256:18c796c2cd35eb1a1d3f012a214a542790a1aed95e29768bdcb9f2197eccbd0b",
@@ -603,6 +610,13 @@
                 "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"
             ],
             "version": "==0.6.1"
+        },
+        "pycodestyle": {
+            "hashes": [
+                "sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56",
+                "sha256:e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c"
+            ],
+            "version": "==2.5.0"
         },
         "pylint": {
             "hashes": [
