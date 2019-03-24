@@ -45,12 +45,14 @@ def incident_details(request, incident_id):
   incident = getIncidentFromFirebase(incident_id)
   reports = getReportsFromFirebase(incident_id)
   # Wrapping the data in context
+  pprint(incident)
+  pprint(reports)
   context = {
     'incident': incident,
     'reports': reports,
   }
 
-  return render(request, 'data.html', context)
+  return render(request, 'incident_details.html', context)
 
 
 def manage_incident(request):

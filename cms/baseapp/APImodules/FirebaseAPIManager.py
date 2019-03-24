@@ -78,7 +78,6 @@ def saveReportToFirebase(incident_id, request):
   data = request.POST.copy()
   report_num_of_casualties = data.get('report_num_of_casualties')
   report_assistance_requested = data.getlist('report_assistance_requested')
-  report_assistance_dispatch_id = []
   report_num_ambulance = data.get('report_num_ambulance_requested')
   report_num_firetruck = data.get('report_num_firetruck_requested')
   report_num_police = data.get('report_num_police_requested')
@@ -87,6 +86,12 @@ def saveReportToFirebase(incident_id, request):
   report_reporter_number = data.get('report_reporter_number')
   report_description = data.get('incident_description')
   report_status = 'Reported'
+  report_assistance_dispatch_id = {
+    'Ambulance': 0,
+    'Fire Fighting': 0,
+    'Police': 0,
+    'Gasleak': 0
+  } 
 
   data = {
       'report_num_of_casualties': report_num_of_casualties,
