@@ -27,6 +27,7 @@ incident_query_watch = incidents_collection_query.on_snapshot(on_snapshot)
 
 
 def saveIncidentToFirebase(request):
+  # Extract data from POST request
   global i_id
   data = request.POST.copy()
   incident_id = i_id
@@ -60,12 +61,16 @@ def saveIncidentToFirebase(request):
     'incident_description' : incident_description
   }
 
+  # Save incident data to firestore
   pprint(data)
   db.collection('incidents').document(str(incident_id)).set(data)
 
+  # Save report data to firestore
+  saveReportToFirebase(str(incident_id), request)
   
 
-def saveReportToFirebase(i_id, request):
+def saveReportToFirebase(incident_id, request):
+  # Extract data from POST request
   data = request.POST.copy()
   report_num_of_casualties = data.get('report_num_of_casualties')
   report_assitance_requested = data.getlist('report_assitance_requested')
@@ -75,3 +80,38 @@ def saveReportToFirebase(i_id, request):
   report_num_gasleak = data.get('report_num_gasleak_requested')
   report_reporter_name = data.get('report_reporter_name')
   report_reporter_number = data.get('report_reporter_number')
+  report_description = data.get('incident_description')
+
+  data = {
+    'report_num_of_casualties': report_num_of_casualties,
+    'report_assitance_requested': report_assitance_requested,
+    'report_num_ambulance': report_num_ambulance,
+    'report_num_firetruck': report_num_firetruck,
+    'report_num_police': report_num_police,
+    'report_num_gasleak': report_num_gasleak,
+    'report_reporter_name': report_reporter_name,
+    'report_reporter_number': report_reporter_number,
+    'report_description': report_description
+  }
+
+  # Save report data to firestore
+  pprint(data)
+  db.collection('incidents').document(str(incident_id)).collection('reports').document(str(report_reporter_number)).set(data)
+
+  # Save assitance data to firestore
+  saveAssistanceToFirebase(str(incident_id), str(report_reporter_number), request)
+
+
+def saveAssistanceToFirebase(incident_id, reporter_number, request):
+  # Extract data from POST request
+  data = request.POST.copy()
+  report_assitance_requested = data.getlist('report_assitance_requested')
+
+  # Save assistance data to firestore
+  for assistance_requested in report_assitance_requested:
+    data = {
+      'report_assistance_requested': assistance_requested,
+      'report_assistance_dispatch_id': ''
+    }
+
+    db.collection('incidents').document(incident_id).collection('reports').document(reporter_number).collection(str(assistance_requested)).document(str(assistance_requested)).set(data)

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .APImodules.FirebaseAPIManager import saveIncidentToFirebase, saveReportToFirebase
-from .models import Report
+from .models import Report, Assistance
 import json
 
 # Create your views here.
