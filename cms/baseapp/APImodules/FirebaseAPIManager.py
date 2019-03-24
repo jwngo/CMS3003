@@ -77,7 +77,7 @@ def saveReportToFirebase(incident_id, request):
   # Extract data from POST request
   data = request.POST.copy()
   report_num_of_casualties = data.get('report_num_of_casualties')
-  report_assitance_requested = data.getlist('report_assitance_requested')
+  report_assistance_requested = data.getlist('report_assistance_requested')
   report_assistance_dispatch_id = []
   report_num_ambulance = data.get('report_num_ambulance_requested')
   report_num_firetruck = data.get('report_num_firetruck_requested')
@@ -90,7 +90,7 @@ def saveReportToFirebase(incident_id, request):
 
   data = {
       'report_num_of_casualties': report_num_of_casualties,
-      'report_assitance_requested': report_assitance_requested,
+      'report_assistance_requested': report_assistance_requested,
       'report_assistance_dispatch_id': report_assistance_dispatch_id,
       'report_num_ambulance': report_num_ambulance,
       'report_num_firetruck': report_num_firetruck,

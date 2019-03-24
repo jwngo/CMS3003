@@ -44,7 +44,6 @@ def new_incident_form(request):
 def incident_details(request, incident_id):
   incident = getIncidentFromFirebase(incident_id)
   reports = getReportsFromFirebase(incident_id)
-  
   # Wrapping the data in context
   context = {
     'incident': incident,
