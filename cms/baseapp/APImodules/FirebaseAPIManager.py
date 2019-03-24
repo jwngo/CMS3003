@@ -78,6 +78,7 @@ def saveReportToFirebase(incident_id, request):
   data = request.POST.copy()
   report_num_of_casualties = data.get('report_num_of_casualties')
   report_assitance_requested = data.getlist('report_assitance_requested')
+  report_assistance_dispatch_id = []
   report_num_ambulance = data.get('report_num_ambulance_requested')
   report_num_firetruck = data.get('report_num_firetruck_requested')
   report_num_police = data.get('report_num_police_requested')
@@ -85,17 +86,20 @@ def saveReportToFirebase(incident_id, request):
   report_reporter_name = data.get('report_reporter_name')
   report_reporter_number = data.get('report_reporter_number')
   report_description = data.get('incident_description')
+  report_status = 'Reported'
 
   data = {
       'report_num_of_casualties': report_num_of_casualties,
       'report_assitance_requested': report_assitance_requested,
+      'report_assistance_dispatch_id': report_assistance_dispatch_id,
       'report_num_ambulance': report_num_ambulance,
       'report_num_firetruck': report_num_firetruck,
       'report_num_police': report_num_police,
       'report_num_gasleak': report_num_gasleak,
       'report_reporter_name': report_reporter_name,
       'report_reporter_number': report_reporter_number,
-      'report_description': report_description
+      'report_description': report_description,
+      'report_status': report_status
   }
 
   # Save report data to firestore
@@ -103,25 +107,25 @@ def saveReportToFirebase(incident_id, request):
   db.collection('incidents').document(str(incident_id)).collection(
       'reports').document(str(report_reporter_number)).set(data)
 
-  # Save assitance data to firestore
-  saveAssistanceToFirebase(
-      str(incident_id), str(report_reporter_number), request)
+  # # Save assitance data to firestore
+  # saveAssistanceToFirebase(
+  #     str(incident_id), str(report_reporter_number), request)
 
 
-def saveAssistanceToFirebase(incident_id, report_id, request):
-  # Extract data from POST request
-  data = request.POST.copy()
-  report_assitance_requested = data.getlist('report_assitance_requested')
+# def saveAssistanceToFirebase(incident_id, report_id, request):
+#   # Extract data from POST request
+#   data = request.POST.copy()
+#   report_assitance_requested = data.getlist('report_assitance_requested')
 
-  # Save assistance data to firestore
-  for assistance_requested in report_assitance_requested:
-    data = {
-        'report_assistance_requested': assistance_requested,
-        'report_assistance_dispatch_id': ''
-    }
+#   # Save assistance data to firestore
+#   for assistance_requested in report_assitance_requested:
+#     data = {
+#         'report_assistance_requested': assistance_requested,
+#         'report_assistance_dispatch_id': ''
+#     }
 
-    db.collection('incidents').document(str(incident_id)).collection('reports').document(
-        str(report_id)).collection('assistances').document(str(assistance_requested)).set(data)
+#     db.collection('incidents').document(str(incident_id)).collection('reports').document(
+#         str(report_id)).collection('assistances').document(str(assistance_requested)).set(data)
 
 
 def getIncidentFromFirebase(incident_id):
@@ -144,14 +148,14 @@ def getReportsFromFirebase(incident_id):
   return reports_data
 
 
-def getAssistancesFromFirebase(incident_id, report_id):
-  assitances_data = {}
+# def getAssistancesFromFirebase(incident_id, report_id):
+#   assitances_data = {}
 
-  # Retrieve assitances data from firebase with specifed incident_id, report_id
-  assistances = db.collection('incidents').document(str(incident_id)).collection('reports').document(str(report_id)).collection('assistances').get()
+#   # Retrieve assitances data from firebase with specifed incident_id, report_id
+#   assistances = db.collection('incidents').document(str(incident_id)).collection('reports').document(str(report_id)).collection('assistances').get()
 
-  # Starting the count at 1
-  for count, assistance in enumerate(assistances, 1):
-    assitances_data[count] = assistance.to_dict()
+#   # Starting the count at 1
+#   for count, assistance in enumerate(assistances, 1):
+#     assitances_data[count] = assistance.to_dict()
   
-  return assitances_data
+#   return assitances_data
