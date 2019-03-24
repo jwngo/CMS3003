@@ -1,4 +1,4 @@
-<ul>
+<!-- <ul>
   {% for key, value in incident.items %}
   <li><a> {{key}} - {{value}} </a></li>
   {% endfor %}
@@ -8,4 +8,20 @@
   {% for key, value in reports.items %}
   <li><a> {{key}} - {{value}} </a></li>
   {% endfor %}
+</ul> -->
+
+<ul>
+  <!-- {% for key, report in reports.items %}
+  <li><a> {{report}} </a></li>
+  {%endfor%} -->
+  {% for key, report in reports.items %}
+  {% for r in report.report_assistance_requested %}
+
+  <li><a>{{r}}</a></li>
+  
+  {% endfor %}
+  {% endfor %}
+  <!-- <li><a> {{ assistance.report_assistance_requested }}</a></li> -->
+ 
+ 
 </ul>
