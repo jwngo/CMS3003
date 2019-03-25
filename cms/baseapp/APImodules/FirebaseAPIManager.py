@@ -66,11 +66,11 @@ def saveIncidentToFirebase(request):
       'incident_description': incident_description
   }
 
-  # Save incident data to firestore
+  # Save incident data to firebase
   pprint(data)
   db.collection('incidents').document(str(incident_id)).set(data)
 
-  # Save report data to firestore
+  # Save report data to firebase
   saveReportToFirebase(str(incident_id), request)
 
 
@@ -109,7 +109,7 @@ def saveReportToFirebase(incident_id, request):
       'report_status': report_status
   }
 
-  # Save report data to firestore
+  # Save report data to firebase
   pprint(data)
   db.collection('incidents').document(str(incident_id)).collection(
       'reports').document(str(report_reporter_number)).set(data)
@@ -129,7 +129,7 @@ def saveSubscriberToFirebase(request):
       'subscriber_region': subscriber_region,
   }
 
-  # Save subscriber data to firestore
+  # Save subscriber data to firebase
   pprint(data)
   db.collection('subscribers').add(data)
 
