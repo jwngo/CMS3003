@@ -8,6 +8,9 @@ import json
 # Create your views here.
 
 
+def public_redirect(request):
+  return redirect('subscribe')
+
 def dashboard(request):
   return render(request, 'dashboard.html', None)
 
