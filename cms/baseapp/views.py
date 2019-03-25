@@ -56,10 +56,8 @@ def subscribe(request):
 
 
 def incidents_map(request):
-  incident_data = Incident.objects.values()
   # remove assistance if not required
-  context = {'incidents': incident_data}
-  return render(request, 'map.html', context)
+  return render(request, 'map.html', None)
 
 
 def new_incident_form(request):
