@@ -55,120 +55,137 @@
         </div>
         <div class="col-6 text-right">
           <!-- change url to new_report_form -->
-          <a href="{% url 'new_incident_form' %}" class="btn btn-outline-primary"><i class="fe fe-plus mr-2"></i>Add New
-            Report</a>
-          </div>
-          <!-- end type of incident -->
-          <hr>
-          <!-- Reporters -->
-          <div class="col-12">
-            <h4>Reporters:</h4>
-          </div>
-          {% for key, report in reports.items %}
-          <!-- 1st card -->
-          <div class="col-md-6 col-xl-4">
-            <div class="card">
-              <div class="card-status bg-red"></div>
-              <div class="card-header">
-                <h3 class="card-title">{{ report.report_reporter_name }}</h3>
-                <div class="card-options">
-                  <div class="dropdown">
-                    <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
-                    <div class="dropdown-menu">
-                      <a href="#" class="dropdown-item">Handling</a>
-                      <a href="#" class="dropdown-item">Closed</a>
-                    </div>
+          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal"><i class="fe fe-plus mr-2"></i>Add New Report </a>
+        </div>
+        <!-- end type of incident -->
+        <hr>
+        <!-- Reporters -->
+        <div class="col-12">
+          <h4>Reporters:</h4>
+        </div>
+        {% for key, report in reports.items %}
+        <!-- 1st card -->
+        <div class="col-md-6 col-xl-4">
+          <div class="card">
+            <div class="card-status bg-red"></div>
+            <div class="card-header">
+              <h3 class="card-title">{{ report.report_reporter_name }}</h3>
+              <div class="card-options">
+                <div class="dropdown">
+                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                  <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Handling</a>
+                    <a href="#" class="dropdown-item">Closed</a>
                   </div>
                 </div>
               </div>
-              {% if report.report_status == 'Reported' %}
-              <div class="card-alert alert alert-danger mb-0">
-                Reported
-              </div>
-              {% elif report.report_status == 'Handling' %}
-              <div class="card-alert alert alert-primary mb-0">
-                Handling
-              </div>
-              {% elif report.report_status == 'Closed' %}
-              <div class="card-alert alert alert-green mb-0">
-                Closed
-              </div>
-              {% endif %}
-              <div class="card-body">
-                <p>Assistance Requested: </p>
-                <div class="tags">
-                  {% for assistance in report.report_assistance_requested %}
-                  {% if assistance == 'Ambulance' %}
-                  <span class="tag tag-red">Ambulance</span>
-                  {% elif assistance == 'Police' %}
-                  <span class="tag tag-indigo">Police</span>
-                  {% elif assistance == 'Fire Fighting' %}
-                  <span class="tag tag-orange">Fire Fighting</span>
-                  {% elif assistance == 'Gasleak' %}
-                  <span class= "tag tag-yellow">Gasleak</span>
-                  {% endif %}
-                  {% endfor %}
-                </div>
-                <hr>
-                <p>Unit Dispatched:</p>
-                
-                <!-- deployed-assistances are those with non-null dispatch-id -->
-                <!-- dispatch-id should only be added through 'Manage' button -->
-                
-                {% for assistance_d in deployed_assistances %}
-                {% if assistance_d.report_id == report.id and assistance_d.assistanceType == 'Rescue and Evacuation' %}
-                <div class="tags">
-                  <span class="tag tag-indigo"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}}</span>
-                </div>
-                {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Emergency Ambulance' %}
-                <div class="tags">
-                  <span class="tag tag-red"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
-                </div>
-                {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Gas Leak Control' %}
-                <div class="tags">
-                  <span class="tag tag-yellow"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
-                </div>
-                {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Fire-Fighting' %}
-                <div class="tags">
-                  <span class="tag tag-orange"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
-                </div>
-                
-                {%endif%}
+            </div>
+            {% if report.report_status == 'Reported' %}
+            <div class="card-alert alert alert-danger mb-0">
+              Reported
+            </div>
+            {% elif report.report_status == 'Handling' %}
+            <div class="card-alert alert alert-primary mb-0">
+              Handling
+            </div>
+            {% elif report.report_status == 'Closed' %}
+            <div class="card-alert alert alert-green mb-0">
+              Closed
+            </div>
+            {% endif %}
+            <div class="card-body">
+              <p>Assistance Requested: </p>
+              <div class="tags">
+                {% for assistance in report.report_assistance_requested %}
+                {% if assistance == 'Ambulance' %}
+                <span class="tag tag-red">Ambulance</span>
+                {% elif assistance == 'Police' %}
+                <span class="tag tag-indigo">Police</span>
+                {% elif assistance == 'Fire Fighting' %}
+                <span class="tag tag-orange">Fire Fighting</span>
+                {% elif assistance == 'Gasleak' %}
+                <span class= "tag tag-yellow">Gasleak</span>
+                {% endif %}
                 {% endfor %}
-                <hr>
-                <p>Description: </p>
-                <p>{{ report.report_description }}</p>
               </div>
+              <hr>
+              <p>Unit Dispatched:</p>
+
+              <!-- deployed-assistances are those with non-null dispatch-id -->
+              <!-- dispatch-id should only be added through 'Manage' button -->
+
+              {% for assistance_d in deployed_assistances %}
+              {% if assistance_d.report_id == report.id and assistance_d.assistanceType == 'Rescue and Evacuation' %}
+              <div class="tags">
+                <span class="tag tag-indigo"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}}</span>
+              </div>
+              {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Emergency Ambulance' %}
+              <div class="tags">
+                <span class="tag tag-red"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
+              </div>
+              {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Gas Leak Control' %}
+              <div class="tags">
+                <span class="tag tag-yellow"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
+              </div>
+              {% elif assistance_d.report_id == report.id and assistance_d.assistanceType == 'Fire-Fighting' %}
+              <div class="tags">
+                <span class="tag tag-orange"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
+              </div>
+
+              {%endif%}
+              {% endfor %}
+              <hr>
+              <p>Description: </p>
+              <p>{{ report.report_description }}</p>
             </div>
           </div>
-          <!-- end 1st card -->
-          {% endfor %}
         </div>
+        <!-- end 1st card -->
+        {% endfor %}
       </div>
     </div>
-    
-    <!-- gmaps script -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap"
-    async defer></script>
-    <script>
-      var markerLat = {{incident.incident_lat}}
-      var markerLng = {{incident.incident_lng}}
-      var singapore = { lat: 1.3521, lng: 103.8198 }
-      var markerPosition = { lat: markerLat, lng: markerLng }
-      
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: singapore,
-          zoom: 12
-        });
-        
-        var marker = new google.maps.Marker({
-          position: markerPosition,
-          map: map,
-          title: 'My House'
-        });
-      }
-    </script>
-    <!-- end gmaps script -->
-    
-    {% endblock %}
+  </div>
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- gmaps script -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap"
+          async defer></script>
+  <script>
+    var markerLat = {{incident.incident_lat}}
+var markerLng = {{incident.incident_lng}}
+var singapore = { lat: 1.3521, lng: 103.8198 }
+var markerPosition = { lat: markerLat, lng: markerLng }
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: singapore,
+    zoom: 12
+  });
+
+  var marker = new google.maps.Marker({
+    position: markerPosition,
+    map: map,
+    title: 'My House'
+  });
+}
+  </script>
+  <!-- end gmaps script -->
+
+  {% endblock %}
