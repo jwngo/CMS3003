@@ -7,7 +7,7 @@ from .PostalCodeAPIManager import postal_code_to_latlong, postal_code_to_region,
 
 # Initialize firebase
 cred = credentials.Certificate(
-    './baseapp/APImodules/ssadproject-1551665312466-c888723cff4c.json')
+    './baseapp/APImodules/up-childcare-firebase-adminsdk-mb9n5-149f2c0647.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
