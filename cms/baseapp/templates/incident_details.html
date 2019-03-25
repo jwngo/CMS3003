@@ -110,10 +110,10 @@
               </div>
               <hr>
               <p>Unit Dispatched:</p>
-
+              
               <!-- deployed-assistances are those with non-null dispatch-id -->
               <!-- dispatch-id should only be added through 'Manage' button -->
-
+              
               {% for assistance_d in deployed_assistances %}
               {% if assistance_d.report_id == report.id and assistance_d.assistanceType == 'Rescue and Evacuation' %}
               <div class="tags">
@@ -131,7 +131,7 @@
               <div class="tags">
                 <span class="tag tag-orange"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
               </div>
-
+              
               {%endif%}
               {% endfor %}
               <hr>
@@ -148,7 +148,7 @@
   <!-- reportModal -->
   <div id="reportModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
+      
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -163,11 +163,11 @@
       </div>
     </div>
   </div>
-
+  
   <!-- manageModal -->
   <div id="manageModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
+      
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -194,29 +194,30 @@
       </div>
     </div>
   </div>
-
+  
   <!-- gmaps script -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap"
-          async defer></script>
+  async defer></script>
   <script>
     var markerLat = {{incident.incident_lat}}
-var markerLng = {{incident.incident_lng}}
-var singapore = { lat: 1.3521, lng: 103.8198 }
-var markerPosition = { lat: markerLat, lng: markerLng }
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: singapore,
-    zoom: 12
-  });
-
-  var marker = new google.maps.Marker({
-    position: markerPosition,
-    map: map,
-    title: 'My House'
-  });
-}
+    var markerLng = {{incident.incident_lng}}
+    var singapore = { lat: 1.3521, lng: 103.8198 }
+    var markerPosition = { lat: markerLat, lng: markerLng }
+    
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: singapore,
+        zoom: 12
+      });
+      
+      var marker = new google.maps.Marker({
+        position: markerPosition,
+        map: map,
+        title: 'My House'
+      });
+    }
   </script>
   <!-- end gmaps script -->
-
+  
   {% endblock %}
+  
