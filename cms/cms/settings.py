@@ -126,7 +126,7 @@ STATIC_URL = '/static/'
 
 # Success Login Redirect
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dashboard'
 
 LOGIN_URL = '/accounts/login'
 
