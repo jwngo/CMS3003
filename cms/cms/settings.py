@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'cms.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'cms.urls'
@@ -126,3 +127,12 @@ STATIC_URL = '/static/'
 # Success Login Redirect
 
 LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = '/accounts/login'
+
+LOGIN_EXEMPT_URLS = [
+    'user_login',
+    'user_logout',
+    'public',
+    'subscribe',
+]

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.contrib.auth import login, logout, authenticate
 from .APImodules.FirebaseAPIManager import saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase
 from .models import Report, Assistance
 from pprint import pprint
@@ -14,6 +15,31 @@ def public_redirect(request):
 def dashboard(request):
   return render(request, 'dashboard.html', None)
 
+def login_redirect(request):
+  return redirect('user_login')
+
+def user_login(request):
+  message = ''
+  if request.method == "POST":
+      username = request.POST['username']
+      password = request.POST['password']
+      # authenticate the user
+      user = authenticate(username=username, password=password)
+      if (not user):
+          # authentication failed
+          message = 'Either the username or password is incorrect'
+      else:
+          login(request, user)
+          if request.GET.get("next"):
+              return redirect(request.GET.get("next"))
+          else:
+              return redirect("dashboard")
+
+  return render(request, "registration/login.html", {'message': message})
+
+def user_logout(request):
+    logout(request)
+    return redirect('user_login')
 
 def subscribe(request):
   # handle subscription details
