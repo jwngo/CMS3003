@@ -1,10 +1,12 @@
 from django.urls import path, include
 from django.contrib import admin
+from django.shortcuts import redirect
 
 from . import views
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),
+    path('', views.public_redirect, name='public'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('map/', views.incidents_map, name='map'),
     path('subscribe/', views.subscribe, name='subscribe'),
