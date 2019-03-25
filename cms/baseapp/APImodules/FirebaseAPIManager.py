@@ -48,6 +48,7 @@ def saveIncidentToFirebase(request):
   incident_created_at_date = '{:%d %B %Y}'.format(datetime.now())
   incident_created_at_time = '{:%H:%M}'.format(datetime.now())
 
+  # Prepare data to be saved to firebase
   data = {
       'incident_id': incident_id,
       'incident_type': incident_type,
@@ -87,12 +88,13 @@ def saveReportToFirebase(incident_id, request):
   report_description = data.get('incident_description')
   report_status = 'Reported'
   report_assistance_dispatch_id = {
-    'Ambulance': 0,
-    'Fire Fighting': 0,
-    'Police': 0,
-    'Gasleak': 0
-  } 
+      'Ambulance': 0,
+      'Fire Fighting': 0,
+      'Police': 0,
+      'Gasleak': 0
+  }
 
+  # Prepare data to be saved to firebase
   data = {
       'report_num_of_casualties': report_num_of_casualties,
       'report_assistance_requested': report_assistance_requested,
@@ -112,25 +114,24 @@ def saveReportToFirebase(incident_id, request):
   db.collection('incidents').document(str(incident_id)).collection(
       'reports').document(str(report_reporter_number)).set(data)
 
-  # # Save assitance data to firestore
-  # saveAssistanceToFirebase(
-  #     str(incident_id), str(report_reporter_number), request)
 
+def saveSubscriberToFirebase(request):
+  # Extract data from POST request
+  data = request.POST.copy()
+  subscriber_name = data.get('name')
+  subscriber_number = data.get('number')
+  subscriber_region = data.get('region')
 
-# def saveAssistanceToFirebase(incident_id, report_id, request):
-#   # Extract data from POST request
-#   data = request.POST.copy()
-#   report_assitance_requested = data.getlist('report_assitance_requested')
+  # Prepare data to be saved to firebase
+  data = {
+      'subscriber_name': subscriber_name,
+      'subscriber_number': subscriber_number,
+      'subscriber_region': subscriber_region,
+  }
 
-#   # Save assistance data to firestore
-#   for assistance_requested in report_assitance_requested:
-#     data = {
-#         'report_assistance_requested': assistance_requested,
-#         'report_assistance_dispatch_id': ''
-#     }
-
-#     db.collection('incidents').document(str(incident_id)).collection('reports').document(
-#         str(report_id)).collection('assistances').document(str(assistance_requested)).set(data)
+  # Save subscriber data to firestore
+  pprint(data)
+  db.collection('subscribers').add(data)
 
 
 def getIncidentFromFirebase(incident_id):
@@ -144,23 +145,37 @@ def getReportsFromFirebase(incident_id):
   reports_data = {}
 
   # Retrieve reports data from firebase with specifed incident_id
-  reports = db.collection('incidents').document(str(incident_id)).collection('reports').get()
+  reports = db.collection('incidents').document(
+      str(incident_id)).collection('reports').get()
 
-  # Starting the count at 1
+  # Push each data into the returning dictionary, starting the count at 1
   for count, report in enumerate(reports, 1):
     reports_data[count] = report.to_dict()
 
   return reports_data
 
 
-# def getAssistancesFromFirebase(incident_id, report_id):
-#   assitances_data = {}
+def getAllSubscribers():
+  subscribers_data = {}
 
-#   # Retrieve assitances data from firebase with specifed incident_id, report_id
-#   assistances = db.collection('incidents').document(str(incident_id)).collection('reports').document(str(report_id)).collection('assistances').get()
+  # Retrieve all subscribers data from firebase
+  subscribers = db.collection('subscribers').get()
 
-#   # Starting the count at 1
-#   for count, assistance in enumerate(assistances, 1):
-#     assitances_data[count] = assistance.to_dict()
+  # Push each data into the returning dictionary, starting the count at 1
+  for count, subscriber in enumerate(subscribers, 1):
+    subscribers_data[count] = subscriber.to_dict()
   
-#   return assitances_data
+  return subscribers_data
+
+
+def getSubscribersByRegion(region):
+  subscribers_data = {}
+
+  # Retrieve subscribers data from firebase, using the region parameter
+  subscribers = db.collection('subscribers').where('subscriber_region', '==', region).get()
+
+  # Push each data into the returning dictionary, starting the count at 1
+  for count, subscriber in enumerate(subscribers, 1):
+    subscribers_data[count] = subscriber.to_dict()
+
+  return subscribers_data
