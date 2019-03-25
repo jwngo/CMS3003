@@ -55,7 +55,7 @@
         </div>
         <div class="col-6 text-right">
           <!-- change url to new_report_form -->
-          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal"><i class="fe fe-plus mr-2"></i>Add New Report </a>
+          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i class="fe fe-plus mr-2"></i>Add New Report </a>
         </div>
         <!-- end type of incident -->
         <hr>
@@ -72,7 +72,7 @@
               <h3 class="card-title">{{ report.report_reporter_name }}</h3>
               <div class="card-options">
                 <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm dropdown-toggle" data-toggle="dropdown">Manage</button>
+                  <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#manageModal">Manage</button>
                   <div class="dropdown-menu">
                     <a href="#" class="dropdown-item">Handling</a>
                     <a href="#" class="dropdown-item">Closed</a>
@@ -98,13 +98,13 @@
               <div class="tags">
                 {% for assistance in report.report_assistance_requested %}
                 {% if assistance == 'Ambulance' %}
-                <span class="tag tag-red">Ambulance</span>
+                <span class="tag tag-red">Ambulance ({{report.report_num_ambulance}})</span>
                 {% elif assistance == 'Police' %}
-                <span class="tag tag-indigo">Police</span>
+                <span class="tag tag-indigo">Police ({{report.report_num_police}}) </span>
                 {% elif assistance == 'Fire Fighting' %}
-                <span class="tag tag-orange">Fire Fighting</span>
+                <span class="tag tag-orange">Fire Fighting ({{report.report_num_firetruck}})</span>
                 {% elif assistance == 'Gasleak' %}
-                <span class= "tag tag-yellow">Gasleak</span>
+                <span class= "tag tag-yellow">Gasleak ({{report.report_num_gasleak}})</span>
                 {% endif %}
                 {% endfor %}
               </div>
@@ -145,8 +145,8 @@
       </div>
     </div>
   </div>
-  <!-- Modal -->
-  <div id="myModal" class="modal fade" role="dialog">
+  <!-- reportModal -->
+  <div id="reportModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -161,9 +161,40 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-
     </div>
   </div>
+
+  <!-- manageModal -->
+  <div id="manageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"></button>
+        </div>
+        <div class="modal-body col-12">
+          {% for key, report in reports.items %}
+          {% for assistance in report.report_assistance_requested %}
+          {% if assistance == 'Ambulance' %}
+          <span class="tag tag-red">Ambulance</span>
+          {% elif assistance == 'Police' %}
+          <span class="tag tag-indigo">Police</span>
+          {% elif assistance == 'Fire Fighting' %}
+          <span class="tag tag-orange">Fire Fighting</span>
+          {% elif assistance == 'Gasleak' %}
+          <span class= "tag tag-yellow">Gasleak</span>
+          {% endif %} 
+          {%endfor%}
+          {%endfor%}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- gmaps script -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap"
           async defer></script>
