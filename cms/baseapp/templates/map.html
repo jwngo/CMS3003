@@ -32,19 +32,19 @@
   </div>
 </div>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap" async
-defer></script>
+  defer></script>
 
 <script>
   var incidentMarkers = [];
   var map;
   // var wMarkers = [];
   function newWeatherMarker(weather) {
-    for (var i = 0, len = weather.length ; i < len; i++) {
+    for (var i = 0, len = weather.length; i < len; i++) {
       var myLat = weather[i].label_location.latitude;
       var myLng = weather[i].label_location.longitude;
       createWeatherMarker(i);
 
-      function createWeatherMarker(i){
+      function createWeatherMarker(i) {
         var weatherMarkers = new google.maps.Marker({
           position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
           map: map,
@@ -58,49 +58,49 @@ defer></script>
         });
         google.maps.event.addListener(weatherMarkers, 'click', function () {
           this.infoWindow.open(map, weatherMarkers);
-          
+
         });
       }
     }
-    
+
   }
-  
+
   function initMap() {
     // Map options
     var options = {
       zoom: 12,
-      center: { lat: 1.3521, lng: 103.8198 }
+      center: { lat: 1.3521, lng: 103.8198 } // Singapore
     }
     // New map
     map = new google.maps.Map(document.getElementById('map'), options);
-    
-    
+
+
   }
   db.collection("incidents")
-  .onSnapshot(function (querySnapshot) {
-    // delete markers from map
-    deleteMarkers(incidentMarkers);
-    incidentMarkers = []; 
-    
-    // create incidentMarkers
-    querySnapshot.forEach(function (doc) {
-      var id = doc.data().id;
-      var incident_level = doc.data().incident_level;
-      var incident_type = doc.data().incident_type;
-      var incident_created_at_date = doc.data().incident_created_at_date;
-      var incident_created_at_time = doc.data().incident_created_at_time;
-      var incident_status = doc.data().incident_status;
-      var incident_lat = parseFloat(doc.data().incident_lat);
-      var incident_lng = parseFloat(doc.data().incident_lng);
-      var incidentIcon = getIncidentIcon(incident_level);
-      var marker = new google.maps.Marker({
-        position: { lat: incident_lat, lng: incident_lng },
-        map: map,
-        title: 'Incidents',
+    .onSnapshot(function (querySnapshot) {
+      // delete markers from map
+      deleteMarkers(incidentMarkers);
+      incidentMarkers = [];
+
+      // create incidentMarkers
+      querySnapshot.forEach(function (doc) {
+        var id = doc.data().id;
+        var incident_level = doc.data().incident_level;
+        var incident_type = doc.data().incident_type;
+        var incident_created_at_date = doc.data().incident_created_at_date;
+        var incident_created_at_time = doc.data().incident_created_at_time;
+        var incident_status = doc.data().incident_status;
+        var incident_lat = parseFloat(doc.data().incident_lat);
+        var incident_lng = parseFloat(doc.data().incident_lng);
+        var incidentIcon = getIncidentIcon(incident_level);
+        var marker = new google.maps.Marker({
+          position: { lat: incident_lat, lng: incident_lng },
+          map: map,
+          title: 'Incidents',
+        });
+        incidentMarkers.push(marker);
       });
-      incidentMarkers.push(marker);
     });
-  });
   // Loading dengue clusters data
   /* map.data.loadGeoJson(
   "{% static './assets/denguehotspots.json' %}"
@@ -111,8 +111,8 @@ defer></script>
       markers[i].setMap(null);
     }
   }
-  
-  
+
+
   // addMarker Function
   function addMarker(props, markers_on_map) {
     var marker = new google.maps.Marker({
@@ -121,7 +121,7 @@ defer></script>
       icon: props.iconImage,
       content: props.content
     });
-    
+
     // to display infoWindow
     var infoWindow = new google.maps.InfoWindow({
       content: props.content
@@ -131,42 +131,43 @@ defer></script>
     });
     markers_on_map.push(marker);
   }
-  
+
+
   function getWeatherIcon(time, weather_condition) {
     //set iconImage using time & weather condition inputs
     var icon = 'https://i.imgsafe.org/21/21c939650b.png';
     var time = getDateTime();
-    console.log(typeof(time));
+    console.log(typeof (time));
     time = parseInt(time.substr(11, 12));
     console.log(time);
     if (time >= 7 && time <= 19) {
       switch (weather_condition) {
         case "Rain":
-        icon = 'https://i.imgsafe.org/21/21bd07b663.png';
-        break;
+          icon = 'https://i.imgsafe.org/21/21bd07b663.png';
+          break;
         case "Light Showers":
-        icon = 'https://i.imgsafe.org/21/21d3cee665.png';
-        break;
+          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+          break;
         default:
-        icon = 'https://i.imgsafe.org/21/21c939650b.png';//sun
+          icon = 'https://i.imgsafe.org/21/21c939650b.png';//sun
       }
     }
     //night
     else {
       switch (weather_condition) {
         case "Rain":
-        icon = 'https://i.imgsafe.org/21/21bd07b663.png';
-        break;
+          icon = 'https://i.imgsafe.org/21/21bd07b663.png';
+          break;
         case "Light Showers":
-        icon = 'https://i.imgsafe.org/21/21b9b68902.png';
-        break;
+          icon = 'https://i.imgsafe.org/21/21b9b68902.png';
+          break;
         default:
-        icon = 'https://i.imgsafe.org/21/21d7c1e9b1.png'; //moon
+          icon = 'https://i.imgsafe.org/21/21d7c1e9b1.png'; //moon
       }
     }
     return icon;
   }
-  
+
   function getIncidentIcon(cat) {
     var icon = 'https://i.imgsafe.org/4c/4cee807259.png';
     if (cat == 'CAT1') {
@@ -174,18 +175,18 @@ defer></script>
     }
     return icon;
   }
-  
-  function getAllWeather(time, callback){
+
+  function getAllWeather(time, callback) {
     parameter = "";
-    if(time.length > 11){
+    if (time.length > 11) {
       parameter = "date_time"
     }
-    else{
+    else {
       parameter = "date"
     }
     var url = "https://api.data.gov.sg/v1/environment/2-hour-weather-forecast"
     var xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         //console.log(JSON.parse(this.responseText))
         var allData = JSON.parse(this.responseText)
@@ -196,20 +197,21 @@ defer></script>
         }
       }
     };
-    xhttp.open("GET", url+"?"+parameter+"="+time, true)
+    xhttp.open("GET", url + "?" + parameter + "=" + time, true)
     xhttp.send()
   }
-  
-  function reorganizeData(allData){
+
+
+  function reorganizeData(allData) {
     var result = []
     var arr = allData.area_metadata
-    for(var i = 0, len = arr.length; i < len; i++){
+    for (var i = 0, len = arr.length; i < len; i++) {
       result.push(arr[i])
     }
-    for(i = 0, len1 = result.length; i < len1; i++){
+    for (i = 0, len1 = result.length; i < len1; i++) {
       forecasts = allData.items[0].forecasts
-      for(var j = 0, len2 = forecasts.length; j < len2; j++){
-        if(forecasts[j].area == result[i].name){
+      for (var j = 0, len2 = forecasts.length; j < len2; j++) {
+        if (forecasts[j].area == result[i].name) {
           result[i].forecast = forecasts[j].forecast
         }
       }
@@ -217,37 +219,41 @@ defer></script>
     }
     return result
   }
-  function getDateTime(){
+
+
+  function getDateTime() {
     var today = new Date();
-    var month=today.getMonth();
-    if (month<10){
-      month="0"+ month;
+    var month = today.getMonth();
+    if (month < 10) {
+      month = "0" + month;
     }
-    var date=today.getDate();
-    if (date<10){
-      date="0"+ date;
+    var date = today.getDate();
+    if (date < 10) {
+      date = "0" + date;
     }
-    var date = today.getFullYear()+'-'+month+'-'+date;
-    
-    hour=today.getHours();
-    if (hour<10){
-      hour="0"+ hour;
+    var date = today.getFullYear() + '-' + month + '-' + date;
+
+    hour = today.getHours();
+    if (hour < 10) {
+      hour = "0" + hour;
     }
-    minute=today.getMinutes();
-    if (minute<10){
-      minute="0"+ minute;
+    minute = today.getMinutes();
+    if (minute < 10) {
+      minute = "0" + minute;
     }
-    second=today.getSeconds();
-    if (second<10){
-      second="0"+ second;
+    second = today.getSeconds();
+    if (second < 10) {
+      second = "0" + second;
     }
     var time = hour + ":" + minute + ":" + second;
-    
-    dateTime = date+'T'+time; 
-    
+
+    dateTime = date + 'T' + time;
+
     return dateTime;
     //2019-03-07T07:56:25
-  } 
+  }
+
+
   getAllWeather(getDateTime(), newWeatherMarker);
 </script>
 {% endblock %}
