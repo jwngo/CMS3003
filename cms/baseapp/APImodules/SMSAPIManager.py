@@ -1,4 +1,3 @@
-
 """
 function: send_sms(sms_body, to_phone_no)
 
@@ -28,23 +27,44 @@ Requirments:
 
 # Download the helper library from https://www.twilio.com/docs/python/install
 from twilio.rest import Client
+from pprint import pprint
 
 
-def send_sms(sms_body, to_phone_no):
+def sendSMS(to_phone_number, message):
 	# Your Account Sid and Auth Token from twilio.com/console
-	account_sid = 'AC289e9926f0696f7a5165552cba03e4eb'
-	auth_token = '08817625897935ca6b9ce1bdb9ce957c'
+	account_sid = 'AC0fa4615e2b0b368896bc92db9ff12c30'
+	auth_token = 'f9fcc33e564a5d31a6ecae07d62e8013'
 	client = Client(account_sid, auth_token)
-
 
 	message = client.messages \
 	                .create(
-	                     body=sms_body,
-	                     from_='+19705146650',
-	                     to=to_phone_no
+	                     body = message,
+	                     from_ = '+12023355301',
+	                     to= to_phone_number
 	                 )
 
 	print(message.sid)
 
-#test case
-#send_sms("cms3003 sending sms test", "+6590361726")
+def sendSMSToSubscribers(subscribers, incident):
+	"""
+	Dear {subscriber_name},
+	there is {types_of_incident} at
+	{incident_address}.
+	"""
+	# Extract necessary incident details
+	types_of_incident = ', '.join(incident['incident_type'])
+	incident_address = incident['incident_address']
+
+	# Craft the message and send it out
+	for count, subscriber in subscribers.items():
+		# { count : { data: value } }
+
+		# Craft the message
+		subscriber_name = subscriber['subscriber_name']
+		message = 'Dear, {}\nthere is {} \nat {}.'.format(
+			subscriber_name, types_of_incident, incident_address)
+		
+		# Send it out
+		subscriber_number = '+65' + subscriber['subscriber_number']
+		sendSMS(subscriber_number, message)
+

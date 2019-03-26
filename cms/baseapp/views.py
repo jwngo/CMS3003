@@ -1,7 +1,11 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(".."))
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout, authenticate
 from .APImodules.FirebaseAPIManager import saveSubscriberToFirebase, saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase, getAllSubscribers, getSubscribersByRegion
+from .APImodules.SMSAPIManager import sendSMSToSubscribers
 from .models import Report, Assistance
 from pprint import pprint
 import json
@@ -67,7 +71,22 @@ def incidents_map(request):
 
 def new_incident_form(request):
   if request.method == 'POST':
-    saveIncidentToFirebase(request)
+    incident = saveIncidentToFirebase(request)
+    
+    # Get dict of subscribers who are in the same region as the incident
+    incident_region = incident['incident_region']
+
+    # CAT1, send SMS to ALL Subscribers
+    # CAT2, send SMS to Subscribers in same region as Incident
+    if (incident['incident_level'] == 'CAT1'):
+      subscribers = getAllSubscribers()
+    else:
+      subscribers = getSubscribersByRegion(str(incident_region))
+    
+    # Send sms to subscribres in region
+    sendSMSToSubscribers(subscribers, incident)
+
+    # Redirect to dashboard after adding new incident
     return redirect('dashboard')
 
   return render(request, 'new_incident_form.html', None)
