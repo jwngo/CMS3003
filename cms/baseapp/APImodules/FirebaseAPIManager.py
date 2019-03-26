@@ -73,6 +73,8 @@ def saveIncidentToFirebase(request):
   # Save report data to firebase
   saveReportToFirebase(str(incident_id), request)
 
+  return data
+
 
 def saveReportToFirebase(incident_id, request):
   # Extract data from POST request
@@ -113,6 +115,8 @@ def saveReportToFirebase(incident_id, request):
   pprint(data)
   db.collection('incidents').document(str(incident_id)).collection(
       'reports').document(str(report_reporter_number)).set(data)
+  
+  return data
 
 
 def saveSubscriberToFirebase(request):
