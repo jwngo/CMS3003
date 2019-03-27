@@ -26,6 +26,7 @@ Requirments:
 
 
 # Download the helper library from https://www.twilio.com/docs/python/install
+from .FirebaseAPIManager import getAllSubscribers, getSubscribersByRegion
 from twilio.rest import Client
 from pprint import pprint
 
@@ -45,15 +46,21 @@ def sendSMS(to_phone_number, message):
 
 	print(message.sid)
 
-def sendSMSToSubscribers(subscribers, incident):
-	"""
-	Dear {subscriber_name},
-	there is {types_of_incident} at
-	{incident_address}.
-	"""
+def sendSMSToSubscribers(incident):
+
 	# Extract necessary incident details
 	types_of_incident = ', '.join(incident['incident_type'])
+	incident_level = incident['incident_level']
+	incident_region = incident['incident_region']
 	incident_address = incident['incident_address']
+
+	# Get subscribers from firebase
+	# CAT1, send SMS to ALL Subscribers
+	# CAT2, send SMS to Subscribers in same region as Incident
+	if (incident_level == 'CAT1'):
+		subscribers = getAllSubscribers()
+	else:
+		subscribers = getSubscribersByRegion(str(incident_region))
 
 	# Craft the message and send it out
 	for count, subscriber in subscribers.items():
