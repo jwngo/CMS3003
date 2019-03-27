@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from .APImodules.FirebaseAPIManager import saveSubscriberToFirebase, saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase, getAllSubscribers, getSubscribersByRegion
 from .APImodules.SMSAPIManager import sendSMSToSubscribers
 from .models import Report, Assistance
+from threading import Thread
 from pprint import pprint
 import json
 
@@ -71,20 +72,14 @@ def incidents_map(request):
 
 def new_incident_form(request):
   if request.method == 'POST':
+    
+    # Save to firebase
     incident = saveIncidentToFirebase(request)
-    
-    # Get dict of subscribers who are in the same region as the incident
-    incident_region = incident['incident_region']
 
-    # CAT1, send SMS to ALL Subscribers
-    # CAT2, send SMS to Subscribers in same region as Incident
-    if (incident['incident_level'] == 'CAT1'):
-      subscribers = getAllSubscribers()
-    else:
-      subscribers = getSubscribersByRegion(str(incident_region))
-    
-    # Send sms to subscribres in region
-    sendSMSToSubscribers(subscribers, incident)
+    # Send SMS to relevant Subscribers in a new Thread
+    # This will improve the time taken to redirect back to dashboard
+    thread = Thread(target=sendSMSToSubscribers, args=(incident,))
+    thread.start()
 
     # Redirect to dashboard after adding new incident
     return redirect('dashboard')
