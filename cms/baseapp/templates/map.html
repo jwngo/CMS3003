@@ -37,33 +37,6 @@
 <script>
   var incidentMarkers = [];
   var map;
-  // var wMarkers = [];
-  function newWeatherMarker(weather) {
-    for (var i = 0, len = weather.length; i < len; i++) {
-      var myLat = weather[i].label_location.latitude;
-      var myLng = weather[i].label_location.longitude;
-      createWeatherMarker(i);
-
-      function createWeatherMarker(i) {
-        var weatherMarkers = new google.maps.Marker({
-          position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
-          map: map,
-          title: 'Weather',
-          content: weather[i].name + ": " + weather[i].forecast + '<br>' + weather[i].timeStamp,
-          icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
-        });
-        // wMarkers.push(weatherMarkers);
-        weatherMarkers.infoWindow = new google.maps.InfoWindow({
-          content: weatherMarkers.content
-        });
-        google.maps.event.addListener(weatherMarkers, 'click', function () {
-          this.infoWindow.open(map, weatherMarkers);
-
-        });
-      }
-    }
-
-  }
 
   function initMap() {
     // Map options
@@ -73,9 +46,16 @@
     }
     // New map
     map = new google.maps.Map(document.getElementById('map'), options);
-
-
+      // Loading dengue clusters data
+  /* map.data.loadGeoJson(
+  "{% static './assets/denguehotspots.json' %}"
+  );*/
   }
+
+  // weatherMarkers
+  getAllWeather(getDateTime(), newWeatherMarker);
+  
+  // incidentMarkers
   db.collection("incidents")
     .onSnapshot(function (querySnapshot) {
       // delete markers from map
@@ -84,7 +64,7 @@
 
       // create incidentMarkers
       querySnapshot.forEach(function (doc) {
-        var id = doc.data().id;
+        var id = doc.data().incident_id;
         var incident_level = doc.data().incident_level;
         var incident_type = doc.data().incident_type;
         var incident_created_at_date = doc.data().incident_created_at_date;
@@ -96,25 +76,39 @@
         var marker = new google.maps.Marker({
           position: { lat: incident_lat, lng: incident_lng },
           map: map,
+          icon: incidentIcon,
+          content:"Incident ID: " + id + "<br /><br />" + 
+            "Incident Type: " + incident_type + "<br /><br />" +
+            "Status: " + incident_status + "<br /><br />"+
+            "Creation Timestamp: " + incident_created_at_time +" " + incident_created_at_date + "<br /><br />",
           title: 'Incidents',
         });
+        createInfoWindow(marker);
         incidentMarkers.push(marker);
+        
       });
     });
-  // Loading dengue clusters data
-  /* map.data.loadGeoJson(
-  "{% static './assets/denguehotspots.json' %}"
-  );
-  */
+
+// Functions:
+//------------------------------------------------------------------------------------------------
+    function createInfoWindow(marker) {
+        // wMarkers.push(weatherMarkers);
+        marker.infoWindow = new google.maps.InfoWindow({
+          content: marker.content
+        });
+        google.maps.event.addListener(marker, 'click', function () {
+          this.infoWindow.open(map, marker);
+        });
+      }
+  
   function deleteMarkers(markers) {
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
   }
 
-
   // addMarker Function
-  function addMarker(props, markers_on_map) {
+ /* function addMarker(props, markers_on_map) {
     var marker = new google.maps.Marker({
       position: props.coords,
       map: map,
@@ -130,7 +124,7 @@
       infoWindow.open(map, marker);
     });
     markers_on_map.push(marker);
-  }
+  }*/
 
 
   function getWeatherIcon(time, weather_condition) {
@@ -148,6 +142,12 @@
         case "Light Showers":
           icon = 'https://i.imgsafe.org/21/21d3cee665.png';
           break;
+          case "Showers":
+          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+          break;
+          case "Partly Cloudy (Day)":
+          icon = 'https://i.imgsafe.org/21/21e707ef33.png';
+          break;  
         default:
           icon = 'https://i.imgsafe.org/21/21c939650b.png';//sun
       }
@@ -158,9 +158,20 @@
         case "Rain":
           icon = 'https://i.imgsafe.org/21/21bd07b663.png';
           break;
+          case "Heavy Thundery Showers with Gusty Winds":
+          icon = 'https://i.imgsafe.org/21/21afe7c290.png';
+          break;        
+          case "Showers":
+          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+          break; 
+
         case "Light Showers":
           icon = 'https://i.imgsafe.org/21/21b9b68902.png';
           break;
+          case "Partly Cloudy (Night)":
+          icon = 'https://i.imgsafe.org/21/21de66f4d9.png';
+          break;
+          
         default:
           icon = 'https://i.imgsafe.org/21/21d7c1e9b1.png'; //moon
       }
@@ -220,10 +231,37 @@
     return result
   }
 
+  function newWeatherMarker(weather) {
+    
+    for (var i = 0, len = weather.length; i < len; i++) {
+      var myLat = weather[i].label_location.latitude;
+      var myLng = weather[i].label_location.longitude;
+      createWeatherMarker(i);
+
+      function createWeatherMarker(i) {
+        var weatherMarkers = new google.maps.Marker({
+          position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
+          map: map,
+          title: 'Weather',
+          content: "Location: "+ weather[i].name +  "<br /><br />"  + "Weather: " + weather[i].forecast +  "<br /><br />" + "Timestamp: " + getDateTimeForMap() ,
+          icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
+        });
+        // wMarkers.push(weatherMarkers);
+        weatherMarkers.infoWindow = new google.maps.InfoWindow({
+          content: weatherMarkers.content
+        });
+        google.maps.event.addListener(weatherMarkers, 'click', function () {
+          this.infoWindow.open(map, weatherMarkers);
+
+        });
+      }
+    }
+  }
+
 
   function getDateTime() {
     var today = new Date();
-    var month = today.getMonth();
+    var month = 1+today.getMonth();
     if (month < 10) {
       month = "0" + month;
     }
@@ -253,7 +291,36 @@
     //2019-03-07T07:56:25
   }
 
+  function getDateTimeForMap() {
+    var today = new Date();
+   // today = today.toString();
+   // today = today.substring(0, 11);
+    console.log(today);
+    var month = 1+ today.getMonth();
+    
+    var date = today.getDate();
 
-  getAllWeather(getDateTime(), newWeatherMarker);
+    var date = today.getFullYear() + '-' + month + '-' + date;
+
+    hour = today.getHours();
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+    minute = today.getMinutes();
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
+    second = today.getSeconds();
+    if (second < 10) {
+      second = "0" + second;
+    }
+    var time = hour + ":" + minute ;
+
+    dateTime = time + " " + date;
+
+    return dateTime;
+
+  }
+
 </script>
 {% endblock %}
