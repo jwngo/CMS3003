@@ -199,15 +199,16 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap"
   async defer></script>
   <script>
+    var map;
     var markerLat = {{incident.incident_lat}}
     var markerLng = {{incident.incident_lng}}
-    var singapore = { lat: 1.3521, lng: 103.8198 }
+    var singapore = { lat: markerLat, lng: markerLng }
     var markerPosition = { lat: markerLat, lng: markerLng }
     
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: singapore,
-        zoom: 12
+        zoom: 14
       });
       
       var marker = new google.maps.Marker({
@@ -216,6 +217,204 @@
         title: 'My House'
       });
     }
+  // weatherMarkers
+  getAllWeather(getDateTime(), newWeatherMarker);
+
+  //-----------------------------------
+
+  function createInfoWindow(marker) {
+        // wMarkers.push(weatherMarkers);
+        marker.infoWindow = new google.maps.InfoWindow({
+          content: marker.content
+        });
+        google.maps.event.addListener(marker, 'click', function () {
+          this.infoWindow.open(map, marker);
+        });
+      }
+      function getWeatherIcon(time, weather_condition) {
+    //set iconImage using time & weather condition inputs
+    var icon = 'https://i.imgsafe.org/21/21c939650b.png';
+    var time = getDateTime();
+    console.log(typeof (time));
+    time = parseInt(time.substr(11, 12));
+    console.log(time);
+    if (time >= 7 && time <= 19) {
+      switch (weather_condition) {
+        case "Rain":
+          icon = 'https://i.imgsafe.org/21/21bd07b663.png';
+          break;
+        case "Light Showers":
+          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+          break;
+          case "Showers":
+          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+          break;
+          case "Partly Cloudy (Day)":
+          icon = 'https://i.imgsafe.org/21/21e707ef33.png';
+          break;  
+        default:
+          icon = 'https://i.imgsafe.org/21/21c939650b.png';//sun
+      }
+    }
+    //night
+    else {
+      switch (weather_condition) {
+        case "Rain":
+          icon = 'https://i.imgsafe.org/21/21bd07b663.png';
+          break;
+          case "Heavy Thundery Showers with Gusty Winds":
+          icon = 'https://i.imgsafe.org/21/21afe7c290.png';
+          break;        
+          case "Showers":
+          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+          break; 
+
+        case "Light Showers":
+          icon = 'https://i.imgsafe.org/21/21b9b68902.png';
+          break;
+          case "Partly Cloudy (Night)":
+          icon = 'https://i.imgsafe.org/21/21de66f4d9.png';
+          break;
+          
+        default:
+          icon = 'https://i.imgsafe.org/21/21d7c1e9b1.png'; //moon
+      }
+    }
+    return icon;
+  }
+
+  function getAllWeather(time, callback) {
+    parameter = "";
+    if (time.length > 11) {
+      parameter = "date_time"
+    }
+    else {
+      parameter = "date"
+    }
+    var url = "https://api.data.gov.sg/v1/environment/2-hour-weather-forecast"
+    var xhttp = new XMLHttpRequest()
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        //console.log(JSON.parse(this.responseText))
+        var allData = JSON.parse(this.responseText)
+        allData = reorganizeData(allData)
+        if (typeof callback === "function") {
+          // apply() sets the meaning of "this" in the callback
+          callback(allData);
+        }
+      }
+    };
+    xhttp.open("GET", url + "?" + parameter + "=" + time, true)
+    xhttp.send()
+  }
+
+
+  function reorganizeData(allData) {
+    var result = []
+    var arr = allData.area_metadata
+    for (var i = 0, len = arr.length; i < len; i++) {
+      result.push(arr[i])
+    }
+    for (i = 0, len1 = result.length; i < len1; i++) {
+      forecasts = allData.items[0].forecasts
+      for (var j = 0, len2 = forecasts.length; j < len2; j++) {
+        if (forecasts[j].area == result[i].name) {
+          result[i].forecast = forecasts[j].forecast
+        }
+      }
+      result[i].timeStamp = allData.items[0].timestamp
+    }
+    return result
+  }
+
+  function newWeatherMarker(weather) {
+    
+    for (var i = 0, len = weather.length; i < len; i++) {
+      var myLat = weather[i].label_location.latitude;
+      var myLng = weather[i].label_location.longitude;
+      createWeatherMarker(i);
+
+      function createWeatherMarker(i) {
+        var weatherMarkers = new google.maps.Marker({
+          position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
+          map: map,
+          title: 'Weather',
+          content: "Location: "+ weather[i].name +  "<br /><br />"  + "Weather: " + weather[i].forecast +  "<br /><br />" + "Timestamp: " + getDateTimeForMap(),
+          icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
+        });
+        // wMarkers.push(weatherMarkers);
+        weatherMarkers.infoWindow = new google.maps.InfoWindow({
+          content: weatherMarkers.content
+        });
+        google.maps.event.addListener(weatherMarkers, 'click', function () {
+          this.infoWindow.open(map, weatherMarkers);
+
+        });
+      }
+    }
+  }
+
+
+  function getDateTime() {
+    var today = new Date();
+    var month = today.getMonth();
+    if (month < 10) {
+      month = "0" + month;
+    }
+    var date = today.getDate();
+    if (date < 10) {
+      date = "0" + date;
+    }
+    var date = today.getFullYear() + '-' + month + '-' + date;
+
+    hour = today.getHours();
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+    minute = today.getMinutes();
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
+    second = today.getSeconds();
+    if (second < 10) {
+      second = "0" + second;
+    }
+    var time = hour + ":" + minute + ":" + second;
+
+    dateTime = date + 'T' + time;
+
+    return dateTime;
+    //2019-03-07T07:56:25
+  }
+  function getDateTimeForMap() {
+    var today = new Date();
+    var month = today.getMonth();
+    
+    var date = today.getDate();
+
+    var date = today.getFullYear() + '-' + month + '-' + date;
+
+    hour = today.getHours();
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+    minute = today.getMinutes();
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
+    second = today.getSeconds();
+    if (second < 10) {
+      second = "0" + second;
+    }
+    var time = hour + ":" + minute ;
+
+    dateTime = time + " " + date;
+
+    return dateTime;
+    //2019-03-07T07:56:25
+  }
+
+
   </script>
   <!-- end gmaps script -->
   
