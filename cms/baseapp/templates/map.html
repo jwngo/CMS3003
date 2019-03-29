@@ -296,11 +296,14 @@
    // today = today.toString();
    // today = today.substring(0, 11);
     console.log(today);
-    var month = 1+ today.getMonth();
+    var month = today.getMonth();
+    var month_in_words = [ "January", "February", "March", "April", "May", "June", 
+           "July", "August", "September", "October", "November", "December" ];
+    month=month_in_words[month];
     
     var date = today.getDate();
 
-    var date = today.getFullYear() + '-' + month + '-' + date;
+    var date =  date + ' ' + month + ' ' +  today.getFullYear();
 
     hour = today.getHours();
     if (hour < 10) {
@@ -309,10 +312,6 @@
     minute = today.getMinutes();
     if (minute < 10) {
       minute = "0" + minute;
-    }
-    second = today.getSeconds();
-    if (second < 10) {
-      second = "0" + second;
     }
     var time = hour + ":" + minute ;
 
