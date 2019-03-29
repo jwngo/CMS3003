@@ -34,21 +34,18 @@
 
 
 import facebook
- 
+
+#get the facebook graph
 token = {'EAAjjQZAPY4XQBAMuShU9uBq6zRORcRmZC23UlkxiRJPXPWRSMXoHaLUpePZAjfj4gAxgBle9BxaZAwvsZBvv36ELriZA5JBB8wLKdBjDO36eaEFGaMHlpRXcKzjHypJ5AMlKmDSoaZB3TqF1DZAfax0WdcaYBGPPDbEW55tEzFhKR1TpbyDGrkpg'}
-
 graph = facebook.GraphAPI(token)
-
-#hardcode data, this parameter expecting a string
-information = "This is my testing for fb page"
-image = open("../../img.jpg", 'rb')
 
 
 def facebookShare(info, img):
-    # put_object for posting text
-    #graph.put_object(parent_object='me', connection_name='feed', message=info)
     # put_photo for posting photo with messsage(text)
     graph.put_photo(image= img, message=info)
     
 #facebookShare(information, image)
-    
+
+
+
+        
