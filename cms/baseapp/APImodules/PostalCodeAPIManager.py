@@ -1,6 +1,9 @@
 import json
+# import os
 
-with open('./baseapp/APImodules/postalcodes.json') as read_file:
+# print(os.getcwd())
+
+with open('./postalcodes.json') as read_file:
 	data = json.load(read_file)
 
 def postal_code_to_latlong(postal_code):
