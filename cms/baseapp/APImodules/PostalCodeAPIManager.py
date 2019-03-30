@@ -3,7 +3,7 @@ import json
 
 # print(os.getcwd())
 
-with open('./postalcodes.json') as read_file:
+with open('./baseapp/APIModules/postalcodes.json') as read_file:
 	data = json.load(read_file)
 
 def postal_code_to_latlong(postal_code):

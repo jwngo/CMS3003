@@ -3,18 +3,16 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from pprint import pprint
 from datetime import datetime
-from PostalCodeAPIManager import postal_code_to_latlong, postal_code_to_region, postal_code_to_area
+from .PostalCodeAPIManager import postal_code_to_latlong, postal_code_to_region, postal_code_to_area
 
 # Initialize firebase
 cred = credentials.Certificate(
-    './cms3003-e1f9c-firebase-adminsdk-3bp9c-6e02ae72ed.json')
+    './baseapp/APImodules/cms3003-e1f9c-firebase-adminsdk-3bp9c-6e02ae72ed.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # For updating of incident_id
 i_id = 0
-
-
 
 
 def on_snapshot(col_snapshot, changes, read_time):
@@ -185,4 +183,3 @@ def getSubscribersByRegion(region):
     subscribers_data[count] = subscriber.to_dict()
 
   return subscribers_data
-
