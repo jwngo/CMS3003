@@ -24,6 +24,7 @@ image = Image.open(BytesIO(response.content))
 def notify(incident):
     incident_id = int(incident['incident_id'])
     message = get_message(incident)
+    incident_level=incident['incident_level']
     
     #For CAT1 incident, send immediately
     if(incident_level == 'CAT1'):
