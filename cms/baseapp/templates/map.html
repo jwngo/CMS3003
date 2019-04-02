@@ -23,15 +23,18 @@
   <div class="card">
     <div class="card-header">
       <h3 class="card-title">Incident Map</h3>
-      <div>
-          <input type="checkbox" name="filter" id="CAT1" class='chk-btn'>
-          <label for='CAT1'>CAT1</label>
+      <div style="margin-left: 2em; margin-top: 0.7em">
+          <input type="checkbox" name="filter" id="CAT1" class='chk-btn' style="margin-left:0.5em">
+          <label for='CAT1' style="font-size: 1.1em;" >CAT1</label>
         
-          <input type="checkbox" name="filter" id="CAT2" class='chk-btn'>
-          <label for='CAT2'>CAT2</label>
+          <input type="checkbox" name="filter" id="CAT2" class='chk-btn' style="margin-left:0.5em">
+          <label for='CAT2' style="font-size: 1.1em;">CAT2</label>
         
-          <input type="checkbox" name="filter" id="weather" class='chk-btn'>
-          <label for='weather'>weather</label>
+          <input type="checkbox" name="filter" id="weather" class='chk-btn' style="margin-left:0.5em">
+          <label for='weather' style="font-size: 1.1em;">WEATHER</label>
+
+          <input type="checkbox" name="filter" id="dengue" class='chk-btn' style="margin-left:0.5em">
+          <label for='dengue' style="font-size: 1.1em;">DENGUE</label>
         </div>
     </div>
     <div class="card-body">
@@ -42,51 +45,87 @@
   </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap" async
-  defer></script>
+<script async defer 
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap">
+</script>
 
 
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <script>
   //create filter list
-  var filters = {CAT1:false, CAT2:false, weather:false}
+  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false}
+  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false}
 
+  var incidentMarkers = [];
+  var weatherMarkers = [];
+  var dengueClusters = [];
+  var map;
+
+  //init check boxes
+  var checkbutton1 = document.getElementById("CAT1");
+  var checkbutton2 = document.getElementById("CAT2");
+  checkbutton1.checked = true;
+  checkbutton2.checked = true;
+
+  //init filters
+  filters["CAT1"] = true;
+  filters["CAT2"] = true;
+
+  //draw markers
+  updateMap();
+
+// Functions:
+//------------------------------------------------------------------------------------------------
   //manage filters
-  var map_filter = function(id_val) {
-    if (filters[id_val]) 
-      filters[id_val] = false
-    else{
-      filters[id_val] = true
-    }
+  var update_filter = function(checkbutton) {
+    filters[checkbutton.id] = checkbutton.checked;
     updateMap();
   }
   
   $('input[name=filter]').change(function (e) {
-    map_filter(this.id);
+    update_filter(this);
   })
 
   function updateMap() {
-    if(filters["weather"]){
+    if(filters["weather"] && !displayed["weather"]){
       // weatherMarkers
       getAllWeather(getDateTime(), newWeatherMarker);
+      displayed["weather"] = true;
     }
-    else{
+    else if(!filters["weather"] && displayed["weather"]){
       deleteMarkers(weatherMarkers)
       weatherMarkers = []
+      displayed["weather"] = false;
     }
-    if(filters["CAT1"] || filters["CAT2"]){
+
+    if((filters["CAT1"] && !displayed["CAT1"]) || (!filters["CAT1"] && displayed["CAT1"])){
       updateIncident();
+      displayed["CAT1"] = !displayed["CAT1"];
     }
-    else{
-      deleteMarkers(incidentMarkers)
-      incidentMarkers = []
+    if((filters["CAT2"] && !displayed["CAT2"]) || (!filters["CAT2"] && displayed["CAT2"])){
+      updateIncident();
+      displayed["CAT2"] = !displayed["CAT2"];
+    }
+
+    if(filters["dengue"] && !displayed["dengue"]){
+      $.getJSON("{% static './assets/denguehotspots.json' %}", function (data) {
+        dengueClusters = map.data.addGeoJson(data);
+      });
+      displayed["dengue"] = true;
+      // Loading dengue clusters data
+      // map.data.loadGeoJson(
+      // "{% static './assets/denguehotspots.json' %}"
+      // );
+    }
+    else if(!filters["dengue"] && displayed["dengue"]){
+      for(var i=0; i<dengueClusters.length; i++){
+        map.data.remove(dengueClusters[i]);
+      }
+      dengueClusters = [];
+      displayed["dengue"] = false;
     }
   }
-
-  var incidentMarkers = [];
-  var weatherMarkers = [];
-  var map;
 
   function initMap() {
     // Map options
@@ -96,10 +135,6 @@
     }
     // New map
     map = new google.maps.Map(document.getElementById('map'), options);
-      // Loading dengue clusters data
-  /* map.data.loadGeoJson(
-  "{% static './assets/denguehotspots.json' %}"
-  );*/
   }
 
   // initialize markers
@@ -144,8 +179,6 @@
       });
   }
 
-// Functions:
-//------------------------------------------------------------------------------------------------
     function createInfoWindow(marker) {
         // wMarkers.push(weatherMarkers);
         marker.infoWindow = new google.maps.InfoWindow({
