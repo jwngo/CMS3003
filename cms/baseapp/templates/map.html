@@ -23,6 +23,16 @@
   <div class="card">
     <div class="card-header">
       <h3 class="card-title">Incident Map</h3>
+      <div>
+          <input type="checkbox" name="filter" id="CAT1" class='chk-btn'>
+          <label for='CAT1'>CAT1</label>
+        
+          <input type="checkbox" name="filter" id="CAT2" class='chk-btn'>
+          <label for='CAT2'>CAT2</label>
+        
+          <input type="checkbox" name="filter" id="weather" class='chk-btn'>
+          <label for='weather'>weather</label>
+        </div>
     </div>
     <div class="card-body">
       <div class="map">
@@ -31,11 +41,51 @@
     </div>
   </div>
 </div>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap" async
   defer></script>
 
+
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 <script>
+  //create filter list
+  var filters = {CAT1:false, CAT2:false, weather:false}
+
+  //manage filters
+  var map_filter = function(id_val) {
+    if (filters[id_val]) 
+      filters[id_val] = false
+    else{
+      filters[id_val] = true
+    }
+    updateMap();
+  }
+  
+  $('input[name=filter]').change(function (e) {
+    map_filter(this.id);
+  })
+
+  function updateMap() {
+    if(filters["weather"]){
+      // weatherMarkers
+      getAllWeather(getDateTime(), newWeatherMarker);
+    }
+    else{
+      deleteMarkers(weatherMarkers)
+      weatherMarkers = []
+    }
+    if(filters["CAT1"] || filters["CAT2"]){
+      updateIncident();
+    }
+    else{
+      deleteMarkers(incidentMarkers)
+      incidentMarkers = []
+    }
+  }
+
   var incidentMarkers = [];
+  var weatherMarkers = [];
   var map;
 
   function initMap() {
@@ -52,42 +102,47 @@
   );*/
   }
 
-  // weatherMarkers
-  getAllWeather(getDateTime(), newWeatherMarker);
+  // initialize markers
+  // getAllWeather(getDateTime(), newWeatherMarker);
+  // updateIncident();
   
-  // incidentMarkers
-  db.collection("incidents")
-    .onSnapshot(function (querySnapshot) {
-      // delete markers from map
-      deleteMarkers(incidentMarkers);
-      incidentMarkers = [];
+  function updateIncident(){
+    // incidentMarkers
+    db.collection("incidents")
+      .onSnapshot(function (querySnapshot) {
+        // delete markers from map
+        deleteMarkers(incidentMarkers);
+        incidentMarkers = [];
 
-      // create incidentMarkers
-      querySnapshot.forEach(function (doc) {
-        var id = doc.data().incident_id;
-        var incident_level = doc.data().incident_level;
-        var incident_type = doc.data().incident_type;
-        var incident_created_at_date = doc.data().incident_created_at_date;
-        var incident_created_at_time = doc.data().incident_created_at_time;
-        var incident_status = doc.data().incident_status;
-        var incident_lat = parseFloat(doc.data().incident_lat);
-        var incident_lng = parseFloat(doc.data().incident_lng);
-        var incidentIcon = getIncidentIcon(incident_level);
-        var marker = new google.maps.Marker({
-          position: { lat: incident_lat, lng: incident_lng },
-          map: map,
-          icon: incidentIcon,
-          content:"Incident ID: " + id + "<br /><br />" + 
-            "Incident Type: " + incident_type + "<br /><br />" +
-            "Status: " + incident_status + "<br /><br />"+
-            "Creation Timestamp: " + incident_created_at_time +" " + incident_created_at_date + "<br /><br />",
-          title: 'Incidents',
+        // create incidentMarkers
+        querySnapshot.forEach(function (doc) {
+          var id = doc.data().incident_id;
+          var incident_level = doc.data().incident_level;
+          var incident_type = doc.data().incident_type;
+          var incident_created_at_date = doc.data().incident_created_at_date;
+          var incident_created_at_time = doc.data().incident_created_at_time;
+          var incident_status = doc.data().incident_status;
+          var incident_lat = parseFloat(doc.data().incident_lat);
+          var incident_lng = parseFloat(doc.data().incident_lng);
+          var incidentIcon = getIncidentIcon(incident_level);
+          //apply filter
+          if((incident_level == "CAT1" && filters["CAT1"]) || (incident_level == "CAT2" && filters["CAT2"])){
+            var marker = new google.maps.Marker({
+              position: { lat: incident_lat, lng: incident_lng },
+              map: map,
+              icon: incidentIcon,
+              content:"Incident ID: " + id + "<br /><br />" + 
+                "Incident Type: " + incident_type + "<br /><br />" +
+                "Status: " + incident_status + "<br /><br />"+
+                "Creation Timestamp: " + incident_created_at_time +" " + incident_created_at_date + "<br /><br />",
+              title: 'Incidents',
+            });
+            createInfoWindow(marker);
+            incidentMarkers.push(marker);
+          }     
         });
-        createInfoWindow(marker);
-        incidentMarkers.push(marker);
-        
       });
-    });
+  }
 
 // Functions:
 //------------------------------------------------------------------------------------------------
@@ -106,7 +161,7 @@
       markers[i].setMap(null);
     }
   }
-
+  
   // addMarker Function
  /* function addMarker(props, markers_on_map) {
     var marker = new google.maps.Marker({
@@ -131,9 +186,9 @@
     //set iconImage using time & weather condition inputs
     var icon = 'https://i.imgsafe.org/21/21c939650b.png';
     var time = getDateTime();
-    console.log(typeof (time));
+    //console.log(typeof (time));
     time = parseInt(time.substr(11, 12));
-    console.log(time);
+    //console.log(time);
     if (time >= 7 && time <= 19) {
       switch (weather_condition) {
         case "Rain":
@@ -232,14 +287,13 @@
   }
 
   function newWeatherMarker(weather) {
-    
     for (var i = 0, len = weather.length; i < len; i++) {
       var myLat = weather[i].label_location.latitude;
       var myLng = weather[i].label_location.longitude;
-      createWeatherMarker(i);
+      createWeatherMarker(i)
 
       function createWeatherMarker(i) {
-        var weatherMarkers = new google.maps.Marker({
+          weatherMarkers[i] = new google.maps.Marker({
           position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
           map: map,
           title: 'Weather',
@@ -247,16 +301,17 @@
           icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
         });
         // wMarkers.push(weatherMarkers);
-        weatherMarkers.infoWindow = new google.maps.InfoWindow({
-          content: weatherMarkers.content
+        weatherMarkers[i].infoWindow = new google.maps.InfoWindow({
+          content: weatherMarkers[i].content
         });
-        google.maps.event.addListener(weatherMarkers, 'click', function () {
-          this.infoWindow.open(map, weatherMarkers);
-
+        google.maps.event.addListener(weatherMarkers[i], 'click', function () {
+          this.infoWindow.open(map, weatherMarkers[i]);
         });
       }
     }
   }
+
+ 
 
 
   function getDateTime() {
@@ -295,7 +350,7 @@
     var today = new Date();
    // today = today.toString();
    // today = today.substring(0, 11);
-    console.log(today);
+    //console.log(today);
     var month = today.getMonth();
     var month_in_words = [ "January", "February", "March", "April", "May", "June", 
            "July", "August", "September", "October", "November", "December" ];
