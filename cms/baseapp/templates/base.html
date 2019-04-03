@@ -21,7 +21,7 @@
   {% endblock %}
   <meta charset="UTF-8">
   <meta name="viewport"
-  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta http-equiv="Content-Language" content="en" />
   <meta name="msapplication-TileColor" content="#2d89ef">
@@ -39,7 +39,7 @@
   {% endblock %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
   <script src="{% static './assets/js/require.min.js' %}"></script>
   <script>
     requirejs.config({
@@ -60,6 +60,9 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
+<div class="network-status-bar">
+  <!-- managed by JQuerry in script below -->
+</div>
 <!-- header -->
 {% block login_page %}
 <div class="header py-4">
@@ -75,7 +78,7 @@
               <!-- <small class="text-muted d-block mt-1">Administrator</small> -->
             </span>
           </a>
-         <!-- add jQuery/javascript for logging out --> 
+          <!-- add jQuery/javascript for logging out -->
           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
             {% if user.is_authenticated %}
             <a class="dropdown-item" href="{% url 'user_logout' %}">
@@ -89,7 +92,8 @@
           </div>
         </div>
       </div>
-      <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0 collapsed" data-toggle="collapse" data-target="#headerMenuCollapse" aria-expanded="false">
+      <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0 collapsed" data-toggle="collapse"
+        data-target="#headerMenuCollapse" aria-expanded="false">
         <span class="header-toggler-icon"></span>
       </a>
     </div>
@@ -112,18 +116,49 @@
                   <a href="{% url 'map' %}" class="nav-link"><i class="fe fe-map"></i>Map</a>
                 </li>
                 {% endblock %}
-              </div>
             </div>
           </div>
         </div>
-        <div class="my-3 my-md-5">
-          <div class="container">
-            {% block content %}
-            {% endblock %}
-          </div>
+      </div>
+      <div class="my-3 my-md-5">
+        <div class="container">
+          {% block content %}
+          {% endblock %}
         </div>
       </div>
     </div>
   </div>
+  </div>
 </body>
 {% endblock %}
+
+<!-- sitewide checks for network connection -->
+<script>
+  // checks for network connection
+  window.addEventListener('offline', () => {
+    showOfflineBar(true)
+  });
+
+  window.addEventListener('online', () => {
+    showOfflineBar(false)
+  });
+
+  // handle change in network connection
+  function showOfflineBar(offline) {
+    // craft offline bar message
+    let offlineBar = $('<div/>', {
+      'class': 'alert alert-icon alert-danger',
+      role: 'alert',
+      append: '<i class="fe fe-alert-triangle mr-2" area-hidden="true"></i> Network disconnected. Check your connection and refresh'
+    })
+
+    if (offline) {
+      // network disconnected shows offline message
+      $('.network-status-bar').append(offlineBar)
+    }
+    else {
+      // network connected/re-connected remove message
+      $('.network-status-bar').empty()
+    }
+  }
+</script>
