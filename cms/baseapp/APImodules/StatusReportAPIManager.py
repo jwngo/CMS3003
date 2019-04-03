@@ -299,5 +299,3 @@ def sendEmailToPMO():
     #building of doc
     doc.build(elements)
     sendEmail()
-
-sendEmailToPMO();
