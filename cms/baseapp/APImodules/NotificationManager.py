@@ -1,3 +1,4 @@
+
 from FacebookAPIManager import facebookShare
 from TelegramAPIManager import telegram_post
 #from TwitterAPIManager import twitterShare
@@ -7,11 +8,13 @@ import requests
 from io import BytesIO
 from datetime import datetime
 import time
+
 ################## hard code data ####################
 # List of CAT2 incident that is posted
 cat2_posted = []
 
 # time interval between CAT2 posts(senconds): 6hours
+
 interval = 21600
 
 # civil defense shelter web page url
@@ -36,14 +39,17 @@ hospital_info = 'List of Hospitals and polyclinlcs: see the image below\n'
 #call notify() when sending the incident to firebase
 def notify(incident):
     incident_id = int(incident['incident_id'])
+
     message = get_message(incident) + shelter_info + hospital_info
     incident_level = incident['incident_level']
+
     #For CAT1 incident, send immediately
     if incident_level == 'CAT1':
         facebookShare(message, image)
         telegram_post(message, url)
     #For CAT2, update when >= 6 hours from last CAT2 post
     elif incident_level == 'CAT2':
+
         check_update(incident_id)
     
 
@@ -90,7 +96,5 @@ def get_message(incident):
         return ''
     alert_message = message + incident_level +' incident in ' + incident_region + ', '+ incident_address +', types of incident:' + types_of_incident + '.\n'
     return alert_message
-
-
 
     
