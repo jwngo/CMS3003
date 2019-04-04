@@ -1,7 +1,8 @@
-from FacebookAPIManager import facebookShare
-from TelegramAPIManager import telegram_post
+from .FacebookAPIManager import facebookShare
+from .TelegramAPIManager import telegram_post
 #from TwitterAPIManager import twitterShare
-from FirebaseAPIManager import getIncidentFromFirebase
+from .FirebaseAPIManager import getIncidentFromFirebase
+import PIL
 from PIL import Image
 import requests
 from io import BytesIO
