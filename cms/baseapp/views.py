@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout, authenticate
 from .APImodules.FirebaseAPIManager import saveSubscriberToFirebase, saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase, getAllSubscribers, getSubscribersByRegion
 from .APImodules.SMSAPIManager import sendSMSToSubscribers
+from .APImodules.NotificationManager import notify
 from .models import Report, Assistance
 from threading import Thread
 from pprint import pprint
@@ -79,6 +80,8 @@ def new_incident_form(request):
     # Send SMS to relevant Subscribers in a new Thread
     # This will improve the time taken to redirect back to dashboard
     thread = Thread(target=sendSMSToSubscribers, args=(incident,))
+    thread.start()
+    thread = Thread(target=notify, args=(incident,))
     thread.start()
 
     # Redirect to dashboard after adding new incident
