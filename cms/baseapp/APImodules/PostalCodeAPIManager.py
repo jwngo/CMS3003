@@ -1,4 +1,7 @@
 import json
+# import os
+
+# print(os.getcwd())
 
 with open('./baseapp/APImodules/postalcodes.json') as read_file:
 	data = json.load(read_file)
