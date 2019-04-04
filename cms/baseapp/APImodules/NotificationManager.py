@@ -1,4 +1,3 @@
-
 from FacebookAPIManager import facebookShare
 from TelegramAPIManager import telegram_post
 #from TwitterAPIManager import twitterShare
@@ -14,12 +13,11 @@ import time
 cat2_posted = []
 
 # time interval between CAT2 posts(senconds): 6hours
-
 interval = 21600
-
+hrs_24 = 86400
 # civil defense shelter web page url
 url_cd = 'https://www.scdf.gov.sg/home/civil-defence-shelter'
-
+url_cdMap = 'https://www.onemap.sg/main/v2/'
 
 #image includes information list of hospitals and polyclinics
 url = 'https://firebasestorage.googleapis.com/v0/b/cz2006project.appspot.com/o/hospitalInfo.jpeg?alt=media&token=be53232a-7e7e-450e-a1da-6f035d837750'
@@ -31,10 +29,18 @@ buf.seek(0)
 image = buf.read()
 buf.close()
 
-shelter_info = 'See civil defense shelter info at: '+url_cd +'\n'
+shelter_info = 'See details of civil defense shelters at: '+url_cd +'\n'
 hospital_info = 'List of Hospitals and polyclinlcs: see the image below\n'
 
 ################## functions ####################
+#send shelter info every 24 hours
+def send_info_24hrs():
+    message = 'Crisis Management System: Useful information and safety tips.\n1.Install smoke alarms on every level of your home, inside bedrooms and outside sleeping areas.\n2.In haze, stay in doors, put on protection when going out and requently wash your hands and face after outdoor activities.\n3.During event of terrorism, stay calm, follow the advice of local emergency officials and check for news and instructions.'+ shelter_info + hospital_info
+    while true:
+        facebookShare(message, image)
+        telegram_post(message, url)
+        time.sleep(hrs_24)
+
 
 #call notify() when sending the incident to firebase
 def notify(incident):
