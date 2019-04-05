@@ -28,14 +28,18 @@
                 <input type="checkbox" name="incident_type_of_incident" value="Terrorist" class="selectgroup-input">
                 <span class="selectgroup-button">Terrorist</span>
               </label>
+              <label class="selectgroup-item">
+                <input type="checkbox" name="incident_type_of_incident" value="Dengue" class="selectgroup-input">
+                <span class="selectgroup-button">Dengue</span>
+              </label>
             </div>
           </div>
         </div>
         <!-- num of casualties -->
         <div class="col-3">
           <div class="form-group">
-            <div class="form-label">Number Of Casualites</div>
-            <input type="tel" name="report_num_of_casualties" class="form-control" placeholder="# Of Casualites" required="" value ="0">
+            <div class="form-label">Number Of Casualties</div>
+            <input type="number" name="report_num_of_casualties" class="form-control" placeholder="# Of Casualites" required title = "Integers only" required="" value ="0" pattern ="[0-9]">
           </div>
         </div>
         <!-- type of assistance requested -->
@@ -71,7 +75,7 @@
         <div class="col-6">
           <div class="form-group">
             <label class="form-label">Reporter Name</label>
-            <input type="text" name="report_reporter_name" class="form-control" placeholder="Name Of Reporter" required = "">
+            <input type="text" name="report_reporter_name" class="form-control" placeholder="Name Of Reporter" required = "" required title = "Alphabets allowed only. " pattern ="[a-zA-Z][a-zA-Z ]+">
           </div>
         </div>
         <div class="col-3">
