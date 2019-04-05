@@ -229,7 +229,7 @@ def createPDF():
     elements.append(title)
     elements.append(table)
     elements.append(trends)
-    IncidentTypes = ["Haze","Fire","Terrorist"]
+    IncidentTypes = ["Haze","Fire","Terrorist","Dengue"]
     for IncidentType in IncidentTypes:
         drawing_six_hours = Image('plot1' + IncidentType + ".png")
         drawing_daily = Image('plot2' + IncidentType + ".png")
@@ -288,7 +288,7 @@ def sendEmail():
 
 
 def sendEmailToPMO():
-    IncidentTypes = ["Haze","Fire","Terrorist"]
+    IncidentTypes = ["Haze","Fire","Terrorist","Dengue"]
     for IncidentType in IncidentTypes:
         plot1 = drawSixHourGraph(Fb.handlingHourList(IncidentType),Fb.resolvedHourList(IncidentType),Fb.casualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot1' + IncidentType + '.png')
