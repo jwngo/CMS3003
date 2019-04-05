@@ -191,7 +191,7 @@ def handlingHourList(type_incident):
    incident_documents_list = []
    # In firebase's object form
    incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(
-       type_incident)).where('incident_status', '==', 'Reported').get()
+       type_incident)).where('incident_status', '==', 'Handling').get()
    for document in incident_documents:
     incident_documents_list.append(document.to_dict())
 
@@ -228,7 +228,7 @@ def resolvedHourList(type_incident):
    incident_documents_list = []
    # In firebase's object form
    incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(
-       type_incident)).where('incident_status', '==', 'Resolved').get()
+       type_incident)).where('incident_status', '==', 'Closed').get()
    for document in incident_documents:
     incident_documents_list.append(document.to_dict())
 
@@ -296,7 +296,7 @@ def handlingDayList(type_incident):
    handlingDayList = [0, 0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
-   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Reported').get()
+   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Handling').get()
    for document in incident_documents:
     incident_documents_list.append(document.to_dict())
 
@@ -337,7 +337,7 @@ def resolvedDayList(type_incident):
    resolvedDayList = [0, 0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
-   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Resolved').get()
+   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Closed').get()
    for document in incident_documents:
     incident_documents_list.append(document.to_dict())
 
