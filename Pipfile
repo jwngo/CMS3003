@@ -16,6 +16,8 @@ requests = "*"
 twilio = "*"
 facebook-sdk = "*"
 firebase-admin = "*"
+pil = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
