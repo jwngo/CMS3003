@@ -22,19 +22,34 @@
 <div class="col-12">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Incident Map</h3>
-      <div style="margin-left: 2em; margin-top: 0.7em">
+      <h2 class="card-title">Incident Map</h2>
+      <div style="margin-left: 2em; margin-top: 0.6em">
           <input type="checkbox" name="filter" id="CAT1" class='chk-btn' style="margin-left:0.5em">
-          <label for='CAT1' style="font-size: 1.1em;" >CAT1</label>
+          <label for='CAT1' style="font-size: 1.2em;" >CAT1</label>
+
+          <input type="checkbox" name="filter" id="terrorist" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'terroristLabel' for='terrorist' style="font-size: 0.8em; display: inline" >TERRORIST</label>
+
+          <input type="checkbox" name="filter" id="fire" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'fireLabel' for='fire' style="font-size: 0.8em; display: inline" >FIRE</label>
         
           <input type="checkbox" name="filter" id="CAT2" class='chk-btn' style="margin-left:0.5em">
-          <label for='CAT2' style="font-size: 1.1em;">CAT2</label>
+          <label for='CAT2' style="font-size: 1.2em;">CAT2</label>
+
+          <input type="checkbox" name="filter" id="carAccident" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'carAccidentLabel' for='carAccident' style="font-size: 0.8em; display: inline" >CAR ACCIDENT</label>
+
+          <input type="checkbox" name="filter" id="others" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'othersLabel' for='others' style="font-size: 0.8em; display: inline" >OTHERS</label>
         
           <input type="checkbox" name="filter" id="weather" class='chk-btn' style="margin-left:0.5em">
-          <label for='weather' style="font-size: 1.1em;">WEATHER</label>
+          <label for='weather' style="font-size: 1.2em;">WEATHER</label>
 
           <input type="checkbox" name="filter" id="dengue" class='chk-btn' style="margin-left:0.5em">
-          <label for='dengue' style="font-size: 1.1em;">DENGUE</label>
+          <label for='dengue' style="font-size: 1.2em;">DENGUE</label>
+
+          <input type="checkbox" name="filter" id="haze" class='chk-btn' style="margin-left:0.5em">
+          <label for='haze' style="font-size: 1.2em;">HAZE</label>
         </div>
     </div>
     <div class="card-body">
@@ -54,23 +69,19 @@
 
 <script>
   //create filter list
-  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false}
-  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false}
+  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, carAccident:false, others:false}
+  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, carAccident:false, others:false}
 
   var incidentMarkers = [];
   var weatherMarkers = [];
   var dengueClusters = [];
+  var hazeMarkers = [];
   var map;
 
   //init check boxes
-  var checkbutton1 = document.getElementById("CAT1");
-  var checkbutton2 = document.getElementById("CAT2");
-  checkbutton1.checked = true;
-  checkbutton2.checked = true;
-
   //init filters
-  filters["CAT1"] = true;
-  filters["CAT2"] = true;
+  checkIncidentLevel("CAT1", true);
+  checkIncidentLevel("CAT2", true);
 
   //draw markers
   updateMap();
@@ -80,6 +91,15 @@
   //manage filters
   var update_filter = function(checkbutton) {
     filters[checkbutton.id] = checkbutton.checked;
+    //update checkbutton display
+    if(checkbutton.id == 'CAT1'){
+      changeCheckButtonDisplay('fire', checkbutton.checked)
+      changeCheckButtonDisplay('terrorist', checkbutton.checked)
+    }
+    else if(checkbutton.id == 'CAT2'){
+      changeCheckButtonDisplay('carAccident', checkbutton.checked)
+      changeCheckButtonDisplay('others', checkbutton.checked)
+    }
     updateMap();
   }
   
@@ -87,7 +107,29 @@
     update_filter(this);
   })
 
+  function checkIncidentLevel(level, check){
+    var checkbutton1 = document.getElementById(level);
+    checkbutton1.checked = check;
+    if(level == 'CAT1'){
+      filters['CAT1'] = check;
+      checkIncidentType('terrorist', check);
+      checkIncidentType('fire', check);
+    }
+    else{
+      filters['CAT2'] = check;
+      checkIncidentType('carAccident', check);
+      checkIncidentType('others', check);
+    }
+  }
+
+  function checkIncidentType(type, check){
+      filters[type] = check;
+      checkbuttonA = document.getElementById(type)
+      checkbuttonA.checked = check;
+  }
+
   function updateMap() {
+    //weather
     if(filters["weather"] && !displayed["weather"]){
       // weatherMarkers
       getAllWeather(getDateTime(), newWeatherMarker);
@@ -99,15 +141,25 @@
       displayed["weather"] = false;
     }
 
-    if((filters["CAT1"] && !displayed["CAT1"]) || (!filters["CAT1"] && displayed["CAT1"])){
-      updateIncident();
-      displayed["CAT1"] = !displayed["CAT1"];
+    //haze
+    if(filters["haze"] && !displayed["haze"]){
+      // hazeMarkers
+      requestAirCondition(getDateTime(), newHazeMarker);
+      displayed["haze"] = true;
     }
-    if((filters["CAT2"] && !displayed["CAT2"]) || (!filters["CAT2"] && displayed["CAT2"])){
-      updateIncident();
-      displayed["CAT2"] = !displayed["CAT2"];
+    else if(!filters["haze"] && displayed["haze"]){
+      deleteMarkers(hazeMarkers)
+      hazeMarkers = []
+      displayed["haze"] = false;
     }
 
+    //incident
+    if(incidentNeedChange('CAT1') || incidentNeedChange('CAT2') || incidentNeedChange('fire')
+      || incidentNeedChange('terrorist') || incidentNeedChange('carAccident') || incidentNeedChange('others')){
+        updateIncident()
+    }
+
+    //dengue
     if(filters["dengue"] && !displayed["dengue"]){
       $.getJSON("{% static './assets/denguehotspots.json' %}", function (data) {
         dengueClusters = map.data.addGeoJson(data);
@@ -125,6 +177,28 @@
       dengueClusters = [];
       displayed["dengue"] = false;
     }
+  }
+
+  function incidentNeedChange(id){
+    var needChange = ((filters[id] && !displayed[id]) || (!filters[id] && displayed[id]))
+    if(needChange){
+      displayed[id] = !displayed[id]
+    }
+    return needChange
+  }
+
+  function changeCheckButtonDisplay(id, display){
+    checkButton = document.getElementById(id)
+    label = document.getElementById(id + 'Label')
+    if(display){
+      display = 'inline'
+      checkButton.checked = true;
+    }
+    else{
+      display = 'none'
+    }
+    checkButton.style.display = display
+    label.style.display = display
   }
 
   function initMap() {
@@ -161,7 +235,7 @@
           var incident_lng = parseFloat(doc.data().incident_lng);
           var incidentIcon = getIncidentIcon(incident_level);
           //apply filter
-          if((incident_level == "CAT1" && filters["CAT1"]) || (incident_level == "CAT2" && filters["CAT2"])){
+          if(filters[incident_level] && filters[incident_type]){
             var marker = new google.maps.Marker({
               position: { lat: incident_lat, lng: incident_lng },
               map: map,
@@ -180,14 +254,19 @@
   }
 
     function createInfoWindow(marker) {
-        // wMarkers.push(weatherMarkers);
         marker.infoWindow = new google.maps.InfoWindow({
-          content: marker.content
+          content: marker.content,
+          disableAutoPan: true
         });
-        google.maps.event.addListener(marker, 'click', function () {
-          this.infoWindow.open(map, marker);
+        marker.addListener('mouseover', function() {
+          this.infoWindow.open(map, this);
         });
-      }
+
+        // hide the infowindow when user mouses-out
+        marker.addListener('mouseout', function() {
+            this.infoWindow.close();
+        });
+    }
   
   function deleteMarkers(markers) {
     for (var i = 0; i < markers.length; i++) {
@@ -267,6 +346,11 @@
     return icon;
   }
 
+  function getHazeIcon(){
+    var icon = 'https://i.imgsafe.org/72/72a7c2decb.png';
+    return icon;
+  }
+
   function getIncidentIcon(cat) {
     var icon = 'https://i.imgsafe.org/4c/4cee807259.png';
     if (cat == 'CAT1') {
@@ -289,7 +373,7 @@
       if (this.readyState == 4 && this.status == 200) {
         //console.log(JSON.parse(this.responseText))
         var allData = JSON.parse(this.responseText)
-        allData = reorganizeData(allData)
+        allData = reorganizeWeatherData(allData)
         if (typeof callback === "function") {
           // apply() sets the meaning of "this" in the callback
           callback(allData);
@@ -300,8 +384,50 @@
     xhttp.send()
   }
 
+  function requestAirCondition(time, callback) {
+    parameter = "";
+    if (time.length > 11) {
+      parameter = "date_time"
+    }
+    else {
+      parameter = "date"
+    }
+    var url = "https://api.data.gov.sg/v1/environment/pm25"
+    var xhttp = new XMLHttpRequest()
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        //console.log(JSON.parse(this.responseText))
+        var allData = JSON.parse(this.responseText)
+        allData = reorganizeAirData(allData)
+        if (typeof callback === "function") {
+          // apply() sets the meaning of "this" in the callback
+          callback(allData);
+        }
+      }
+    };
+    xhttp.open("GET", url + "?" + parameter + "=" + time, true)
+    xhttp.send()
+  }
 
-  function reorganizeData(allData) {
+  function reorganizeAirData(airData){
+    var result = []
+    var region = airData.region_metadata
+    for (var i = 1, len = region.length; i < len; i++) {
+      result.push(region[i])
+      // //test
+      // console.log(region[i].name)
+    }
+    readings = airData.items[0].readings.pm25_one_hourly
+    for (i = 0, len1 = result.length; i < len1; i++) {
+      // //test
+      // console.log(result[i] +"    "+ readings[result.name])
+      result[i].reading = readings[result[i].name]
+      result[i].timeStamp = airData.items[0].timestamp
+    }
+    return result
+  }
+
+  function reorganizeWeatherData(allData) {
     var result = []
     var arr = allData.area_metadata
     for (var i = 0, len = arr.length; i < len; i++) {
@@ -320,32 +446,87 @@
   }
 
   function newWeatherMarker(weather) {
+    if(!filters['weather']) return
     for (var i = 0, len = weather.length; i < len; i++) {
       var myLat = weather[i].label_location.latitude;
       var myLng = weather[i].label_location.longitude;
       createWeatherMarker(i)
 
       function createWeatherMarker(i) {
-          weatherMarkers[i] = new google.maps.Marker({
+        weatherMarkers[i] = new google.maps.Marker({
           position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
           map: map,
           title: 'Weather',
           content: "Location: "+ weather[i].name +  "<br /><br />"  + "Weather: " + weather[i].forecast +  "<br /><br />" + "Timestamp: " + getDateTimeForMap() ,
           icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
         });
-        // wMarkers.push(weatherMarkers);
-        weatherMarkers[i].infoWindow = new google.maps.InfoWindow({
-          content: weatherMarkers[i].content
-        });
-        google.maps.event.addListener(weatherMarkers[i], 'click', function () {
-          this.infoWindow.open(map, weatherMarkers[i]);
-        });
+        
+        createInfoWindow(weatherMarkers[i])
+
+        // weatherMarkers[i].infoWindow = new google.maps.InfoWindow({
+        //   content: weatherMarkers[i].content
+        // });
+        // // google.maps.event.addListener(weatherMarkers[i], 'click', function () {
+        // //   this.infoWindow.open(map, weatherMarkers[i]);
+        // // });
+        // weatherMarkers[i].addListener('mouseover', function() {
+        //     this.infoWindow.open(map, this);
+        // });
+
+        // // assuming you also want to hide the infowindow when user mouses-out
+        // weatherMarkers[i].addListener('mouseout', function() {
+        //     this.infoWindow.close();
+        // });
       }
     }
   }
 
- 
+  function newHazeMarker(airData) {
+    if(!filters['haze']) return
+    //haze threshold
+    var threshold = 50;
+    for(var i=0; i<airData.length; i++){
+      // //test
+      // console.log(airData);
+      if(airData[i].reading >= threshold){
+        var myLat = airData[i].label_location.latitude;
+        var myLng = airData[i].label_location.longitude;
+        var myIcon = {
+          url: getHazeIcon(), // url
+          scaledSize: new google.maps.Size(40, 40), // scaled size
+          origin: new google.maps.Point(0,0), // origin
+          anchor: new google.maps.Point(0, 0) // anchor
+        };
+        hazeMarkers.push(new google.maps.Marker({
+          position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
+          map: map,
+          title: 'Haze',
+          content: "Location: "+ airData[i].name +  "<br /><br />"  + "pm2.5 level: " + airData[i].reading +  "<br /><br />" + "Timestamp: " + getDateTimeForMap() ,
+          icon: myIcon,
+        }))
+      }
+    }
+    for(var i=0; i<hazeMarkers.length; i++){
+      createInfoWindow(hazeMarkers[i])
+      // hazeMarkers[i].infoWindow = new google.maps.InfoWindow({
+      //   content: hazeMarkers[i].content
+      // });
+      // hazeMarkers[i].addListener('mouseover', function() {
+      //     this.infoWindow.open(map, this);
+      // });
 
+      // // assuming you also want to hide the infowindow when user mouses-out
+      // hazeMarkers[i].addListener('mouseout', function() {
+      //     this.infoWindow.close();
+      // });
+    }
+  }
+
+  // function hazeMarkerOnClick(hazeMarker){
+  //   //test
+  //   console.log(hazeMarker);
+  //   hazeMarker.infoWindow.open(map, hazeMarker);
+  // }
 
   function getDateTime() {
     var today = new Date();
