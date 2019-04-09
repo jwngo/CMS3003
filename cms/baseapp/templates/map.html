@@ -32,6 +32,9 @@
 
           <input type="checkbox" name="filter" id="fire" class='chk-btn' style="margin-left:0.5em; display: inline">
           <label id = 'fireLabel' for='fire' style="font-size: 0.8em; display: inline" >FIRE</label>
+
+          <input type="checkbox" name="filter" id="gasLeak" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'gasLeakLabel' for='gasLeak' style="font-size: 0.8em; display: inline" >GAS LEAK</label>
         
           <input type="checkbox" name="filter" id="CAT2" class='chk-btn' style="margin-left:0.5em">
           <label for='CAT2' style="font-size: 1.2em;">CAT2</label>
@@ -69,8 +72,8 @@
 
 <script>
   //create filter list
-  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, carAccident:false, others:false}
-  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, carAccident:false, others:false}
+  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, gasLeak:false, carAccident:false, others:false}
+  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, gasLeak:false, carAccident:false, others:false}
 
   var incidentMarkers = [];
   var weatherMarkers = [];
@@ -95,6 +98,7 @@
     if(checkbutton.id == 'CAT1'){
       changeCheckButtonDisplay('fire', checkbutton.checked)
       changeCheckButtonDisplay('terrorist', checkbutton.checked)
+      changeCheckButtonDisplay('gasLeak', checkbutton.checked)
     }
     else if(checkbutton.id == 'CAT2'){
       changeCheckButtonDisplay('carAccident', checkbutton.checked)
@@ -114,6 +118,7 @@
       filters['CAT1'] = check;
       checkIncidentType('terrorist', check);
       checkIncidentType('fire', check);
+      checkIncidentType('gasLeak', check);
     }
     else{
       filters['CAT2'] = check;
@@ -155,7 +160,7 @@
 
     //incident
     if(incidentNeedChange('CAT1') || incidentNeedChange('CAT2') || incidentNeedChange('fire')
-      || incidentNeedChange('terrorist') || incidentNeedChange('carAccident') || incidentNeedChange('others')){
+      || incidentNeedChange('terrorist') || incidentNeedChange('gasLeak') || incidentNeedChange('carAccident') || incidentNeedChange('others')){
         updateIncident()
     }
 
