@@ -10,13 +10,10 @@ autopep8 = "*"
 [packages]
 django = "*"
 pylint = "*"
-channels = "*"
-channels-redis = "*"
 requests = "*"
 twilio = "*"
 facebook-sdk = "*"
 firebase-admin = "*"
-pil = "*"
 pillow = "*"
 
 [requires]
