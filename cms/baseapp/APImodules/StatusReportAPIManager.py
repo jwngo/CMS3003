@@ -8,7 +8,8 @@ from firebase_admin import firestore
 import .FirebaseAPIManager as Fb
 from pprint import pprint
 
-import datetime
+from datetime import datetime
+from datetime import timedelta
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter, inch
@@ -162,16 +163,16 @@ def createTable(item_data):
 
 #Creating graph of Number of Casualities against Number of Incidents and Day
 #Returns graph
-def drawDayGraph(handlingDayList,resolvedDayList,casualtiesDayList,incidenttype):
+def drawDayGraph(handlingDayList,closedDayList,casualtiesDayList,incidenttype):
     width = .35 # width of a bar
 
     m1_t = pd.DataFrame({
     'Handling' : handlingDayList,
-    'Resolved' : resolvedDayList,
+    'Closed' : closedDayList,
     'No. of casualties' : casualtiesDayList})
 
     my_colors = list(islice(cycle(['r', 'g']), None, 2))
-    m1_t[['Handling','Resolved']].plot(kind='bar', width = width, color = my_colors )
+    m1_t[['Handling','Closed']].plot(kind='bar', width = width, color = my_colors )
     ax1 = plt.gca()
     ax1.set(xlabel="Day",ylabel='No. of Incidents')
     m1_t['No. of casualties'].plot(secondary_y=True)
@@ -186,18 +187,25 @@ def drawDayGraph(handlingDayList,resolvedDayList,casualtiesDayList,incidenttype)
 
     return plt.gcf()   
 
-#Creating graph of Number of Casualities against Number of Incidents and Hours in 5-hours interval
+def getTime(date_Now):
+  time_Now =  date_Now.time() 
+  if(1 <= int(time_Now.minute) <= 9)
+    return (str(time_Now.hour)+":"+"0"+str(time_Now.minute))
+  else:
+      return (str(time_Now.hour)+":"+str(time_Now.minute)) 
+
+#Creating graph of Number of Casualities against Number of Incidents and Hours for six hours using the time now as end point
 #Returns graph
-def drawSixHourGraph(handlingHourList,resolvedHourList,casualtiesHourList,incidenttype):
+def drawSixHourGraph(handlingHourList,closedHourList,casualtiesHourList,incidenttype):
     width = .35 # width of a bar
 
     m1_t = pd.DataFrame({
     'Handling' : handlingHourList,
-    'Resolved' : resolvedHourList,
+    'Closed' : closedHourList,
     'No. of casualties' : casualtiesHourList})
 
     my_colors = list(islice(cycle(['r', 'g']), None, 2))
-    m1_t[['Handling','Resolved']].plot(kind='bar', width = width, color = my_colors )
+    m1_t[['Handling','Closed']].plot(kind='bar', width = width, color = my_colors )
     ax1 = plt.gca()
     ax1.set(xlabel="Time",ylabel='No. of Incidents')
     m1_t['No. of casualties'].plot(secondary_y=True)
@@ -206,7 +214,14 @@ def drawSixHourGraph(handlingHourList,resolvedHourList,casualtiesHourList,incide
     plt.legend(loc = 'upper center')
     plt.xlim([-width, len(m1_t['Handling'])-width])
     plt.title(incidenttype.format(0))
-    ax.set_xticklabels(('00:00', '05:00', '10:00', '15:00', '20:00'))
+    
+    date_Now = datetime.now()
+    labelTuple = (getTime(date_Now),)
+
+    for i in range(1,6):
+        labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+    
+    ax.set_xticklabels(labelTuple[::-1])
     ax.set(ylabel='No. of casualties')
     
     
@@ -288,11 +303,11 @@ def sendEmail():
 
 
 def sendEmailToPMO():
-    IncidentTypes = ["Haze","Fire","Terrorist","Dengue"]
+    IncidentTypes = ["others","Fire","terrorist","gas leak"]
     for IncidentType in IncidentTypes:
-        plot1 = drawSixHourGraph(Fb.handlingHourList(IncidentType),Fb.resolvedHourList(IncidentType),Fb.casualtiesHourList(IncidentType),IncidentType)
+        plot1 = drawSixHourGraph(Fb.getHandlingHourList(IncidentType),Fb.getClosedHourList(IncidentType),Fb.getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot1' + IncidentType + '.png')
-        plot2 = drawDayGraph(Fb.handlingHourList(IncidentType),Fb.resolvedHourList(IncidentType),Fb.casualtiesHourList(IncidentType),IncidentType)
+        plot2 = drawDayGraph(Fb.getHandlingHourList(IncidentType),Fb.getClosedHourList(IncidentType),Fb.getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot2' + IncidentType + '.png')
     
     elements = createPDF()
