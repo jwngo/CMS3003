@@ -185,79 +185,94 @@ def getSubscribersByRegion(region):
     subscribers_data[count] = subscriber.to_dict()
 
   return subscribers_data
-def handlingHourList(type_incident):
+
+def getTime(date_Now):
+    time_Now =  date_Now.time() 
+    if(1 <= int(time_Now.minute) <= 9):
+        return (str(time_Now.hour)+":"+"0"+str(time_Now.minute))
+    else:
+        return (str(time_Now.hour)+":"+str(time_Now.minute)) 
+
+def getHandlingHourList(type_incident):
 # handlingHourList = [3,2,2,2,1]
-   handlingHourList = [0, 0, 0, 0, 0]
+   handlingHourList = [0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
-   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(
-       type_incident)).where('incident_status', '==', 'Handling').get()
+   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Handling').get()
+    #get time
+   date_Now = datetime.now()
+   labelTuple = (getTime(date_Now),)
+
+   for i in range(1,6):
+        labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+   reverseTuple = labelTuple[::-1]
+  
    for document in incident_documents:
-    incident_documents_list.append(document.to_dict())
+        incident_documents_list.append(document.to_dict())
 
    # if no documents
    if(len(incident_documents_list) == 0):
-       return handlingHourList
+        return handlingHourList
    else:
     # go through each document and classify document into specified time range
     for i in range(len(incident_documents_list)):
-        #check dateTime and make sure that it is 24 hours before the time now
+        #check dateTime and make sure that it is within 24 hours from the time now
         time = incident_documents_list[i]['incident_created_at_time']
         date=incident_documents_list[i]['incident_created_at_date']
         dateTime = time+' '+date
         check = datetime.strptime(dateTime, '%H:%M %d %B %Y')
         date_Now = datetime.now()
         if(check > (date_Now - timedelta(hours =24))):
-            if(firstRange(time)):
-                handlingHourList[0] += 1
-            elif (secondRange(time)):
-                handlingHourList[1] += 1
-            elif (thirdRange(time)):
-                handlingHourList[2] += 1
-            elif (fourthRange(time)):
-                handlingHourList[3] += 1
-            elif (fifthRange(time)):
-                handlingHourList[4] += 1
+            for i in range(6):
+                start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(hours =1)).time()
+                startRange = str(start.hour)+":"+str(start.minute)
+                endRange = reverseTuple[i]
+                if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
+                    handlingHourList[i]+=1
     return handlingHourList
 
 
-def resolvedHourList(type_incident):
-# resolvedHourList = [3,2,2,2,1]
+def getClosedHourList(type_incident):
+# closedHourList = [3,2,2,2,1]
    # handlingHourList = [3,2,2,2,1]
-   resolvedHourList = [0, 0, 0, 0, 0]
-   incident_documents_list = []
+    closedHourList = [0, 0, 0, 0, 0]
+    incident_documents_list = []
    # In firebase's object form
-   incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(
-       type_incident)).where('incident_status', '==', 'Closed').get()
-   for document in incident_documents:
-    incident_documents_list.append(document.to_dict())
+    incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Closed').get()
+    #get time
+    date_Now = datetime.now()
+    labelTuple = (getTime(date_Now),)
 
-   # if no documents
-   if(len(incident_documents_list) == 0):
-       return resolvedHourList
-   else:
-    # go through each document and classify document into specified time range
-    for i in range(len(incident_documents_list)):
-        time = incident_documents_list[i]['incident_created_at_time']
-        date=incident_documents_list[i]['incident_created_at_date']
-        dateTime = time+' '+date
-        check = datetime.strptime(dateTime, '%H:%M %d %B %Y')
-        date_Now = datetime.now()
-        if(check > (date_Now - timedelta(hours =24))):
-            if(firstRange(time)):
-                resolvedHourList[0] += 1
-            elif (secondRange(time)):
-                resolvedHourList[1] += 1
-            elif (thirdRange(time)):
-                resolvedHourList[2] += 1
-            elif (fourthRange(time)):
-                resolvedHourList[3] += 1
-            elif (fifthRange(time)):
-                resolvedHourList[4] += 1
-    return resolvedHourList
+    for i in range(1,6):
+            labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+    reverseTuple = labelTuple[::-1]
+    
+    for document in incident_documents:
+            incident_documents_list.append(document.to_dict())
+
+    # if no documents
+    if(len(incident_documents_list) == 0):
+            return closedHourList
+    else:
+        # go through each document and classify document into specified time range
+        for i in range(len(incident_documents_list)):
+            #check dateTime and make sure that it is within 24 hours from the time now
+            time = incident_documents_list[i]['incident_created_at_time']
+            date=incident_documents_list[i]['incident_created_at_date']
+            dateTime = time+' '+date
+            check = datetime.strptime(dateTime, '%H:%M %d %B %Y')
+            date_Now = datetime.now()
+            if(check > (date_Now - timedelta(hours =24))):
+                for i in range(6):
+                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(hours =1)).time()
+                    startRange = str(start.hour)+":"+str(start.minute)
+                    endRange = reverseTuple[i]
+                    if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
+                        closedHourList[i]+=1
+    return closedHourList
 
 
-def casualtiesHourList(type_incident):
+def getCasualtiesHourList(type_incident):
 # casualtiesHourList = [3,3,4,5,10]
     casualtiesHourList = [0, 0, 0, 0, 0]
 
@@ -265,33 +280,39 @@ def casualtiesHourList(type_incident):
     # In firebase's object form
     incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).get()
 
+     #get time
+    date_Now = datetime.now()
+    labelTuple = (getTime(date_Now),)
+
+    for i in range(1,6):
+            labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+    reverseTuple = labelTuple[::-1]
+
     for document in incident_documents:
         incident_documents_list.append(document.to_dict())
     #if no documents
     if(len(incident_documents_list) == 0):
         return casualtiesHourList
     else:
+        # go through each document and classify document into specified time range
         for i in range(len(incident_documents_list)):
+            #check dateTime and make sure that it is within 24 hours from the time now
             time = incident_documents_list[i]['incident_created_at_time']
             date=incident_documents_list[i]['incident_created_at_date']
             dateTime = time+' '+date
             check = datetime.strptime(dateTime, '%H:%M %d %B %Y')
             date_Now = datetime.now()
             if(check > (date_Now - timedelta(hours =24))):
-                if(firstRange(time)):
-                    casualtiesHourList[0] += countCasualties(incident_documents_list,i)
-                elif (secondRange(time)):
-                    casualtiesHourList[1] += countCasualties(incident_documents_list,i)
-                elif (thirdRange(time)):
-                    casualtiesHourList[2] += countCasualties(incident_documents_list,i)
-                elif (fourthRange(time)):
-                    casualtiesHourList[3] += countCasualties(incident_documents_list,i)
-                elif (fifthRange(time)):
-                    casualtiesHourList[4] += countCasualties(incident_documents_list,i)
+                for i in range(6):
+                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(hours =1)).time()
+                    startRange = str(start.hour)+":"+str(start.minute)
+                    endRange = reverseTuple[i]
+                    if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
+                        casualtiesHourList[i]+= countCasualties(incident_documents_list,i)
     return casualtiesHourList
 
 
-def handlingDayList(type_incident):
+def getHandlingDayList(type_incident):
     # handlingDayList = [3,2,2,2,1,4,4]
    handlingDayList = [0, 0, 0, 0, 0, 0, 0]
    incident_documents_list = []
@@ -330,11 +351,11 @@ def handlingDayList(type_incident):
         return handlingDayList
 
 
-def resolvedDayList(type_incident):
-# resolvedDayList = [3,2,2,2,1,3,3]
+def getClosedDayList(type_incident):
+# closedDayList = [3,2,2,2,1,3,3]
 
     
-   resolvedDayList = [0, 0, 0, 0, 0, 0, 0]
+   closedDayList = [0, 0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
    incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Closed').get()
@@ -343,7 +364,7 @@ def resolvedDayList(type_incident):
 
    # if no documents
    if(len(incident_documents_list) == 0):
-       return resolvedDayList
+       return closedDayList
    else:
         # go through each document and classify document into specified time range
         for i in range(len(incident_documents_list)):
@@ -353,23 +374,23 @@ def resolvedDayList(type_incident):
             boundary = date_Now - timedelta(days = 7)
             if(date>boundary):
                 if(datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Monday"):
-                    resolvedDayList[0] += 1
+                    closedDayList[0] += 1
                 elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Tuesday"):
-                    resolvedDayList[1] += 1
+                    closedDayList[1] += 1
                 elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Wednesday"):
-                    resolvedDayList[2] += 1
+                    closedDayList[2] += 1
                 elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Thursday"):
-                    resolvedDayList[3] += 1
+                    closedDayList[3] += 1
                 elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Friday"):
-                    resolvedDayList[4] += 1
+                    closedDayList[4] += 1
                 elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Saturday"):
-                    resolvedDayList[5] += 1
+                    closedDayList[5] += 1
                 elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Sunday"):
-                    resolvedDayList[6] += 1
+                    closedDayList[6] += 1
 
-        return resolvedDayList
+        return closedDayList
 
-def casualtiesDayList(type_incident):
+def getCasualtiesDayList(type_incident):
 # casualtiesDayList = [3,3,4,5,10,2,3]
 
     casualtiesDayList=[0, 0, 0, 0, 0, 0, 0]
@@ -382,7 +403,7 @@ def casualtiesDayList(type_incident):
         incident_documents_list.append(document.to_dict())
     #if no documents
     if(len(incident_documents_list) == 0):
-        return casualtiesHourList
+        return casualtiesDayList
         # loop through all reports to add up all casualties
     else:
         for i in range(len(incident_documents_list)):
@@ -410,42 +431,14 @@ def casualtiesDayList(type_incident):
     return casualtiesDayList
 
 def time_in_range(start, end, x):
-  startObj=datetime.strptime(start, ":%H:%M").time()
-  endObj=datetime.strptime(end, ":%H:%M").time()
+  startObj=datetime.strptime(start, "%H:%M").time()
+  endObj=datetime.strptime(end, "%H:%M").time()
   if startObj <= endObj:
-        return startObj <= x <= endObj
+      #e,g (4,5]
+        return startObj < x <= endObj
   else:
         return startObj <= x or x <= endObj
 
-
-
-def firstRange(time):
-    start=":00:00"
-    end=":04:00"
-    return time_in_range(start, end, datetime.time(datetime.strptime(time, "%H:%M")))
-
-def secondRange(time):
-    start=":05:00"
-    end=":09:00"
-    return time_in_range(start, end, datetime.time(datetime.strptime(time, "%H:%M")))
-
-
-def thirdRange(time):
-    start=":10:00"
-    end=":14:00"
-    return time_in_range(start, end, datetime.time(datetime.strptime(time, "%H:%M")))
-
-
-def fourthRange(time):
-    start=":15:00"
-    end=":20:00"
-    return time_in_range(start, end, datetime.time(datetime.strptime(time, "%H:%M")))
-
-
-def fifthRange(time):
-    start=":21:00"
-    end=":24:00"
-    return time_in_range(start, end, datetime.time(datetime.strptime(time, "%H:%M")))
 
 def countCasualties(incident_documents_list,i):
     casualties_incident = []
