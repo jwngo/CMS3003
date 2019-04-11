@@ -1,15 +1,12 @@
-from .FirebaseAPIManager import getIncidentFromFirebase, getReportsFromFirebase
-from pprint import pprint
+from .FirebaseAPIManager import *
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+import os
 
-import .FirebaseAPIManager as Fb
-from pprint import pprint
-
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter, inch
@@ -29,16 +26,6 @@ from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import pyplot as mp
 from itertools import cycle, islice
 
-# Initializing current datetime
-now = datetime.datetime.now()
-currentDateTime = now.strftime("%Y-%m-%d %H:%M")
-
-# Initializing document
-doc = SimpleDocTemplate("Status Report " + currentDateTime+".pdf", pagesize=letter)
-
-# Initializing elements to be added into empty pdf file
-elements = []
-
 # Initializing styleSheet for document design 
 styleSheet = getSampleStyleSheet()
 
@@ -46,26 +33,37 @@ styleSheet = getSampleStyleSheet()
 def getDataFromFirebase():
     db = firestore.client()
 
+    now = datetime.now()
+
     # Retrieving the current date, time for comparison to retrieve data
     incident_date = now.strftime("%d %B %Y")
 
-    # Getting all the Incidents in this order: 
-    # 1) Cat1 + Reported 2) Cat2 + Reported 3) Cat1 + Closed 4) Cat2 + Reported
+    # Getting all the Incidents in this order:
+    # 1) Cat1 + Handling 2) Cat2 + Handling 3) Cat1 + Closed(only for cases in that day) 4) Cat2 + Closed(only for cases in that day)
     incident_data = db.collection('incidents')
+
     cat1_incidents_data = incident_data.where(
-        u'incident_date', u'==', incident_date).where(
+        u'incident_created_at_date', u'==', incident_date).where(
             u'incident_level', u'==', u'CAT1')
+
     cat2_incidents_data = incident_data.where(
-        u'incident_date', u'==', incident_date).where(
+        u'incident_created_at_date', u'==', incident_date).where(
             u'incident_level', u'==', u'CAT2')
-    cat1_reported_data = cat1_incidents_data.where(
-        u'incident_status', u'==', u'Reported').get()
+
+    cat1_reported_data = incident_data.where(
+        u'incident_level', u'==', u'CAT1').where(
+            u'incident_status', u'==', u'Handling').get()
+
     cat1_closed_data = cat1_incidents_data.where(
         u'incident_status', u'==', u'Closed').get()
-    cat2_reported_data = cat2_incidents_data.where(
-        u'incident_status', u'==', u'Reported').get()
+
+    cat2_reported_data = incident_data.where(
+        u'incident_level', u'==', u'CAT2').where(
+            u'incident_status', u'==', u'Handling').get()
+
     cat2_closed_data = cat2_incidents_data.where(
         u'incident_status', u'==', u'Closed').get()
+
     all_incidents_data = {}
     all_incidents_data.update(cat1_reported_data)
     all_incidents_data.update(cat2_reported_data)
@@ -188,11 +186,11 @@ def drawDayGraph(handlingDayList,closedDayList,casualtiesDayList,incidenttype):
     return plt.gcf()   
 
 def getTime(date_Now):
-  time_Now =  date_Now.time() 
-  if(1 <= int(time_Now.minute) <= 9)
-    return (str(time_Now.hour)+":"+"0"+str(time_Now.minute))
-  else:
-      return (str(time_Now.hour)+":"+str(time_Now.minute)) 
+    time_Now =  date_Now.time() 
+    if(1 <= int(time_Now.minute) <= 9):
+        return (str(time_Now.hour)+":"+"0"+str(time_Now.minute))
+    else:
+        return (str(time_Now.hour)+":"+str(time_Now.minute)) 
 
 #Creating graph of Number of Casualities against Number of Incidents and Hours for six hours using the time now as end point
 #Returns graph
@@ -229,14 +227,14 @@ def drawSixHourGraph(handlingHourList,closedHourList,casualtiesHourList,incident
 
 
 #Creating the style and combining the different elements together
-def createPDF():
+def createPDF(currentDateTime, elements):
     cms_name = Paragraph('''Crisis Management System''', styleSheet["Title"])
     current_datetime = now.strftime("<para align=centre>%Y-%m-%d %H:%M</para>")
     print_datetime = Paragraph(current_datetime, styleSheet["h3"])
     title = Paragraph('''<b>Status Report</b>''', styleSheet["Title"])
     item_data = getDataFromFirebase()
     table = createTable(item_data)
-    trends = Paragraph('''<para align=centre><b>The next two pages display graphs that summarises key indicators and trends.</b></para>''', styleSheet["h4"])
+    trends = Paragraph('''<para align=centre><b>The next few pages display graphs that summarises key indicators and trends based on their incident types.</b></para>''', styleSheet["h4"])
     six_hours_graph = Paragraph('''<para align=centre><b>Six Hours Graph</b></para>''', styleSheet["h1"])
     daily_graph = Paragraph('''<para align=centre><b>Daily Graph</b></para>''', styleSheet["h1"])
     elements.append(cms_name)
@@ -244,7 +242,7 @@ def createPDF():
     elements.append(title)
     elements.append(table)
     elements.append(trends)
-    IncidentTypes = ["Haze","Fire","Terrorist","Dengue"]
+    IncidentTypes = ["others","Fire","terrorist","gas leak"]
     for IncidentType in IncidentTypes:
         drawing_six_hours = Image('plot1' + IncidentType + ".png")
         drawing_daily = Image('plot2' + IncidentType + ".png")
@@ -261,7 +259,7 @@ def createPDF():
 
 
 #Sending out Email to PMO
-def sendEmail():
+def sendEmail(currentDateTime):
     fromaddr = "cms3003report@gmail.com"
     toaddr = "cms3003report@gmail.com" #To Prime Minister Office email address
     # instance of MIMEMultipart 
@@ -303,14 +301,28 @@ def sendEmail():
 
 
 def sendEmailToPMO():
+    # Initializing time
+    now = datetime.now()
+    currentDateTime = now.strftime("%Y-%m-%d %H:%M")
+    # Initializing document
+    doc = SimpleDocTemplate("Status Report " + currentDateTime + ".pdf", pagesize=letter)
+    # Initializing elements to be added into empty pdf file
+    emptyList = []
+
     IncidentTypes = ["others","Fire","terrorist","gas leak"]
     for IncidentType in IncidentTypes:
-        plot1 = drawSixHourGraph(Fb.getHandlingHourList(IncidentType),Fb.getClosedHourList(IncidentType),Fb.getCasualtiesHourList(IncidentType),IncidentType)
+        plot1 = drawSixHourGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot1' + IncidentType + '.png')
-        plot2 = drawDayGraph(Fb.getHandlingHourList(IncidentType),Fb.getClosedHourList(IncidentType),Fb.getCasualtiesHourList(IncidentType),IncidentType)
+        plot2 = drawDayGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot2' + IncidentType + '.png')
     
-    elements = createPDF()
+    elements = createPDF(currentDateTime, emptyList)
     #building of doc
     doc.build(elements)
-    sendEmail()
+    sendEmail(currentDateTime)
+
+    for IncidentType in IncidentTypes:
+        os.remove('plot1' + IncidentType + '.png')
+        os.remove('plot2' + IncidentType + '.png')
+
+    os.remove("Status Report " + currentDateTime + ".pdf")
