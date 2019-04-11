@@ -25,34 +25,34 @@
       <h2 class="card-title">Incident Map</h2>
       <div style="margin-left: 2em; margin-top: 0.6em">
           <input type="checkbox" name="filter" id="CAT1" class='chk-btn' style="margin-left:0.5em">
-          <label for='CAT1' style="font-size: 1.2em;" >CAT1</label>
+          <label for='CAT1' style="font-size: 1.1em;" >CAT1</label>
 
           <input type="checkbox" name="filter" id="terrorist" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'terroristLabel' for='terrorist' style="font-size: 0.8em; display: inline" >TERRORIST</label>
+          <label id = 'terroristLabel' for='terrorist' style="font-size: 0.7em; display: inline" >TERRORIST</label>
 
           <input type="checkbox" name="filter" id="fire" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'fireLabel' for='fire' style="font-size: 0.8em; display: inline" >FIRE</label>
+          <label id = 'fireLabel' for='fire' style="font-size: 0.7em; display: inline" >FIRE</label>
 
-          <input type="checkbox" name="filter" id="gasLeak" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'gasLeakLabel' for='gasLeak' style="font-size: 0.8em; display: inline" >GAS LEAK</label>
+          <input type="checkbox" name="filter" id="gasleak" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'gasleakLabel' for='gasleak' style="font-size: 0.7em; display: inline" >GAS LEAK</label>
         
           <input type="checkbox" name="filter" id="CAT2" class='chk-btn' style="margin-left:0.5em">
-          <label for='CAT2' style="font-size: 1.2em;">CAT2</label>
+          <label for='CAT2' style="font-size: 1.1em;">CAT2</label>
 
-          <input type="checkbox" name="filter" id="carAccident" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'carAccidentLabel' for='carAccident' style="font-size: 0.8em; display: inline" >CAR ACCIDENT</label>
+          <input type="checkbox" name="filter" id="caraccident" class='chk-btn' style="margin-left:0.5em; display: inline">
+          <label id = 'caraccidentLabel' for='caraccident' style="font-size: 0.7em; display: inline" >CAR ACCIDENT</label>
 
           <input type="checkbox" name="filter" id="others" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'othersLabel' for='others' style="font-size: 0.8em; display: inline" >OTHERS</label>
+          <label id = 'othersLabel' for='others' style="font-size: 0.7em; display: inline" >OTHERS</label>
         
           <input type="checkbox" name="filter" id="weather" class='chk-btn' style="margin-left:0.5em">
-          <label for='weather' style="font-size: 1.2em;">WEATHER</label>
+          <label for='weather' style="font-size: 1.1em;">WEATHER</label>
 
           <input type="checkbox" name="filter" id="dengue" class='chk-btn' style="margin-left:0.5em">
-          <label for='dengue' style="font-size: 1.2em;">DENGUE</label>
+          <label for='dengue' style="font-size: 1.1em;">DENGUE</label>
 
           <input type="checkbox" name="filter" id="haze" class='chk-btn' style="margin-left:0.5em">
-          <label for='haze' style="font-size: 1.2em;">HAZE</label>
+          <label for='haze' style="font-size: 1.1em;">HAZE</label>
         </div>
     </div>
     <div class="card-body">
@@ -72,8 +72,8 @@
 
 <script>
   //create filter list
-  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, gasLeak:false, carAccident:false, others:false}
-  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, gasLeak:false, carAccident:false, others:false}
+  var filters = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, gasleak:false, caraccident:false, others:false}
+  var displayed = {CAT1:false, CAT2:false, weather:false, dengue:false, haze:false, fire:false, terrorist:false, gasleak:false, caraccident:false, others:false}
 
   var incidentMarkers = [];
   var weatherMarkers = [];
@@ -98,10 +98,10 @@
     if(checkbutton.id == 'CAT1'){
       changeCheckButtonDisplay('fire', checkbutton.checked)
       changeCheckButtonDisplay('terrorist', checkbutton.checked)
-      changeCheckButtonDisplay('gasLeak', checkbutton.checked)
+      changeCheckButtonDisplay('gasleak', checkbutton.checked)
     }
     else if(checkbutton.id == 'CAT2'){
-      changeCheckButtonDisplay('carAccident', checkbutton.checked)
+      changeCheckButtonDisplay('caraccident', checkbutton.checked)
       changeCheckButtonDisplay('others', checkbutton.checked)
     }
     updateMap();
@@ -118,11 +118,11 @@
       filters['CAT1'] = check;
       checkIncidentType('terrorist', check);
       checkIncidentType('fire', check);
-      checkIncidentType('gasLeak', check);
+      checkIncidentType('gasleak', check);
     }
     else{
       filters['CAT2'] = check;
-      checkIncidentType('carAccident', check);
+      checkIncidentType('caraccident', check);
       checkIncidentType('others', check);
     }
   }
@@ -160,7 +160,7 @@
 
     //incident
     if(incidentNeedChange('CAT1') || incidentNeedChange('CAT2') || incidentNeedChange('fire')
-      || incidentNeedChange('terrorist') || incidentNeedChange('gasLeak') || incidentNeedChange('carAccident') || incidentNeedChange('others')){
+      || incidentNeedChange('terrorist') || incidentNeedChange('gasleak') || incidentNeedChange('caraccident') || incidentNeedChange('others')){
         updateIncident()
     }
 
@@ -185,7 +185,8 @@
   }
 
   function incidentNeedChange(id){
-    var needChange = ((filters[id] && !displayed[id]) || (!filters[id] && displayed[id]))
+    var needChange = (filters[id] != displayed[id])
+    // var needChange = ((filters[id] && !displayed[id]) || (!filters[id] && displayed[id]))
     if(needChange){
       displayed[id] = !displayed[id]
     }
@@ -193,6 +194,9 @@
   }
 
   function changeCheckButtonDisplay(id, display){
+     //update filter
+     filters[id] = display;
+     //update display
     checkButton = document.getElementById(id)
     label = document.getElementById(id + 'Label')
     if(display){
@@ -239,8 +243,19 @@
           var incident_lat = parseFloat(doc.data().incident_lat);
           var incident_lng = parseFloat(doc.data().incident_lng);
           var incidentIcon = getIncidentIcon(incident_level);
+
+          //test
+          console.log(incident_type);
           //apply filter
-          if(filters[incident_level] && filters[incident_type]){
+          bDisplay = false;
+          for(var i = 0; i < incident_type.length; i++){
+            //test
+            console.log(filters[incident_type[i].toLowerCase().replace(/\s+/g,"")])
+            if(filters[incident_type[i].toLowerCase().replace(/\s+/g,"")]){
+              bDisplay = true;
+            }
+          }
+          if(filters[incident_level] && bDisplay){
             var marker = new google.maps.Marker({
               position: { lat: incident_lat, lng: incident_lng },
               map: map,
