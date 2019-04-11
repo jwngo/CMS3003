@@ -85,6 +85,9 @@
   //init filters
   checkIncidentLevel("CAT1", true);
   checkIncidentLevel("CAT2", true);
+  checkIncidentType("weather", false);
+  checkIncidentType("dengue", false);
+  checkIncidentType("haze", false);
 
   //draw markers
   updateMap();
@@ -159,9 +162,11 @@
     }
 
     //incident
-    if(incidentNeedChange('CAT1') || incidentNeedChange('CAT2') || incidentNeedChange('fire')
-      || incidentNeedChange('terrorist') || incidentNeedChange('gasleak') || incidentNeedChange('caraccident') || incidentNeedChange('others')){
-        updateIncident()
+    if(incidentNeedChange('CAT1') + incidentNeedChange('CAT2') + incidentNeedChange('fire')
+      + incidentNeedChange('terrorist') + incidentNeedChange('gasleak') + incidentNeedChange('caraccident') + incidentNeedChange('others') > 0){
+       
+       updateIncident()
+       
     }
 
     //dengue
@@ -244,13 +249,9 @@
           var incident_lng = parseFloat(doc.data().incident_lng);
           var incidentIcon = getIncidentIcon(incident_level);
 
-          //test
-          console.log(incident_type);
           //apply filter
           bDisplay = false;
           for(var i = 0; i < incident_type.length; i++){
-            //test
-            console.log(filters[incident_type[i].toLowerCase().replace(/\s+/g,"")])
             if(filters[incident_type[i].toLowerCase().replace(/\s+/g,"")]){
               bDisplay = true;
             }
@@ -504,7 +505,7 @@
   function newHazeMarker(airData) {
     if(!filters['haze']) return
     //haze threshold
-    var threshold = 50;
+    var threshold = 25;
     for(var i=0; i<airData.length; i++){
       // //test
       // console.log(airData);
