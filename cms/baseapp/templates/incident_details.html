@@ -110,6 +110,35 @@
               </div>
               <hr>
               <p>Unit Dispatched:</p>
+              <div class="tags">
+                  {% for assistance in report.report_assistance_requested %}
+                  {% if assistance == 'Ambulance' %}
+                    {% with ''|center:report.report_num_ambulance as range %}
+                    {% for _ in range %}
+                      <span class="tag tag-red">Ambulance ({{ key }}.{{ forloop.counter }})</span>
+                    {% endfor %}
+                    {% endwith %}
+                  {% elif assistance == 'Police' %}
+                    {% with ''|center:report.report_num_police as range %}
+                    {% for _ in range %}
+                      <span class="tag tag-indigo">Police ({{ key }}.{{ forloop.counter }})</span>
+                    {% endfor %}
+                    {% endwith %}
+                  {% elif assistance == 'Fire Fighting' %}
+                    {% with ''|center:report.report_num_firetruck as range %}
+                    {% for _ in range %}
+                      <span class="tag tag-orange">Fire Fighting ({{ key }}.{{ forloop.counter }})</span>
+                    {% endfor %}
+                    {% endwith %}
+                  {% elif assistance == 'Gasleak' %}
+                    {% with ''|center:report.report_num_gasleak as range %}
+                    {% for _ in range %}
+                      <span class="tag tag-yellow">Gasleak ({{ key }}.{{ forloop.counter }})</span>
+                    {% endfor %}
+                    {% endwith %}
+                  {% endif %}
+                  {% endfor %}
+                </div>
               
               <!-- deployed-assistances are those with non-null dispatch-id -->
               <!-- dispatch-id should only be added through 'Manage' button -->
