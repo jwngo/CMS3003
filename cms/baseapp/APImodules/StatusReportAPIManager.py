@@ -179,7 +179,7 @@ def drawDayGraph(handlingDayList,closedDayList,casualtiesDayList,incidenttype):
     plt.legend(loc = 'upper center')
     plt.xlim([-width, len(m1_t['Handling'])-width])
     plt.title(incidenttype.format(0))
-    ax.set_xticklabels(('Mon', 'Tues', 'Wed', 'Thur', 'Fri','Sat','Sun'))
+    ax.set_xticklabels(('3 am', '7am', '11am', '3 pm', '9pm','11pm'))
     ax.set(ylabel='No. of casualties')
 
 
