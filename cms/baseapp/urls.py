@@ -8,8 +8,8 @@ urlpatterns = [
     path('', views.public_redirect, name='public'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('accounts/', views.login_redirect, name='login_redirect'),
-    path('accounts/login', views.user_login, name='user_login'),
-    path('accounts/logout', views.user_logout, name='user_logout'),
+    path('accounts/login/', views.user_login, name='user_login'),
+    path('accounts/logout/', views.user_logout, name='user_logout'),
     path('map/', views.incidents_map, name='map'),
     path('subscribe/', views.subscribe, name='subscribe'),
 
