@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(".."))
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout, authenticate
-from .APImodules.FirebaseAPIManager import saveSubscriberToFirebase, saveIncidentToFirebase, getIncidentFromFirebase, getReportsFromFirebase, getAllSubscribers, getSubscribersByRegion
+from .APImodules.FirebaseAPIManager import saveSubscriberToFirebase, saveIncidentToFirebase, saveReportToFirebase, getIncidentFromFirebase, getReportsFromFirebase, getAllSubscribers, getSubscribersByRegion
 from .APImodules.SMSAPIManager import sendSMSToSubscribers
 from .APImodules.NotificationManager import notify
 from .models import Report, Assistance
@@ -91,6 +91,8 @@ def new_incident_form(request):
 
 
 def incident_details(request, incident_id):
+  if request.method == "POST":
+    saveReportToFirebase(incident_id, request)
   incident = getIncidentFromFirebase(incident_id)
   reports = getReportsFromFirebase(incident_id)
   # Wrapping the data in context
