@@ -204,7 +204,7 @@ def getHandlingHourList(type_incident):
    labelTuple = (getTime(date_Now),)
 
    for i in range(1,6):
-        labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+        labelTuple = labelTuple + (getTime(date_Now - timedelta(minutes=i*30)),)
    reverseTuple = labelTuple[::-1]
   
    for document in incident_documents:
@@ -224,7 +224,7 @@ def getHandlingHourList(type_incident):
         date_Now = datetime.now()
         if(check > (date_Now - timedelta(hours =24))):
             for i in range(6):
-                start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(hours =1)).time()
+                start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(minutes=30)).time()
                 startRange = str(start.hour)+":"+str(start.minute)
                 endRange = reverseTuple[i]
                 if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
@@ -244,7 +244,7 @@ def getClosedHourList(type_incident):
     labelTuple = (getTime(date_Now),)
 
     for i in range(1,6):
-            labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+            labelTuple = labelTuple + (getTime(date_Now - timedelta(minutes=i*30)),)
     reverseTuple = labelTuple[::-1]
     
     for document in incident_documents:
@@ -264,7 +264,7 @@ def getClosedHourList(type_incident):
             date_Now = datetime.now()
             if(check > (date_Now - timedelta(hours =24))):
                 for i in range(6):
-                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(hours =1)).time()
+                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(minutes=30)).time()
                     startRange = str(start.hour)+":"+str(start.minute)
                     endRange = reverseTuple[i]
                     if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
@@ -285,7 +285,7 @@ def getCasualtiesHourList(type_incident):
     labelTuple = (getTime(date_Now),)
 
     for i in range(1,6):
-            labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+            labelTuple = labelTuple + (getTime(date_Now - timedelta(minutes=i*30)),)
     reverseTuple = labelTuple[::-1]
 
     for document in incident_documents:
@@ -304,7 +304,7 @@ def getCasualtiesHourList(type_incident):
             date_Now = datetime.now()
             if(check > (date_Now - timedelta(hours =24))):
                 for i in range(6):
-                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(hours =1)).time()
+                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(minutes=30)).time()
                     startRange = str(start.hour)+":"+str(start.minute)
                     endRange = reverseTuple[i]
                     if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
@@ -314,7 +314,7 @@ def getCasualtiesHourList(type_incident):
 
 def getHandlingDayList(type_incident):
     # handlingDayList = [3,2,2,2,1,4,4]
-   handlingDayList = [0, 0, 0, 0, 0, 0, 0]
+   handlingDayList = [0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
    incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Handling').get()
@@ -331,31 +331,30 @@ def getHandlingDayList(type_incident):
             date_raw = incident_documents_list[i]['incident_created_at_date']
             date = datetime.strptime(str(date_raw), '%d %B %Y')
             date_Now = datetime.now()
-            boundary = date_Now - timedelta(days = 7)
-            if(date>boundary):
-                if(datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Monday"):
+            time = incident_documents_list[i]['incident_created_at_time']
+            if(date_Now.date() == date.date()):
+                if(timeRange("00:00","03:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[0] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Tuesday"):
+                if(timeRange("04:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[1] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Wednesday"):
+                if(timeRange("08:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[2] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Thursday"):
+                if(timeRange("12:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[3] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Friday"):
+                if(timeRange("16:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[4] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Saturday"):
+                if(timeRange("20:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[5] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Sunday"):
-                    handlingDayList[6] += 1
-
-        return handlingDayList
+                
+                
+   return handlingDayList
 
 
 def getClosedDayList(type_incident):
 # closedDayList = [3,2,2,2,1,3,3]
 
     
-   closedDayList = [0, 0, 0, 0, 0, 0, 0]
+   closedDayList = [0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
    incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Closed').get()
@@ -371,29 +370,27 @@ def getClosedDayList(type_incident):
             date_raw = incident_documents_list[i]['incident_created_at_date']
             date = datetime.strptime(str(date_raw), '%d %B %Y')
             date_Now = datetime.now()
-            boundary = date_Now - timedelta(days = 7)
-            if(date>boundary):
-                if(datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Monday"):
+            time = incident_documents_list[i]['incident_created_at_time']
+            if(date_Now.date() == date.date()):
+                if(timeRange("00:00","03:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[0] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Tuesday"):
+                if(timeRange("04:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[1] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Wednesday"):
+                if(timeRange("08:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[2] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Thursday"):
+                if(timeRange("12:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[3] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Friday"):
+                if(timeRange("16:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[4] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Saturday"):
+                if(timeRange("20:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[5] += 1
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Sunday"):
-                    closedDayList[6] += 1
 
         return closedDayList
 
 def getCasualtiesDayList(type_incident):
 # casualtiesDayList = [3,3,4,5,10,2,3]
 
-    casualtiesDayList=[0, 0, 0, 0, 0, 0, 0]
+    casualtiesDayList=[0, 0, 0, 0, 0, 0]
     incident_documents_list = []
     i=0
     # In firebase's object form
@@ -410,22 +407,21 @@ def getCasualtiesDayList(type_incident):
             date_raw = incident_documents_list[i]['incident_created_at_date']
             date = datetime.strptime(str(date_raw), '%d %B %Y')
             date_Now = datetime.now()
-            boundary = date_Now - timedelta(days = 7)
-            if(date>boundary):
-                if(datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Monday"):
+            time = incident_documents_list[i]['incident_created_at_time']
+            if(date_Now.date() == date.date()):
+                if(timeRange("00:00","03:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[0] += countCasualties(incident_documents_list,i)
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Tuesday"):
+                if(timeRange("04:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[1] += countCasualties(incident_documents_list,i)
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Wednesday"):
+                if(timeRange("08:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[2] += countCasualties(incident_documents_list,i)
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Thursday"):
+                if(timeRange("12:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[3] += countCasualties(incident_documents_list,i)
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Friday"):
+                if(timeRange("16:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[4] += countCasualties(incident_documents_list,i)
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Saturday"):
+                if(timeRange("20:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[5] += countCasualties(incident_documents_list,i)
-                elif (datetime.strptime(str(date_raw), '%d %B %Y').strftime('%A') == "Sunday"):
-                    casualtiesDayList[6] += countCasualties(incident_documents_list,i)
+
 
 
     return casualtiesDayList
@@ -439,6 +435,14 @@ def time_in_range(start, end, x):
   else:
         return startObj <= x or x <= endObj
 
+def timeRange(start, end, x):
+  startObj=datetime.strptime(start, "%H:%M").time()
+  endObj=datetime.strptime(end, "%H:%M").time()
+  if startObj <= endObj:
+      #e,g (4,5]
+        return startObj <= x <= endObj
+  else:
+        return startObj <= x or x <= endObj
 
 def countCasualties(incident_documents_list,i):
     casualties_incident = []
