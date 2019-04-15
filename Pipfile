@@ -15,6 +15,7 @@ twilio = "*"
 facebook-sdk = "*"
 firebase-admin = "*"
 pillow = "*"
+apscheduler = "*"
 
 [requires]
 python_version = "3.7"
