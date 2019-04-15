@@ -94,6 +94,7 @@ def get_message(incident):
     incident_region = incident['incident_region']
     incident_address = incident['incident_address']
     incident_status = incident['incident_status']
+
     # different messages for reported and handling, default return empty string(closed). However, when incident is closed, NotificationManager shouldn't be called !
     if incident_status == 'Reported':
         message = 'Incident Alert! There is a [possible] '
@@ -101,7 +102,11 @@ def get_message(incident):
         message = 'We are currently handling a '
     else:
         return ''
-    alert_message = message + incident_level +' incident in ' + incident_region + ', '+ incident_address +', types of incident:' + types_of_incident + '.\n'
+    printed_types_of_incident = ''
+    for i in types_of_incident:
+    	printed_types_of_incident+=i
+
+    alert_message = message + incident_level +' incident in ' + incident_region + ', '+ incident_address +', types of incident:' + printed_types_of_incident + '.\n'
     return alert_message
 
     
