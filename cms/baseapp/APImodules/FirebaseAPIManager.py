@@ -46,7 +46,10 @@ def saveIncidentToFirebase(request):
   incident_region = postal_code_to_region(incident_postalcode)
   incident_area = postal_code_to_area(incident_postalcode)
   incident_status = 'Reported'
-  incident_level = 'CAT2'
+  if ( 'Fire' in incident_type or 'Gas Leak' in incident_type or 'Terrorist' in incident_type): 
+    incident_level = 'CAT1'
+  else: 
+    incident_level = 'CAT2'
   incident_created_at_date = '{:%d %B %Y}'.format(datetime.now())
   incident_created_at_time = '{:%H:%M}'.format(datetime.now())
 
