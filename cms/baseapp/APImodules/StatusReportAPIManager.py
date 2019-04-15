@@ -26,6 +26,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import pyplot as mp
 from itertools import cycle, islice
 
+from apscheduler.schedulers.background import BackgroundScheduler
+
 # Initializing styleSheet for document design 
 styleSheet = getSampleStyleSheet()
 
@@ -179,22 +181,16 @@ def drawDayGraph(handlingDayList,closedDayList,casualtiesDayList,incidenttype):
     plt.legend(loc = 'upper center')
     plt.xlim([-width, len(m1_t['Handling'])-width])
     plt.title(incidenttype.format(0))
-    ax.set_xticklabels(('3 am', '7am', '11am', '3 pm', '9pm','11pm'))
+    ax.set_xticklabels(('3am', '7am', '11am', '3pm', '9pm','11pm'))
     ax.set(ylabel='No. of casualties')
 
 
     return plt.gcf()   
 
-def getTime(date_Now):
-    time_Now =  date_Now.time() 
-    if(1 <= int(time_Now.minute) <= 9):
-        return (str(time_Now.hour)+":"+"0"+str(time_Now.minute))
-    else:
-        return (str(time_Now.hour)+":"+str(time_Now.minute)) 
 
-#Creating graph of Number of Casualities against Number of Incidents and Hours for six hours using the time now as end point
+#Creating graph of Number of Casualities against Number of Incidents and Hours for three hours using the time now as end point
 #Returns graph
-def drawSixHourGraph(handlingHourList,closedHourList,casualtiesHourList,incidenttype):
+def drawThreeHourGraph(handlingHourList,closedHourList,casualtiesHourList,incidenttype):
     width = .35 # width of a bar
 
     m1_t = pd.DataFrame({
@@ -217,7 +213,7 @@ def drawSixHourGraph(handlingHourList,closedHourList,casualtiesHourList,incident
     labelTuple = (getTime(date_Now),)
 
     for i in range(1,6):
-        labelTuple = labelTuple + (getTime(date_Now - timedelta(hours=i)),)
+        labelTuple = labelTuple + (getTime(date_Now - timedelta(minutes=i*30)),)
     
     ax.set_xticklabels(labelTuple[::-1])
     ax.set(ylabel='No. of casualties')
@@ -229,29 +225,28 @@ def drawSixHourGraph(handlingHourList,closedHourList,casualtiesHourList,incident
 #Creating the style and combining the different elements together
 def createPDF(currentDateTime, elements):
     cms_name = Paragraph('''Crisis Management System''', styleSheet["Title"])
-    current_datetime = now.strftime("<para align=centre>%Y-%m-%d %H:%M</para>")
-    print_datetime = Paragraph(current_datetime, styleSheet["h3"])
+    print_datetime = Paragraph("<para align=centre>" + currentDateTime + "</para>", styleSheet["h3"])
     title = Paragraph('''<b>Status Report</b>''', styleSheet["Title"])
     item_data = getDataFromFirebase()
     table = createTable(item_data)
     trends = Paragraph('''<para align=centre><b>The next few pages display graphs that summarises key indicators and trends based on their incident types.</b></para>''', styleSheet["h4"])
-    six_hours_graph = Paragraph('''<para align=centre><b>Six Hours Graph</b></para>''', styleSheet["h1"])
-    daily_graph = Paragraph('''<para align=centre><b>Daily Graph</b></para>''', styleSheet["h1"])
+    three_hours_graph = Paragraph('''<para align=centre><b>Three Hours Graph (30-mins Interval)</b></para>''', styleSheet["h1"])
+    daily_graph = Paragraph('''<para align=centre><b>Daily Graph (4-hours Interval)</b></para>''', styleSheet["h1"])
     elements.append(cms_name)
     elements.append(print_datetime)
     elements.append(title)
     elements.append(table)
     elements.append(trends)
-    IncidentTypes = ["others","Fire","terrorist","gas leak"]
+    IncidentTypes = ["Others","Fire","Terrorist","Gas Leak"]
     for IncidentType in IncidentTypes:
-        drawing_six_hours = Image('plot1' + IncidentType + ".png")
+        drawing_three_hours = Image('plot1' + IncidentType + ".png")
         drawing_daily = Image('plot2' + IncidentType + ".png")
-        drawing_six_hours_table = [[drawing_six_hours]]
+        drawing_three_hours_table = [[drawing_three_hours]]
         drawing_daily_table = [[drawing_daily]]
-        t1=Table(drawing_six_hours_table)
+        t1=Table(drawing_three_hours_table)
         t2=Table(drawing_daily_table)
         elements.append(t1)
-        elements.append(six_hours_graph)
+        elements.append(three_hours_graph)
         elements.append(t2)
         elements.append(daily_graph)
     
@@ -309,9 +304,9 @@ def sendEmailToPMO():
     # Initializing elements to be added into empty pdf file
     emptyList = []
 
-    IncidentTypes = ["others","Fire","terrorist","gas leak"]
+    IncidentTypes = ["others","Fire","Terrorist","gas leak"]
     for IncidentType in IncidentTypes:
-        plot1 = drawSixHourGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
+        plot1 = drawThreeHourGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot1' + IncidentType + '.png')
         plot2 = drawDayGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot2' + IncidentType + '.png')
@@ -321,8 +316,7 @@ def sendEmailToPMO():
     doc.build(elements)
     sendEmail(currentDateTime)
 
-    for IncidentType in IncidentTypes:
-        os.remove('plot1' + IncidentType + '.png')
-        os.remove('plot2' + IncidentType + '.png')
-
-    os.remove("Status Report " + currentDateTime + ".pdf")
+def start():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(sendEmailToPMO, 'interval', seconds = 1800)
+    scheduler.start()
