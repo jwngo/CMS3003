@@ -98,9 +98,13 @@ def incident_details(request, incident_id):
   # Wrapping the data in context
   pprint(incident)
   pprint(reports)
+  casualties=0
+  for key, report in reports.items():
+    casualties+= int(report['report_num_of_casualties'])
   context = {
       'incident': incident,
       'reports': reports,
+      'casualties': casualties,
   }
 
   return render(request, 'incident_details.html', context)

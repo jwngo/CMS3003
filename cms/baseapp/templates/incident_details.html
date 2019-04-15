@@ -5,13 +5,55 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
+<style>
+#incStatus {
+margin-left: auto;
+margin-right: 0px;
+}
+</style>
+<div class="page-header col-12">
   <h1 class="page-title">Incident #{{incident.incident_id}}</h1>
+  {% if incident.incident_status == 'Reported' %}
+  <div id="incStatus" class="alert alert-danger mb-0">
+    Reported
+  </div>
+  {% elif incident.incident_status == 'Handling' %}
+  <div class="card-alert alert alert-primary mb-0">
+    Handling
+  </div>
+  {% elif incident.incident_status == 'Closed' %}
+  <div class="card-alert alert alert-green mb-0">
+    Closed
+  </div>
+  {% endif %}
 </div>
 <div class="col-12">
   <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">#{{incident.incident_id}} @ {{incident.incident_address}} {{incident.incident_postalcode}}</h3>
+    <div class="card-header col-12">
+      <div class="col-10">
+        <h3 class="card-title">#{{incident.incident_id}} @ {{incident.incident_address}}
+          {{incident.incident_postalcode}}
+        </h3>
+      </div>
+      <!-- Manage incident button -->
+      <div class="input-group-append col-3">
+        <button data-toggle="dropdown" type="button" class="btn btn-outline-info dropdown-toggle">Manage
+          Incident</button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a id="changeReported" class="dropdown-item" href="javascript:void(0)">
+            Reported
+          </a>
+          <a id="changeHandling" class="dropdown-item" href="javascript:void(0)">
+            Handling
+          </a>
+          <a id="changeClosed" class="dropdown-item" href="javascript:void(0)">
+            Closed
+          </a>
+        </div>
+      </div>
+
+
+
     </div>
     <div class="card-body">
       <div class="row">
@@ -26,7 +68,11 @@
           </div>
         </div>
         <!-- end map -->
-        
+
+          <div class="col-12">
+            <h4>Number of casualties: </h4>{{casualties}}
+          </div>
+
         <hr>
         <!-- type of incident badge -->
         <div class="col-12">
@@ -38,24 +84,25 @@
           <span class="stamp stamp-md bg-orange">
             <p>Fire</p>
           </span>
-          {% elif type == 'Haze' %}
+          {% elif type == 'Gas Leak' %}
           <span class="stamp stamp-md bg-dark-gray">
-            <p>Haze</p>
+            <p>Gas Leak</p>
           </span>
           {% elif type == 'Terrorist' %}
           <span class="stamp stamp-md bg-red">
             <p>Terrorist</p>
           </span>
-          {% elif type == 'Dengue Outbreak' %}
+          {% elif type == 'Car Accident' %}
           <span class="stamp stamp-md bg-yellow">
-            <p>Dengue Outbreak</p>
+            <p>Car Accident</p>
           </span>
           {% endif %}
           {% endfor %}
         </div>
         <div class="col-6 text-right">
           <!-- change url to new_report_form -->
-          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i class="fe fe-plus mr-2"></i>Add New Report </a>
+          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i
+              class="fe fe-plus mr-2"></i>Add New Report </a>
         </div>
         <!-- end type of incident -->
         <hr>
@@ -72,7 +119,8 @@
               <h3 class="card-title">{{ report.report_reporter_name }}</h3>
               <div class="card-options">
                 <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#manageModal">Manage</button>
+                  <button class="btn btn-outline-info btn-sm" data-toggle="modal"
+                    data-target="#manageModal">Manage</button>
                   <div class="dropdown-menu">
                     <a href="#" class="dropdown-item">Handling</a>
                     <a href="#" class="dropdown-item">Closed</a>
@@ -104,45 +152,45 @@
                 {% elif assistance == 'Fire Fighting' %}
                 <span class="tag tag-orange">Fire Fighting ({{report.report_num_firetruck}})</span>
                 {% elif assistance == 'Gasleak' %}
-                <span class= "tag tag-yellow">Gasleak ({{report.report_num_gasleak}})</span>
+                <span class="tag tag-yellow">Gasleak ({{report.report_num_gasleak}})</span>
                 {% endif %}
                 {% endfor %}
               </div>
               <hr>
               <p>Unit Dispatched:</p>
               <div class="tags">
-                  {% for assistance in report.report_assistance_requested %}
-                  {% if assistance == 'Ambulance' %}
-                    {% with ''|center:report.report_num_ambulance as range %}
-                    {% for _ in range %}
-                      <span class="tag tag-red">Ambulance ({{ key }}.{{ forloop.counter }})</span>
-                    {% endfor %}
-                    {% endwith %}
-                  {% elif assistance == 'Police' %}
-                    {% with ''|center:report.report_num_police as range %}
-                    {% for _ in range %}
-                      <span class="tag tag-indigo">Police ({{ key }}.{{ forloop.counter }})</span>
-                    {% endfor %}
-                    {% endwith %}
-                  {% elif assistance == 'Fire Fighting' %}
-                    {% with ''|center:report.report_num_firetruck as range %}
-                    {% for _ in range %}
-                      <span class="tag tag-orange">Fire Fighting ({{ key }}.{{ forloop.counter }})</span>
-                    {% endfor %}
-                    {% endwith %}
-                  {% elif assistance == 'Gasleak' %}
-                    {% with ''|center:report.report_num_gasleak as range %}
-                    {% for _ in range %}
-                      <span class="tag tag-yellow">Gasleak ({{ key }}.{{ forloop.counter }})</span>
-                    {% endfor %}
-                    {% endwith %}
-                  {% endif %}
-                  {% endfor %}
-                </div>
-              
+                {% for assistance in report.report_assistance_requested %}
+                {% if assistance == 'Ambulance' %}
+                {% with ''|center:report.report_num_ambulance as range %}
+                {% for _ in range %}
+                <span class="tag tag-red">Ambulance ({{ key }}.{{ forloop.counter }})</span>
+                {% endfor %}
+                {% endwith %}
+                {% elif assistance == 'Police' %}
+                {% with ''|center:report.report_num_police as range %}
+                {% for _ in range %}
+                <span class="tag tag-indigo">Police ({{ key }}.{{ forloop.counter }})</span>
+                {% endfor %}
+                {% endwith %}
+                {% elif assistance == 'Fire Fighting' %}
+                {% with ''|center:report.report_num_firetruck as range %}
+                {% for _ in range %}
+                <span class="tag tag-orange">Fire Fighting ({{ key }}.{{ forloop.counter }})</span>
+                {% endfor %}
+                {% endwith %}
+                {% elif assistance == 'Gasleak' %}
+                {% with ''|center:report.report_num_gasleak as range %}
+                {% for _ in range %}
+                <span class="tag tag-yellow">Gasleak ({{ key }}.{{ forloop.counter }})</span>
+                {% endfor %}
+                {% endwith %}
+                {% endif %}
+                {% endfor %}
+              </div>
+
               <!-- deployed-assistances are those with non-null dispatch-id -->
               <!-- dispatch-id should only be added through 'Manage' button -->
-              
+
               {% for assistance_d in deployed_assistances %}
               {% if assistance_d.report_id == report.id and assistance_d.assistanceType == 'Rescue and Evacuation' %}
               <div class="tags">
@@ -160,7 +208,7 @@
               <div class="tags">
                 <span class="tag tag-orange"> {{assistance_d.assistanceType}} #{{assistance_d.dispatch_id}} </span>
               </div>
-              
+
               {%endif%}
               {% endfor %}
               <hr>
@@ -177,7 +225,7 @@
   <!-- reportModal -->
   <div id="reportModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -186,13 +234,14 @@
         </div>
         <div class="modal-body">
           <form method="post">
-          {% csrf_token %}
+            {% csrf_token %}
             <div class="row">
               <!-- num of casualties -->
               <div class="col-6">
                 <div class="form-group">
                   <div class="form-label">Number Of Casualties</div>
-                  <input type="number" name="report_num_of_casualties" class="form-control" placeholder="# Of Casualites" required title = "Integers only" required="" value ="0" pattern ="[0-9]">
+                  <input type="number" name="report_num_of_casualties" class="form-control"
+                    placeholder="# Of Casualites" required title="Integers only" required="" value="0" pattern="[0-9]">
                 </div>
               </div>
               <!-- type of assistance requested -->
@@ -201,24 +250,32 @@
                   <label class="form-label">Assistance Requested</label>
                   <div class="selectgroup selectgroup-item">
                     <label class="selectgroup-item">
-                      <input type="checkbox" name="report_assistance_requested" value="Ambulance" class="selectgroup-input">
+                      <input type="checkbox" name="report_assistance_requested" value="Ambulance"
+                        class="selectgroup-input">
                       <span class="selectgroup-button">Ambulance</span>
-                      <input type="number" name="report_num_ambulance_requested" class="mt-1 form-control" placeholder="# of Ambulance Required" required="" value ="0">
+                      <input type="number" name="report_num_ambulance_requested" class="mt-1 form-control"
+                        placeholder="# of Ambulance Required" required="" value="0">
                     </label>
                     <label class="selectgroup-item">
-                      <input type="checkbox" name="report_assistance_requested" value="Fire Fighting" class="selectgroup-input">
+                      <input type="checkbox" name="report_assistance_requested" value="Fire Fighting"
+                        class="selectgroup-input">
                       <span class="selectgroup-button">Fire Fighting</span>
-                      <input type="number" name="report_num_firetruck_requested" class="mt-1 form-control" placeholder="# of FireTruck Required" required="" value ="0">
+                      <input type="number" name="report_num_firetruck_requested" class="mt-1 form-control"
+                        placeholder="# of FireTruck Required" required="" value="0">
                     </label>
                     <label class="selectgroup-item">
-                      <input type="checkbox" name="report_assistance_requested" value="Police" class="selectgroup-input">
+                      <input type="checkbox" name="report_assistance_requested" value="Police"
+                        class="selectgroup-input">
                       <span class="selectgroup-button">Police</span>
-                      <input type="number" name="report_num_police_requested" class="mt-1 form-control" placeholder="# of PoliceCar Required" required="" value ="0">
+                      <input type="number" name="report_num_police_requested" class="mt-1 form-control"
+                        placeholder="# of PoliceCar Required" required="" value="0">
                     </label>
                     <label class="selectgroup-item">
-                      <input type="checkbox" name="report_assistance_requested" value="Gasleak" class="selectgroup-input">
+                      <input type="checkbox" name="report_assistance_requested" value="Gasleak"
+                        class="selectgroup-input">
                       <span class="selectgroup-button">Gask Leak Control</span>
-                      <input type="number" name="report_num_gasleak_requested" class="mt-1 form-control" placeholder="# of Ambulance Required" required="" value ="0">
+                      <input type="number" name="report_num_gasleak_requested" class="mt-1 form-control"
+                        placeholder="# of Ambulance Required" required="" value="0">
                     </label>
                   </div>
                 </div>
@@ -227,21 +284,24 @@
               <div class="col-7">
                 <div class="form-group">
                   <label class="form-label">Reporter Name</label>
-                  <input type="text" name="report_reporter_name" class="form-control" placeholder="Name Of Reporter" required = "" required title = "Alphabets allowed only. " pattern ="[a-zA-Z][a-zA-Z ]+">
+                  <input type="text" name="report_reporter_name" class="form-control" placeholder="Name Of Reporter"
+                    required="" required title="Alphabets allowed only. " pattern="[a-zA-Z][a-zA-Z ]+">
                 </div>
               </div>
               <div class="col-5">
                 <div class="form-group">
                   <label class="form-label">Phone Number</label>
-                  <input type="tel" name="report_reporter_number" class="form-control" placeholder="Reporter Phone Number" required title= "Key in a valid Phone Number." maxlength="8" pattern="[0-9]{8}"
-                  required>
+                  <input type="tel" name="report_reporter_number" class="form-control"
+                    placeholder="Reporter Phone Number" required title="Key in a valid Phone Number." maxlength="8"
+                    pattern="[0-9]{8}" required>
                 </div>
               </div>
             </div>
             <!-- description  -->
             <div class="form-group">
               <label class="form-label">Description Of Incident</label>
-              <textarea rows="4" name="incident_description" class="form-control" placeholder="As Descriptive As Possible" value="Mike" required =""></textarea>
+              <textarea rows="4" name="incident_description" class="form-control"
+                placeholder="As Descriptive As Possible" value="Mike" required=""></textarea>
             </div>
             <!-- add button -->
             <div class="row no-gutters">
@@ -251,16 +311,16 @@
                 </button>
               </div>
             </div>
-          </form>        
+          </form>
         </div>
       </div>
     </div>
   </div>
-  
+
   <!-- manageModal -->
   <div id="manageModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -276,8 +336,8 @@
           {% elif assistance == 'Fire Fighting' %}
           <span class="tag tag-orange">Fire Fighting</span>
           {% elif assistance == 'Gasleak' %}
-          <span class= "tag tag-yellow">Gasleak</span>
-          {% endif %} 
+          <span class="tag tag-yellow">Gasleak</span>
+          {% endif %}
           {%endfor%}
           {%endfor%}
         </div>
@@ -287,231 +347,235 @@
       </div>
     </div>
   </div>
-  
+
   <!-- gmaps script -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIPegc31Eqsj8iy1cqAGC6An5wZXdpek4&callback=initMap"
-  async defer></script>
+    async defer></script>
   <script>
     var map;
-    var markerLat = {{incident.incident_lat}}
-    var markerLng = {{incident.incident_lng}}
+    var markerLat = {{ incident.incident_lat }}
+    var markerLng = {{ incident.incident_lng }}
     var singapore = { lat: markerLat, lng: markerLng }
     var markerPosition = { lat: markerLat, lng: markerLng }
-    
+
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: singapore,
         zoom: 14
       });
-      
+
       var marker = new google.maps.Marker({
         position: markerPosition,
         map: map,
         title: 'My House'
       });
     }
-  // weatherMarkers
-  getAllWeather(getDateTime(), newWeatherMarker);
+    // weatherMarkers
+    getAllWeather(getDateTime(), newWeatherMarker);
 
-  //-----------------------------------
+    //-----------------------------------
 
-  function createInfoWindow(marker) {
-        // wMarkers.push(weatherMarkers);
-        marker.infoWindow = new google.maps.InfoWindow({
-          content: marker.content
-        });
-        google.maps.event.addListener(marker, 'click', function () {
-          this.infoWindow.open(map, marker);
-        });
-      }
-      function getWeatherIcon(time, weather_condition) {
-    //set iconImage using time & weather condition inputs
-    var icon = 'https://i.imgsafe.org/21/21c939650b.png';
-    var time = getDateTime();
-    console.log(typeof (time));
-    time = parseInt(time.substr(11, 12));
-    console.log(time);
-    if (time >= 7 && time <= 19) {
-      switch (weather_condition) {
-        case "Rain":
-          icon = 'https://i.imgsafe.org/21/21bd07b663.png';
-          break;
-        case "Light Showers":
-          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
-          break;
+    function createInfoWindow(marker) {
+      // wMarkers.push(weatherMarkers);
+      marker.infoWindow = new google.maps.InfoWindow({
+        content: marker.content
+      });
+      google.maps.event.addListener(marker, 'click', function () {
+        this.infoWindow.open(map, marker);
+      });
+    }
+    function getWeatherIcon(time, weather_condition) {
+      //set iconImage using time & weather condition inputs
+      var icon = 'https://i.imgsafe.org/21/21c939650b.png';
+      var time = getDateTime();
+      console.log(typeof (time));
+      time = parseInt(time.substr(11, 12));
+      console.log(time);
+      if (time >= 7 && time <= 19) {
+        switch (weather_condition) {
+          case "Rain":
+            icon = 'https://i.imgsafe.org/21/21bd07b663.png';
+            break;
+          case "Light Showers":
+            icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+            break;
           case "Showers":
-          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
-          break;
+            icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+            break;
           case "Partly Cloudy (Day)":
-          icon = 'https://i.imgsafe.org/21/21e707ef33.png';
-          break;  
-        default:
-          icon = 'https://i.imgsafe.org/21/21c939650b.png';//sun
+            icon = 'https://i.imgsafe.org/21/21e707ef33.png';
+            break;
+          default:
+            icon = 'https://i.imgsafe.org/21/21c939650b.png';//sun
+        }
       }
-    }
-    //night
-    else {
-      switch (weather_condition) {
-        case "Rain":
-          icon = 'https://i.imgsafe.org/21/21bd07b663.png';
-          break;
+      //night
+      else {
+        switch (weather_condition) {
+          case "Rain":
+            icon = 'https://i.imgsafe.org/21/21bd07b663.png';
+            break;
           case "Heavy Thundery Showers with Gusty Winds":
-          icon = 'https://i.imgsafe.org/21/21afe7c290.png';
-          break;        
+            icon = 'https://i.imgsafe.org/21/21afe7c290.png';
+            break;
           case "Showers":
-          icon = 'https://i.imgsafe.org/21/21d3cee665.png';
-          break; 
+            icon = 'https://i.imgsafe.org/21/21d3cee665.png';
+            break;
 
-        case "Light Showers":
-          icon = 'https://i.imgsafe.org/21/21b9b68902.png';
-          break;
+          case "Light Showers":
+            icon = 'https://i.imgsafe.org/21/21b9b68902.png';
+            break;
           case "Partly Cloudy (Night)":
-          icon = 'https://i.imgsafe.org/21/21de66f4d9.png';
-          break;
-          
-        default:
-          icon = 'https://i.imgsafe.org/21/21d7c1e9b1.png'; //moon
-      }
-    }
-    return icon;
-  }
+            icon = 'https://i.imgsafe.org/21/21de66f4d9.png';
+            break;
 
-  function getAllWeather(time, callback) {
-    parameter = "";
-    if (time.length > 11) {
-      parameter = "date_time"
-    }
-    else {
-      parameter = "date"
-    }
-    var url = "https://api.data.gov.sg/v1/environment/2-hour-weather-forecast"
-    var xhttp = new XMLHttpRequest()
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        //console.log(JSON.parse(this.responseText))
-        var allData = JSON.parse(this.responseText)
-        allData = reorganizeData(allData)
-        if (typeof callback === "function") {
-          // apply() sets the meaning of "this" in the callback
-          callback(allData);
+          default:
+            icon = 'https://i.imgsafe.org/21/21d7c1e9b1.png'; //moon
         }
       }
-    };
-    xhttp.open("GET", url + "?" + parameter + "=" + time, true)
-    xhttp.send()
-  }
-
-
-  function reorganizeData(allData) {
-    var result = []
-    var arr = allData.area_metadata
-    for (var i = 0, len = arr.length; i < len; i++) {
-      result.push(arr[i])
+      return icon;
     }
-    for (i = 0, len1 = result.length; i < len1; i++) {
-      forecasts = allData.items[0].forecasts
-      for (var j = 0, len2 = forecasts.length; j < len2; j++) {
-        if (forecasts[j].area == result[i].name) {
-          result[i].forecast = forecasts[j].forecast
+
+    function getAllWeather(time, callback) {
+      parameter = "";
+      if (time.length > 11) {
+        parameter = "date_time"
+      }
+      else {
+        parameter = "date"
+      }
+      var url = "https://api.data.gov.sg/v1/environment/2-hour-weather-forecast"
+      var xhttp = new XMLHttpRequest()
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          //console.log(JSON.parse(this.responseText))
+          var allData = JSON.parse(this.responseText)
+          allData = reorganizeData(allData)
+          if (typeof callback === "function") {
+            // apply() sets the meaning of "this" in the callback
+            callback(allData);
+          }
+        }
+      };
+      xhttp.open("GET", url + "?" + parameter + "=" + time, true)
+      xhttp.send()
+    }
+
+
+    function reorganizeData(allData) {
+      var result = []
+      var arr = allData.area_metadata
+      for (var i = 0, len = arr.length; i < len; i++) {
+        result.push(arr[i])
+      }
+      for (i = 0, len1 = result.length; i < len1; i++) {
+        forecasts = allData.items[0].forecasts
+        for (var j = 0, len2 = forecasts.length; j < len2; j++) {
+          if (forecasts[j].area == result[i].name) {
+            result[i].forecast = forecasts[j].forecast
+          }
+        }
+        result[i].timeStamp = allData.items[0].timestamp
+      }
+      return result
+    }
+
+    function newWeatherMarker(weather) {
+
+      for (var i = 0, len = weather.length; i < len; i++) {
+        var myLat = weather[i].label_location.latitude;
+        var myLng = weather[i].label_location.longitude;
+        createWeatherMarker(i);
+
+        function createWeatherMarker(i) {
+          var weatherMarkers = new google.maps.Marker({
+            position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
+            map: map,
+            title: 'Weather',
+            content: "Location: " + weather[i].name + "<br /><br />" + "Weather: " + weather[i].forecast + "<br /><br />" + "Timestamp: " + getDateTimeForMap(),
+            icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
+          });
+          // wMarkers.push(weatherMarkers);
+          weatherMarkers.infoWindow = new google.maps.InfoWindow({
+            content: weatherMarkers.content
+          });
+          google.maps.event.addListener(weatherMarkers, 'click', function () {
+            this.infoWindow.open(map, weatherMarkers);
+
+          });
         }
       }
-      result[i].timeStamp = allData.items[0].timestamp
     }
-    return result
-  }
 
-  function newWeatherMarker(weather) {
-    
-    for (var i = 0, len = weather.length; i < len; i++) {
-      var myLat = weather[i].label_location.latitude;
-      var myLng = weather[i].label_location.longitude;
-      createWeatherMarker(i);
 
-      function createWeatherMarker(i) {
-        var weatherMarkers = new google.maps.Marker({
-          position: { lat: parseFloat(myLat), lng: parseFloat(myLng) },
-          map: map,
-          title: 'Weather',
-          content: "Location: "+ weather[i].name +  "<br /><br />"  + "Weather: " + weather[i].forecast +  "<br /><br />" + "Timestamp: " + getDateTimeForMap(),
-          icon: getWeatherIcon(weather[i].timeStamp, weather[i].forecast),
-        });
-        // wMarkers.push(weatherMarkers);
-        weatherMarkers.infoWindow = new google.maps.InfoWindow({
-          content: weatherMarkers.content
-        });
-        google.maps.event.addListener(weatherMarkers, 'click', function () {
-          this.infoWindow.open(map, weatherMarkers);
-
-        });
+    function getDateTime() {
+      var today = new Date();
+      var month = 1 + today.getMonth();
+      if (month < 10) {
+        month = "0" + month;
       }
+      var date = today.getDate();
+      if (date < 10) {
+        date = "0" + date;
+      }
+      var date = today.getFullYear() + '-' + month + '-' + date;
+
+      hour = today.getHours();
+      if (hour < 10) {
+        hour = "0" + hour;
+      }
+      minute = today.getMinutes();
+      if (minute < 10) {
+        minute = "0" + minute;
+      }
+      second = today.getSeconds();
+      if (second < 10) {
+        second = "0" + second;
+      }
+      var time = hour + ":" + minute + ":" + second;
+
+      dateTime = date + 'T' + time;
+
+      return dateTime;
+      //2019-03-07T07:56:25
     }
-  }
+    function getDateTimeForMap() {
+      var today = new Date();
+      // today = today.toString();
+      // today = today.substring(0, 11);
+      console.log(today);
+      var month = today.getMonth();
+      var month_in_words = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+      month = month_in_words[month];
 
+      var date = today.getDate();
 
-  function getDateTime() {
-    var today = new Date();
-    var month = 1+ today.getMonth();
-    if (month < 10) {
-      month = "0" + month;
+      var date = date + ' ' + month + ' ' + today.getFullYear();
+
+      hour = today.getHours();
+      if (hour < 10) {
+        hour = "0" + hour;
+      }
+      minute = today.getMinutes();
+      if (minute < 10) {
+        minute = "0" + minute;
+      }
+      var time = hour + ":" + minute;
+
+      dateTime = time + " " + date;
+
+      return dateTime;
+
     }
-    var date = today.getDate();
-    if (date < 10) {
-      date = "0" + date;
-    }
-    var date = today.getFullYear() + '-' + month + '-' + date;
-
-    hour = today.getHours();
-    if (hour < 10) {
-      hour = "0" + hour;
-    }
-    minute = today.getMinutes();
-    if (minute < 10) {
-      minute = "0" + minute;
-    }
-    second = today.getSeconds();
-    if (second < 10) {
-      second = "0" + second;
-    }
-    var time = hour + ":" + minute + ":" + second;
-
-    dateTime = date + 'T' + time;
-
-    return dateTime;
-    //2019-03-07T07:56:25
-  }
-  function getDateTimeForMap() {
-    var today = new Date();
-   // today = today.toString();
-   // today = today.substring(0, 11);
-    console.log(today);
-    var month = today.getMonth();
-    var month_in_words = [ "January", "February", "March", "April", "May", "June", 
-           "July", "August", "September", "October", "November", "December" ];
-    month=month_in_words[month];
-    
-    var date = today.getDate();
-
-    var date =  date + ' ' + month + ' ' +  today.getFullYear();
-
-    hour = today.getHours();
-    if (hour < 10) {
-      hour = "0" + hour;
-    }
-    minute = today.getMinutes();
-    if (minute < 10) {
-      minute = "0" + minute;
-    }
-    var time = hour + ":" + minute ;
-
-    dateTime = time + " " + date;
-
-    return dateTime;
-
-  }
 
 
   </script>
   <!-- end gmaps script -->
-  
+
+<!-- Change incident logic-->
+<script>
+
+
+</script>
   {% endblock %}
-  
