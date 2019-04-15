@@ -197,7 +197,6 @@ def getTime(date_Now):
         return (str(time_Now.hour)+":"+str(time_Now.minute)) 
 
 def getHandlingHourList(type_incident):
-# handlingHourList = [3,2,2,2,1]
    handlingHourList = [0, 0, 0, 0, 0, 0]
    incident_documents_list = []
    # In firebase's object form
@@ -232,13 +231,13 @@ def getHandlingHourList(type_incident):
                 endRange = reverseTuple[i]
                 if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingHourList[i]+=1
-    return handlingHourList
+   return handlingHourList
 
 
 def getClosedHourList(type_incident):
 # closedHourList = [3,2,2,2,1]
    # handlingHourList = [3,2,2,2,1]
-    closedHourList = [0, 0, 0, 0, 0]
+    closedHourList = [0, 0, 0, 0, 0,0]
     incident_documents_list = []
    # In firebase's object form
     incident_documents = db.collection('incidents').where('incident_type', 'array_contains', str(type_incident)).where('incident_status', '==', 'Closed').get()
@@ -277,7 +276,7 @@ def getClosedHourList(type_incident):
 
 def getCasualtiesHourList(type_incident):
 # casualtiesHourList = [3,3,4,5,10]
-    casualtiesHourList = [0, 0, 0, 0, 0]
+    casualtiesHourList = [0, 0, 0, 0, 0,0]
 
     incident_documents_list = []
     # In firebase's object form
@@ -306,12 +305,12 @@ def getCasualtiesHourList(type_incident):
             check = datetime.strptime(dateTime, '%H:%M %d %B %Y')
             date_Now = datetime.now()
             if(check > (date_Now - timedelta(hours =24))):
-                for i in range(6):
-                    start = (datetime.strptime(reverseTuple[i], "%H:%M")-timedelta(minutes=30)).time()
+                for j in range(6):
+                    start = (datetime.strptime(reverseTuple[j], "%H:%M")-timedelta(minutes=30)).time()
                     startRange = str(start.hour)+":"+str(start.minute)
-                    endRange = reverseTuple[i]
+                    endRange = reverseTuple[j]
                     if(time_in_range(startRange,endRange,datetime.time(datetime.strptime(time, "%H:%M")))):
-                        casualtiesHourList[i]+= countCasualties(incident_documents_list,i)
+                        casualtiesHourList[j]+= countCasualties(incident_documents_list,i)
     return casualtiesHourList
 
 
