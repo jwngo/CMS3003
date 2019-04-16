@@ -240,7 +240,7 @@ def createPDF(currentDateTime, elements):
     elements.append(title)
     elements.append(table)
     elements.append(trends)
-    IncidentTypes = ["Others","Fire","Terrorist","Gas Leak"]
+    IncidentTypes = ["Car Accident","Fire","Terrorist","Gas Leak"]
     for IncidentType in IncidentTypes:
         drawing_three_hours = Image('plot1' + IncidentType + ".png")
         drawing_daily = Image('plot2' + IncidentType + ".png")
@@ -307,7 +307,7 @@ def sendEmailToPMO():
     # Initializing elements to be added into empty pdf file
     emptyList = []
 
-    IncidentTypes = ["others","Fire","Terrorist","gas leak"]
+    IncidentTypes = ["Car Accident","Fire","Terrorist","Gas Leak"]
     for IncidentType in IncidentTypes:
         plot1 = drawThreeHourGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot1' + IncidentType + '.png')
