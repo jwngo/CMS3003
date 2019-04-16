@@ -36,9 +36,9 @@ margin-right: 0px;
         </h3>
       </div>
       <!-- Manage incident button -->
-      <div class="input-group-append col-3">
-        <button data-toggle="dropdown" type="button" class="btn btn-outline-info dropdown-toggle">Manage
-          Incident</button>
+      <div class="card-options">
+        <button data-toggle="dropdown" type="button" class="btn btn-outline-info">Manage
+          Incident<i class="fe fe-chevron-down ml-2"></i></button>
         <div class="dropdown-menu dropdown-menu-right">
           <a id="changeReported" class="dropdown-item" href="javascript:void(0)">
             Reported
@@ -80,29 +80,28 @@ margin-right: 0px;
         </div>
         <div class="col-6">
           {% for type in incident.incident_type %}
-          {% if type == 'Fire' %}
-          <span class="stamp stamp-md bg-orange">
-            <p>Fire</p>
-          </span>
-          {% elif type == 'Gas Leak' %}
-          <span class="stamp stamp-md bg-dark-gray">
-            <p>Gas Leak</p>
-          </span>
-          {% elif type == 'Terrorist' %}
-          <span class="stamp stamp-md bg-red">
-            <p>Terrorist</p>
-          </span>
-          {% elif type == 'Car Accident' %}
-          <span class="stamp stamp-md bg-yellow">
-            <p>Car Accident</p>
-          </span>
-          {% endif %}
+            {% if type == 'Fire' %}
+            <span class="stamp stamp-md bg-orange">
+              <p>Fire</p>
+            </span>
+            {% elif type == 'Gas Leak' %}
+            <span class="stamp stamp-md bg-dark-gray">
+              <p>Gas Leak</p>
+            </span>
+            {% elif type == 'Terrorist' %}
+            <span class="stamp stamp-md bg-red">
+              <p>Terrorist</p>
+            </span>
+            {% elif type == 'Car Accident' %}
+            <span class="stamp stamp-md bg-yellow">
+              <p>Car Accident</p>
+            </span>
+            {% endif %}
           {% endfor %}
         </div>
         <div class="col-6 text-right">
           <!-- change url to new_report_form -->
-          <a class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i
-              class="fe fe-plus mr-2"></i>Add New Report </a>
+          <a href='#' class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i class="fe fe-plus mr-2"></i>Add New Report </a>
         </div>
         <!-- end type of incident -->
         <hr>
