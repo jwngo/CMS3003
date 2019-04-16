@@ -21,7 +21,7 @@ url_cd = 'https://www.scdf.gov.sg/home/civil-defence-shelter'
 url_cdMap = 'https://www.onemap.sg/main/v2/'
 
 #image includes information list of hospitals and polyclinics
-url = 'https://firebasestorage.googleapis.com/v0/b/cz2006project.appspot.com/o/hospitalInfo.jpeg?alt=media&token=be53232a-7e7e-450e-a1da-6f035d837750'
+url = 'http://m.qpic.cn/psb?/V14AUAsM0bkgjF/p0DG0P4HJ4pzP94GxsEZUIxaqou0plLTPIIWPs.ohvA!/b/dL8AAAAAAAAA&bo=UAQ4BAAAAAARB1g!&rf=viewer_4'
 response = requests.get(url)
 image = Image.open(BytesIO(response.content))
 buf = BytesIO()
