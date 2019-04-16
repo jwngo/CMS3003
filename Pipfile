@@ -16,6 +16,10 @@ facebook-sdk = "*"
 firebase-admin = "*"
 pillow = "*"
 apscheduler = "*"
+reportlab = "*"
+matplotlib = "*"
+pandas = "*"
+django-apscheduler = "*"
 
 [requires]
 python_version = "3.7"
