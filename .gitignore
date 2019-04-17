@@ -1,7 +1,6 @@
 
 # Created by https://www.gitignore.io/api/macos,django,python,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=macos,django,python,visualstudiocode
-
 ### Django ###
 *.log
 *.pot
@@ -221,3 +220,6 @@ Temporary Items
 .history
 
 # End of https://www.gitignore.io/api/macos,django,python,visualstudiocode
+cms/plot1*.png
+cms/plot2*.png
+cms/Status*
