@@ -23,37 +23,63 @@
   <div class="card">
     <div class="card-header">
       <h2 class="card-title">Incident Map</h2>
-      <div style="margin-left: 2em; margin-top: 0.6em">
-          <input type="checkbox" name="filter" id="CAT1" class='chk-btn' style="margin-left:0.5em">
-          <label for='CAT1' style="font-size: 1.1em;" >CAT1</label>
+      
+      <div style="margin-top: 0.6em">
+        <label for="CAT1" class="custom-control custom-checkbox custom-control-inline ml-4">
+          <input type="checkbox" class="custom-control-input" name="filter" id="CAT1" checked="">
+          <span class="custom-control-label">CAT1</span>
+        </label>
 
-          <input type="checkbox" name="filter" id="terrorist" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'terroristLabel' for='terrorist' style="font-size: 0.7em; display: inline" >TERRORIST</label>
+        <label for="terrorist" id="terroristLabel" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="terrorist" checked="">
+          <span class="custom-control-label">TERRORIST</span>
+        </label>
 
-          <input type="checkbox" name="filter" id="fire" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'fireLabel' for='fire' style="font-size: 0.7em; display: inline" >FIRE</label>
+        <label for="fire" id="fireLabel" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="fire" checked="">
+          <span class="custom-control-label">FIRE</span>
+        </label>
 
-          <input type="checkbox" name="filter" id="gasleak" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'gasleakLabel' for='gasleak' style="font-size: 0.7em; display: inline" >GAS LEAK</label>
+        <label for="gasleak" id="gasleakLabel" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="gasleak" checked="">
+          <span class="custom-control-label">GASLEAK</span>
+        </label>
+
+        <br>
+      
+        <label for="CAT2" class="custom-control custom-checkbox custom-control-inline ml-4">
+          <input type="checkbox" class="custom-control-input" name="filter" id="CAT2" checked="">
+          <span class="custom-control-label">CAT2</span>
+        </label>
+
+        <label for="others" id="othersLabel" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="others" checked="">
+          <span class="custom-control-label">OTHERS</span>
+        </label>
+
+        <label for="caraccident" id="caraccidentLabel" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="caraccident" checked="">
+          <span class="custom-control-label">CARACCIDENT</span>
+        </label>
         
-          <input type="checkbox" name="filter" id="CAT2" class='chk-btn' style="margin-left:0.5em">
-          <label for='CAT2' style="font-size: 1.1em;">CAT2</label>
+        <br>
 
-          <input type="checkbox" name="filter" id="caraccident" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'caraccidentLabel' for='caraccident' style="font-size: 0.7em; display: inline" >CAR ACCIDENT</label>
+        <label for="weather" class="custom-control custom-checkbox custom-control-inline ml-4">
+          <input type="checkbox" class="custom-control-input" name="filter" id="weather" checked="">
+          <span class="custom-control-label">WEATHER</span>
+        </label>
 
-          <input type="checkbox" name="filter" id="others" class='chk-btn' style="margin-left:0.5em; display: inline">
-          <label id = 'othersLabel' for='others' style="font-size: 0.7em; display: inline" >OTHERS</label>
-        
-          <input type="checkbox" name="filter" id="weather" class='chk-btn' style="margin-left:0.5em">
-          <label for='weather' style="font-size: 1.1em;">WEATHER</label>
+        <label for="dengue" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="dengue" checked="">
+          <span class="custom-control-label">DENGUE</span>
+        </label>
 
-          <input type="checkbox" name="filter" id="dengue" class='chk-btn' style="margin-left:0.5em">
-          <label for='dengue' style="font-size: 1.1em;">DENGUE</label>
+        <label for="haze" class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" name="filter" id="haze" checked="">
+          <span class="custom-control-label">HAZE</span>
+        </label>
+      </div>
 
-          <input type="checkbox" name="filter" id="haze" class='chk-btn' style="margin-left:0.5em">
-          <label for='haze' style="font-size: 1.1em;">HAZE</label>
-        </div>
     </div>
     <div class="card-body">
       <div class="map">
