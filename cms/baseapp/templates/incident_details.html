@@ -26,7 +26,7 @@
     Handling
   </div>
   {% elif incident.incident_status == 'Closed' %}
-<div id="incStatus" class="card-alert alert bg-lime mb-0">
+  <div id="incStatus" class="card-alert alert bg-lime mb-0">
     Closed
   </div>
   {% endif %}
@@ -55,19 +55,6 @@
           </a>
         </div>
       </div>
-      <!-- <div class="col-3" id="incidentStatus">
-        <a> Manage Incident </a>
-        <form>
-          <select id="incidentStatus" onchange="changeStatus(this)" class="btn btn-outline-info">
-            <option>Reported</option>
-            <option>Handling</option>
-            <option>Closed</option>
-          </select>
-        </form>
-      </div> -->
-
-
-
     </div>
     <div class="card-body">
       <div class="row">
@@ -132,12 +119,19 @@
             <div class="card-header">
               <h3 class="card-title">{{ report.report_reporter_name }}</h3>
               <div class="card-options">
-                <div class="dropdown">
-                  <button class="btn btn-outline-info btn-sm" data-toggle="modal"
-                    data-target="#manageModal">Manage</button>
-                  <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Handling</a>
-                    <a href="#" class="dropdown-item">Closed</a>
+                <div class="text-right">
+                  <button data-toggle="dropdown" type="button" class="btn btn-outline-info">Manage
+                    <i class="fe fe-chevron-down ml-2"></i></button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a id="changeReported" class="dropdown-item" href="javascript:ReportChangeToReported({{report.report_reporter_number}}); ">
+                      Reported
+                    </a>
+                    <a id="changeHandling" class="dropdown-item" href="javascript:ReportChangeToHandling({{report.report_reporter_number}});">
+                      Handling
+                    </a>
+                    <a id="changeClosed" class="dropdown-item" href="javascript:ReportChangeToClosed({{report.report_reporter_number}});">
+                      Closed
+                    </a>
                   </div>
                 </div>
               </div>
@@ -151,7 +145,7 @@
               Handling
             </div>
             {% elif report.report_status == 'Closed' %}
-            <div class="card-alert alert alert-green mb-0">
+            <div class="card-alert alert bg-lime mb-0">
               Closed
             </div>
             {% endif %}
@@ -589,28 +583,76 @@
 
   <!-- Change incident logic-->
   <script>
-function changeToReported(){
-  var incident_id;
-  incident_id = "{{incident.incident_id}}"
-  console.log(db.collection("incidents").doc(incident_id).update({
-    incident_status: 'Reported'
-  }))
-}
+    function changeToReported() {
+      var incident_id;
+      incident_id = "{{incident.incident_id}}"
+      var incidentRef = db.collection("incidents").doc(incident_id);
+      return incidentRef.update({
+        incident_status: 'Reported'
+      })
+        .then(function () {
+          location.reload(true);
+        })
+    }
 
-function changeToHandling(){
-  var incident_id;
-  incident_id = "{{incident.incident_id}}"
-  console.log(db.collection("incidents").doc(incident_id).update({
-    incident_status: 'Handling'
-  }))
-}
+    function changeToHandling() {
+      var incident_id;
+      incident_id = "{{incident.incident_id}}"
+      var incidentRef = db.collection("incidents").doc(incident_id);
+      return incidentRef.update({
+        incident_status: 'Handling'
+      })
+        .then(function () {
+          location.reload(true);
+        })
+    }
 
-function changeToClosed(){
-  var incident_id;
-  incident_id = "{{incident.incident_id}}"
-  console.log(db.collection("incidents").doc(incident_id).update({
-    incident_status: 'Closed'
-  }))
-}
+    function changeToClosed() {
+      var incident_id;
+      incident_id = "{{incident.incident_id}}"
+      var incidentRef = db.collection("incidents").doc(incident_id);
+      return incidentRef.update({
+        incident_status: 'Closed'
+      })
+        .then(function () {
+          location.reload(true);
+        })
+    }
+
+    function ReportChangeToReported(x){
+      var report_id = x.toString(); 
+      var incident_id = "{{incident.incident_id}}";
+      var reportRef = db.collection("incidents").doc(incident_id).collection("reports").doc(report_id);
+      return reportRef.update({
+        report_status: 'Reported'
+      })
+        .then(function() {
+          location.reload(true);
+        })
+    }
+
+    function ReportChangeToHandling(x){
+      var report_id = x.toString(); 
+      var incident_id = "{{incident.incident_id}}";
+      var reportRef = db.collection("incidents").doc(incident_id).collection("reports").doc(report_id);
+      return reportRef.update({
+        report_status: 'Handling'
+      })
+        .then(function() {
+          location.reload(true);
+        })
+    }
+
+    function ReportChangeToClosed(x){
+      var report_id = x.toString(); 
+      var incident_id = "{{incident.incident_id}}";
+      var reportRef = db.collection("incidents").doc(incident_id).collection("reports").doc(report_id);
+      return reportRef.update({
+        report_status: 'Closed'
+      })
+        .then(function() {
+          location.reload(true);
+        })
+    }
   </script>
   {% endblock %}
