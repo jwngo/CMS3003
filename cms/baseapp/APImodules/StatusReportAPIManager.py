@@ -20,8 +20,12 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 # Uncomment the two line below if using MAC OS
-# import matplotlib
-# matplotlib.use('TkAgg')
+import platform
+if platform.system() == "Darwin":
+    # OS X
+	import matplotlib
+	matplotlib.use('TkAgg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
