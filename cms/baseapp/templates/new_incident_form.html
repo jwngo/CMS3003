@@ -49,24 +49,24 @@
             <label class="form-label">Assistance Requested</label>
             <div class="selectgroup selectgroup-item">
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Ambulance" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Ambulance" class="selectgroup-input" onclick="toggler('ambulance')">
                 <span class="selectgroup-button">Ambulance</span>
-                <input type="number" name="report_num_ambulance_requested" class="mt-1 form-control" placeholder="# of Ambulance Required" required="" value ="0">
+                <input id="ambulance" type="number" name="report_num_ambulance_requested" class="mt-1 form-control hidden" placeholder="# of Ambulance Required" required="" value ="0">
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Fire Fighting" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Fire Fighting" class="selectgroup-input" onclick="toggler('firetruck')">
                 <span class="selectgroup-button">Fire Fighting</span>
-                <input type="number" name="report_num_firetruck_requested" class="mt-1 form-control" placeholder="# of FireTruck Required" required="" value ="0">
+                <input id="firetruck" type="number" name="report_num_firetruck_requested" class="mt-1 form-control hidden" placeholder="# of FireTruck Required" required="" value ="0">
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Police" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Police" class="selectgroup-input" onclick="toggler('police')">
                 <span class="selectgroup-button">Police</span>
-                <input type="number" name="report_num_police_requested" class="mt-1 form-control" placeholder="# of PoliceCar Required" required="" value ="0">
+                <input id="police" type="number" name="report_num_police_requested" class="mt-1 form-control hidden" placeholder="# of PoliceCar Required" required="" value ="0">
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Gas Leak Control" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Gas Leak Control" class="selectgroup-input" onclick="toggler('gasleak')">
                 <span class="selectgroup-button">Gask Leak Control</span>
-                <input type="number" name="report_num_gasleak_requested" class="mt-1 form-control" placeholder="# of Gasleak Control Required" required="" value ="0">
+                <input id="gasleak" type="number" name="report_num_gasleak_requested" class="mt-1 form-control hidden" placeholder="# of Gasleak Control Required" required="" value ="0">
               </label>
             </div>
           </div>
@@ -114,5 +114,18 @@
   </form>
 </div>
 
+<!-- Style for toggling the assitance request field -->
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
+<!-- Script for togging the assitance request field -->
+<script>
+  const toggler = (divID) => {
+    $('#'+divID).toggle();
+  }
+</script>
 
 {% endblock %}
