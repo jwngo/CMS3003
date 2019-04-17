@@ -6,10 +6,14 @@
 
 {% block content %}
 <style>
-#incStatus {
-margin-left: auto;
-margin-right: 0px;
-}
+  #incStatus {
+    margin-left: auto;
+    margin-right: 0px;
+  }
+
+  #incidentStatus {
+    text-align: right;
+  }
 </style>
 <div class="page-header col-12">
   <h1 class="page-title">Incident #{{incident.incident_id}}</h1>
@@ -18,11 +22,11 @@ margin-right: 0px;
     Reported
   </div>
   {% elif incident.incident_status == 'Handling' %}
-  <div class="card-alert alert alert-primary mb-0">
+  <div id="incStatus" class="card-alert alert alert-primary mb-0">
     Handling
   </div>
   {% elif incident.incident_status == 'Closed' %}
-  <div class="card-alert alert alert-green mb-0">
+<div id="incStatus" class="card-alert alert bg-lime mb-0">
     Closed
   </div>
   {% endif %}
@@ -30,27 +34,37 @@ margin-right: 0px;
 <div class="col-12">
   <div class="card">
     <div class="card-header col-12">
-      <div class="col-10">
+      <div class="col-8">
         <h3 class="card-title">#{{incident.incident_id}} @ {{incident.incident_address}}
           {{incident.incident_postalcode}}
         </h3>
       </div>
       <!-- Manage incident button -->
-      <div class="card-options">
+      <div class="col-4 text-right">
         <button data-toggle="dropdown" type="button" class="btn btn-outline-info">Manage
           Incident<i class="fe fe-chevron-down ml-2"></i></button>
         <div class="dropdown-menu dropdown-menu-right">
-          <a id="changeReported" class="dropdown-item" href="javascript:void(0)">
+          <a id="changeReported" class="dropdown-item" href="javascript:changeToReported(); ">
             Reported
           </a>
-          <a id="changeHandling" class="dropdown-item" href="javascript:void(0)">
+          <a id="changeHandling" class="dropdown-item" href="javascript:changeToHandling();">
             Handling
           </a>
-          <a id="changeClosed" class="dropdown-item" href="javascript:void(0)">
+          <a id="changeClosed" class="dropdown-item" href="javascript:changeToClosed();">
             Closed
           </a>
         </div>
       </div>
+      <!-- <div class="col-3" id="incidentStatus">
+        <a> Manage Incident </a>
+        <form>
+          <select id="incidentStatus" onchange="changeStatus(this)" class="btn btn-outline-info">
+            <option>Reported</option>
+            <option>Handling</option>
+            <option>Closed</option>
+          </select>
+        </form>
+      </div> -->
 
 
 
@@ -69,9 +83,9 @@ margin-right: 0px;
         </div>
         <!-- end map -->
 
-          <div class="col-12">
-            <h4>Number of casualties: </h4>{{casualties}}
-          </div>
+        <div class="col-12">
+          <h4>Number of casualties: </h4>{{casualties}}
+        </div>
 
         <hr>
         <!-- type of incident badge -->
@@ -80,28 +94,29 @@ margin-right: 0px;
         </div>
         <div class="col-6">
           {% for type in incident.incident_type %}
-            {% if type == 'Fire' %}
-            <span class="stamp stamp-md bg-orange">
-              <p>Fire</p>
-            </span>
-            {% elif type == 'Gas Leak' %}
-            <span class="stamp stamp-md bg-dark-gray">
-              <p>Gas Leak</p>
-            </span>
-            {% elif type == 'Terrorist' %}
-            <span class="stamp stamp-md bg-red">
-              <p>Terrorist</p>
-            </span>
-            {% elif type == 'Car Accident' %}
-            <span class="stamp stamp-md bg-yellow">
-              <p>Car Accident</p>
-            </span>
-            {% endif %}
+          {% if type == 'Fire' %}
+          <span class="stamp stamp-md bg-orange">
+            <p>Fire</p>
+          </span>
+          {% elif type == 'Gas Leak' %}
+          <span class="stamp stamp-md bg-dark-gray">
+            <p>Gas Leak</p>
+          </span>
+          {% elif type == 'Terrorist' %}
+          <span class="stamp stamp-md bg-red">
+            <p>Terrorist</p>
+          </span>
+          {% elif type == 'Car Accident' %}
+          <span class="stamp stamp-md bg-yellow">
+            <p>Car Accident</p>
+          </span>
+          {% endif %}
           {% endfor %}
         </div>
         <div class="col-6 text-right">
           <!-- change url to new_report_form -->
-          <a href='#' class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i class="fe fe-plus mr-2"></i>Add New Report </a>
+          <a href='#' class="btn btn-outline-primary" data-toggle="modal" data-target="#reportModal"><i
+              class="fe fe-plus mr-2"></i>Add New Report </a>
         </div>
         <!-- end type of incident -->
         <hr>
@@ -572,9 +587,30 @@ margin-right: 0px;
   </script>
   <!-- end gmaps script -->
 
-<!-- Change incident logic-->
-<script>
+  <!-- Change incident logic-->
+  <script>
+function changeToReported(){
+  var incident_id;
+  incident_id = "{{incident.incident_id}}"
+  console.log(db.collection("incidents").doc(incident_id).update({
+    incident_status: 'Reported'
+  }))
+}
 
+function changeToHandling(){
+  var incident_id;
+  incident_id = "{{incident.incident_id}}"
+  console.log(db.collection("incidents").doc(incident_id).update({
+    incident_status: 'Handling'
+  }))
+}
 
-</script>
+function changeToClosed(){
+  var incident_id;
+  incident_id = "{{incident.incident_id}}"
+  console.log(db.collection("incidents").doc(incident_id).update({
+    incident_status: 'Closed'
+  }))
+}
+  </script>
   {% endblock %}
