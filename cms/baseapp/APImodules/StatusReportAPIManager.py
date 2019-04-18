@@ -345,5 +345,5 @@ def sendEmailToPMO():
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(sendEmailToPMO, 'interval', seconds = 30)
+    scheduler.add_job(sendEmailToPMO, 'interval', seconds = 1800)
     scheduler.start()
