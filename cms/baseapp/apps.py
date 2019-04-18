@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from .APImodules import StatusReportAPIManager
+from .APImodules import StatusReportAPIManager, NotificationManager
 from django.conf import settings
 
 class BaseappConfig(AppConfig):
@@ -7,3 +7,5 @@ class BaseappConfig(AppConfig):
 
     def ready(self):   
         StatusReportAPIManager.start()
+        NotificationManager.start()
+        
