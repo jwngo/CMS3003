@@ -23,7 +23,7 @@
 </div>
 
 <script>
-  db.collection("incidents").orderBy('incident_id')
+  db.collection('incidents').orderBy('incident_id', 'desc')
     .onSnapshot(function (querySnapshot) {
       $('#table').empty()
 
