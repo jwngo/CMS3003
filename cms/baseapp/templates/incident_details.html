@@ -155,8 +155,8 @@
                 {% for assistance in report.report_assistance_requested %}
                 {% if assistance == 'Ambulance' %}
                 <span class="tag tag-red">Ambulance ({{report.report_num_ambulance}})</span>
-                {% elif assistance == 'Police' %}
-                <span class="tag tag-indigo">Police ({{report.report_num_police}}) </span>
+                {% elif assistance == 'Rescue and Evacuation' %}
+                <span class="tag tag-indigo">Rescue and Evacuation ({{report.report_num_police}}) </span>
                 {% elif assistance == 'Fire Fighting' %}
                 <span class="tag tag-orange">Fire Fighting ({{report.report_num_firetruck}})</span>
                 {% elif assistance == 'Gasleak' %}
@@ -174,10 +174,10 @@
                 <span class="tag tag-red">Ambulance ({{ key }}.{{ forloop.counter }})</span>
                 {% endfor %}
                 {% endwith %}
-                {% elif assistance == 'Police' %}
+                {% elif assistance == 'Rescue and Evacuation' %}
                 {% with ''|center:report.report_num_police as range %}
                 {% for _ in range %}
-                <span class="tag tag-indigo">Police ({{ key }}.{{ forloop.counter }})</span>
+                <span class="tag tag-indigo">Rescue and Evacuation ({{ key }}.{{ forloop.counter }})</span>
                 {% endfor %}
                 {% endwith %}
                 {% elif assistance == 'Fire Fighting' %}
@@ -272,11 +272,11 @@
                         placeholder="# of FireTruck Required" required="" value="0">
                     </label>
                     <label class="selectgroup-item">
-                      <input type="checkbox" name="report_assistance_requested" value="Police"
+                      <input type="checkbox" name="report_assistance_requested" value="Rescue and Evacuation"
                         class="selectgroup-input">
-                      <span class="selectgroup-button">Police</span>
+                      <span class="selectgroup-button">Rescue and Evacuation</span>
                       <input type="number" name="report_num_police_requested" class="mt-1 form-control"
-                        placeholder="# of PoliceCar Required" required="" value="0">
+                        placeholder="# of Rescue and Evacuation Required" required="" value="0">
                     </label>
                     <label class="selectgroup-item">
                       <input type="checkbox" name="report_assistance_requested" value="Gas Leak Control"
@@ -339,8 +339,8 @@
           {% for assistance in report.report_assistance_requested %}
           {% if assistance == 'Ambulance' %}
           <span class="tag tag-red">Ambulance</span>
-          {% elif assistance == 'Police' %}
-          <span class="tag tag-indigo">Police</span>
+          {% elif assistance == 'Rescue and Evacuation' %}
+          <span class="tag tag-indigo">Rescue and Evacuation</span>
           {% elif assistance == 'Fire Fighting' %}
           <span class="tag tag-orange">Fire Fighting</span>
           {% elif assistance == 'Gasleak' %}
