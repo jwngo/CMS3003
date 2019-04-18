@@ -173,6 +173,7 @@
               </div>
               <hr>
               <p>Unit Dispatched:</p>
+              {% if not report.report_status == 'Reported' %}
               <div class="tags">
                 {% for assistance in report.report_assistance_requested %}
                 {% if assistance == 'Ambulance' %}
@@ -202,6 +203,7 @@
                 {% endif %}
                 {% endfor %}
               </div>
+              {% endif %}
 
               <!-- deployed-assistances are those with non-null dispatch-id -->
               <!-- dispatch-id should only be added through 'Manage' button -->
