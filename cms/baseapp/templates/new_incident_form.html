@@ -21,7 +21,7 @@
                 <span class="selectgroup-button">Fire</span>
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="incident_type_of_incident" value="Haze" class="selectgroup-input">
+                <input type="checkbox" name="incident_type_of_incident" value="Gas Leak" class="selectgroup-input">
                 <span class="selectgroup-button">Gas Leak</span>
               </label>
               <label class="selectgroup-item">
@@ -29,7 +29,7 @@
                 <span class="selectgroup-button">Terrorist</span>
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="incident_type_of_incident" value="Dengue" class="selectgroup-input">
+                <input type="checkbox" name="incident_type_of_incident" value="Car Accident" class="selectgroup-input">
                 <span class="selectgroup-button">Car Accident</span>
               </label>
             </div>
@@ -39,7 +39,7 @@
         <div class="col-3">
           <div class="form-group">
             <div class="form-label">Number Of Casualties</div>
-            <input type="number" name="report_num_of_casualties" class="form-control" placeholder="# Of Casualites" required title = "Integers only" required="" value ="0" pattern ="[0-9]">
+            <input type="number" name="report_num_of_casualties" class="form-control" placeholder="# Of Casualites" required title = "Invalid input, integers only" required="" value ="0" pattern ="[0-9]">
           </div>
         </div>
         <!-- type of assistance requested -->
@@ -49,24 +49,24 @@
             <label class="form-label">Assistance Requested</label>
             <div class="selectgroup selectgroup-item">
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Ambulance" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Ambulance" class="selectgroup-input" onclick="toggler('ambulance')">
                 <span class="selectgroup-button">Ambulance</span>
-                <input type="number" name="report_num_ambulance_requested" class="mt-1 form-control" placeholder="# of Ambulance Required" required="" value ="0">
+                <input id="ambulance" type="number" name="report_num_ambulance_requested" class="mt-1 form-control hidden" placeholder="# of Ambulance Required" required title = "Invalid input, integers only" required="" value ="0">
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Fire Fighting" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Fire Fighting" class="selectgroup-input" onclick="toggler('firetruck')">
                 <span class="selectgroup-button">Fire Fighting</span>
-                <input type="number" name="report_num_firetruck_requested" class="mt-1 form-control" placeholder="# of FireTruck Required" required="" value ="0">
+                <input id="firetruck" type="number" name="report_num_firetruck_requested" class="mt-1 form-control hidden" placeholder="# of FireTruck Required" required title = "Invalid input, integers only" required="" value ="0">
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Police" class="selectgroup-input">
-                <span class="selectgroup-button">Police</span>
-                <input type="number" name="report_num_police_requested" class="mt-1 form-control" placeholder="# of PoliceCar Required" required="" value ="0">
+                <input type="checkbox" name="report_assistance_requested" value="Rescue and Evacuation" class="selectgroup-input" onclick="toggler('police')">
+                <span class="selectgroup-button">Rescue and Evacuation</span>
+                <input id="police" type="number" name="report_num_police_requested" class="mt-1 form-control hidden" placeholder="# of Rescue and Evacuation Required" required title = "Invalid input, integers only" required="" value ="0">
               </label>
               <label class="selectgroup-item">
-                <input type="checkbox" name="report_assistance_requested" value="Gasleak" class="selectgroup-input">
+                <input type="checkbox" name="report_assistance_requested" value="Gas Leak Control" class="selectgroup-input" onclick="toggler('gasleak')">
                 <span class="selectgroup-button">Gask Leak Control</span>
-                <input type="number" name="report_num_gasleak_requested" class="mt-1 form-control" placeholder="# of Ambulance Required" required="" value ="0">
+                <input id="gasleak" type="number" name="report_num_gasleak_requested" class="mt-1 form-control hidden" placeholder="# of Gasleak Control Required" required title = "Invalid input, integers only" required="" value ="0">
               </label>
             </div>
           </div>
@@ -74,35 +74,35 @@
         <!-- reporter details -->
         <div class="col-6">
           <div class="form-group">
-            <label class="form-label">Reporter Name</label>
-            <input type="text" name="report_reporter_name" class="form-control" placeholder="Name Of Reporter" required = "" required title = "Alphabets allowed only. " pattern ="[a-zA-Z][a-zA-Z ]+">
+            <label class="form-label">Reporter Name<span class="form-required">*</span></label>
+            <input type="text" name="report_reporter_name" class="form-control" placeholder="Name Of Reporter" required = "" required title = "Reporter Name required. Alphabets only." pattern ="[a-zA-Z][a-zA-Z ]+">
           </div>
         </div>
         <div class="col-3">
           <div class="form-group">
-            <label class="form-label">Phone Number</label>
-            <input type="tel" name="report_reporter_number" class="form-control" placeholder="Reporter Phone Number" required title= "Key in a valid Phone Number." maxlength="8" pattern="[0-9]{8}"
+            <label class="form-label">Phone Number<span class="form-required">*</span></label>
+            <input type="tel" name="report_reporter_number" class="form-control" placeholder="Reporter Phone Number (8-Digit)" required title= "Invalid phone number keyed in. It should be 8-digits." maxlength="8" pattern="[6|8|9]{1}[0-9]{7}"
             required>
           </div>
         </div>
         <!-- location of incident -->
         <div class="col-9">
           <div class="form-group">
-            <label class="form-label">Address</label>
-            <input type="text" name="incident_address" class="form-control" placeholder="Location Of Incident" required = "">
+            <label class="form-label">Address<span class="form-required">*</span></label>
+            <input type="text" name="incident_address" class="form-control" placeholder="Location Of Incident" required = "" required = "" required title = "Address of Incident required.">
           </div>
         </div>
         <div class="col-3">
           <div class="form-group">
-            <label class="form-label">Postal Code</label>
-            <input type="text" name="incident_postalcode" class="form-control" placeholder="6 digit postal code" pattern="[0-9]{6}" maxlength="6" required title="Key in a valid Postal Code.">
+            <label class="form-label">Postal Code<span class="form-required">*</span></label>
+            <input type="text" name="incident_postalcode" class="form-control" placeholder="Postal Code (6-Digit)" pattern="[0-9]{6}" maxlength="6" required title="Valid Postal Code required. It should be 6-digits.">
           </div>
         </div>
       </div>
       <!-- description  -->
       <div class="form-group">
-        <label class="form-label">Description Of Incident</label>
-        <textarea rows="4" name="incident_description" class="form-control" placeholder="As Descriptive As Possible" value="Mike" required =""></textarea>
+        <label class="form-label">Description Of Incident<span class="form-required">*</span></label>
+        <textarea rows="4" name="incident_description" class="form-control" placeholder="As Descriptive As Possible" value="Mike" required ="" required title = "Description of Incident required."></textarea>
       </div>
       <!-- card footer -->
       <div class="card-footer text-right">
@@ -114,5 +114,18 @@
   </form>
 </div>
 
+<!-- Style for toggling the assitance request field -->
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
+<!-- Script for togging the assitance request field -->
+<script>
+  const toggler = (divID) => {
+    $('#'+divID).toggle();
+  }
+</script>
 
 {% endblock %}

@@ -23,7 +23,7 @@
 </div>
 
 <script>
-  db.collection("incidents")
+  db.collection('incidents').orderBy('incident_id', 'desc')
     .onSnapshot(function (querySnapshot) {
       $('#table').empty()
 
@@ -48,9 +48,12 @@
 
           if (incident_status === 'Reported') {
             incident_status = '<td><span class="status-icon bg-danger"></span>' + incident_status + '</td>';
-          } else {
+          } else if (incident_status === 'Handling') {
             incident_status = '<td><span class="status-icon bg-warning"></span>' + incident_status + '</td>';
           }
+            else {
+              incident_status = '<td><span class="status-icon bg-lime"></span>' + incident_status + '</td>';
+            }
 
           var url_mask = "{% url 'incident_details' incident_id=1234 %}".replace(/1234/, incident_id.toString());
           var details_button = '<td class="text-right">'
