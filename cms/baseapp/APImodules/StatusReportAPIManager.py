@@ -19,6 +19,13 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase 
 from email import encoders
 
+# Uncomment the two line below if using MAC OS
+import platform
+if platform.system() == "Darwin":
+    # OS X
+	import matplotlib
+	matplotlib.use('TkAgg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -67,12 +74,24 @@ def getDataFromFirebase():
         u'incident_status', u'==', u'Closed').get()
 
     all_incidents_data = {}
-    all_incidents_data.update(cat1_reported_data)
-    all_incidents_data.update(cat2_reported_data)
-    all_incidents_data.update(cat1_closed_data)
-    all_incidents_data.update(cat2_closed_data)
+    for count, detail in enumerate(cat1_reported_data, 1):
+       all_incidents_data[count] = detail.to_dict()
+    count = count + 1
+    for count, detail in enumerate(cat2_reported_data, count):
+        all_incidents_data[count] = detail.to_dict()
+    count = count + 1
+    for count, detail in enumerate(cat1_closed_data, count):
+        all_incidents_data[count] = detail.to_dict()
+    count = count + 1
+    for count, detail in enumerate(cat2_closed_data, count):
+        all_incidents_data[count] = detail.to_dict()
+    
+   # all_incidents_data.update(cat1_reported_data)
+    #all_incidents_data.update(cat2_reported_data)
+    #all_incidents_data.update(cat1_closed_data)
+    #all_incidents_data.update(cat2_closed_data)
 
-    all_incidents_data_dict = { el.id: el.to_dict() for el in all_incidents_data }
+    all_incidents_data_dict = all_incidents_data
     
     # Getting all the IncidentIDs
     list_of_incident_ids = []
@@ -89,7 +108,15 @@ def getDataFromFirebase():
         current_incident_id = list_of_incident_ids[i]
         list_for_incident_details = []
         # Appending incident location into list_of_data
-        list_for_incident_details.append(all_incidents_data_dict[current_incident_id]['incident_address'])
+        incident_address = all_incidents_data_dict[current_incident_id]['incident_address']
+        printable_address = ""
+        if len(incident_address) > 35:
+            printable_address = incident_address[:35] + '...'
+        else:
+            printable_address = incident_address
+        
+
+        list_for_incident_details.append(printable_address)
         # Retrieving all the different incident types
         incident_type_list = all_incidents_data_dict[current_incident_id]['incident_type']
         string_for_incident_type = ""
@@ -108,26 +135,26 @@ def getDataFromFirebase():
         reports_id = []
         for keys in reports_dict:
             reports_id.append(keys)
-
+        reports_id_number = reports_id[0]
         #Appending number of casualties into list_of_data
-        list_for_incident_details.append(reports_dict[reports_id[i]]['report_num_of_casualties'])
+        list_for_incident_details.append(reports_dict[reports_id_number]['report_num_of_casualties'])
 
         # Retrieving all the individual help needed
-        number_of_ambulance = reports_dict[reports_id[i]]['report_num_ambulance']
-        number_of_firetruck = reports_dict[reports_id[i]]['report_num_firetruck']
-        number_of_gasleak = reports_dict[reports_id[i]]['report_num_gasleak']
-        number_of_police = reports_dict[reports_id[i]]['report_num_police']
+        number_of_ambulance = reports_dict[reports_id_number]['report_num_ambulance']
+        number_of_firetruck = reports_dict[reports_id_number]['report_num_firetruck']
+        number_of_gasleak = reports_dict[reports_id_number]['report_num_gasleak']
+        number_of_police = reports_dict[reports_id_number]['report_num_police']
 
         # Creating string to list down the specific help needed
         type_and_size = ""
         if (number_of_ambulance != 0):
-            type_and_size = type_and_size + "Ambulance : %d" %number_of_ambulance 
+            type_and_size = type_and_size + "Ambulance : %s \n" %number_of_ambulance 
         if (number_of_firetruck != 0):
-            type_and_size = type_and_size + "Firetruck : %d" %number_of_firetruck
+            type_and_size = type_and_size + "Firetruck : %s \n" %number_of_firetruck
         if (number_of_gasleak != 0):
-            type_and_size = type_and_size + "Gas Leak : %d" %number_of_gasleak
+            type_and_size = type_and_size + "Gas Leak : %s \n" %number_of_gasleak
         if (number_of_police != 0):
-            type_and_size = type_and_size + "Police : %d" %number_of_police
+            type_and_size = type_and_size + "Police : %s" %number_of_police
         # When no help is needed, return this string instead
         if (type_and_size == ''):
             type_and_size = "No Deployments Required"
@@ -237,7 +264,7 @@ def createPDF(currentDateTime, elements):
     elements.append(title)
     elements.append(table)
     elements.append(trends)
-    IncidentTypes = ["Others","Fire","Terrorist","Gas Leak"]
+    IncidentTypes = ["Car Accident","Fire","Terrorist","Gas Leak"]
     for IncidentType in IncidentTypes:
         drawing_three_hours = Image('plot1' + IncidentType + ".png")
         drawing_daily = Image('plot2' + IncidentType + ".png")
@@ -304,11 +331,11 @@ def sendEmailToPMO():
     # Initializing elements to be added into empty pdf file
     emptyList = []
 
-    IncidentTypes = ["others","Fire","Terrorist","gas leak"]
+    IncidentTypes = ["Car Accident","Fire","Terrorist","Gas Leak"]
     for IncidentType in IncidentTypes:
         plot1 = drawThreeHourGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
         mp.savefig('plot1' + IncidentType + '.png')
-        plot2 = drawDayGraph(getHandlingHourList(IncidentType),getClosedHourList(IncidentType),getCasualtiesHourList(IncidentType),IncidentType)
+        plot2 = drawDayGraph(getHandlingDayList(IncidentType),getClosedDayList(IncidentType),getCasualtiesDayList(IncidentType),IncidentType)
         mp.savefig('plot2' + IncidentType + '.png')
     
     elements = createPDF(currentDateTime, emptyList)
