@@ -337,15 +337,15 @@ def getHandlingDayList(type_incident):
             if(date_Now.date() == date.date()):
                 if(timeRange("00:00","03:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[0] += 1
-                if(timeRange("04:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("03:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[1] += 1
-                if(timeRange("08:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("07:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[2] += 1
-                if(timeRange("12:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("11:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[3] += 1
-                if(timeRange("16:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("15:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[4] += 1
-                if(timeRange("20:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("19:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     handlingDayList[5] += 1
                 
                 
@@ -376,15 +376,15 @@ def getClosedDayList(type_incident):
             if(date_Now.date() == date.date()):
                 if(timeRange("00:00","03:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[0] += 1
-                if(timeRange("04:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("03:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[1] += 1
-                if(timeRange("08:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("07:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[2] += 1
-                if(timeRange("12:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("11:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[3] += 1
-                if(timeRange("16:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("15:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[4] += 1
-                if(timeRange("20:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("19:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     closedDayList[5] += 1
 
         return closedDayList
@@ -413,15 +413,15 @@ def getCasualtiesDayList(type_incident):
             if(date_Now.date() == date.date()):
                 if(timeRange("00:00","03:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[0] += countCasualties(incident_documents_list,i)
-                if(timeRange("04:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("03:00","07:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[1] += countCasualties(incident_documents_list,i)
-                if(timeRange("08:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("07:00","11:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[2] += countCasualties(incident_documents_list,i)
-                if(timeRange("12:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("11:00","15:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[3] += countCasualties(incident_documents_list,i)
-                if(timeRange("16:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("15:00","19:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[4] += countCasualties(incident_documents_list,i)
-                if(timeRange("20:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
+                if(timeRange("19:00","23:00",datetime.time(datetime.strptime(time, "%H:%M")))):
                     casualtiesDayList[5] += countCasualties(incident_documents_list,i)
 
 
