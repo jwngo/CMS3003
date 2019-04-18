@@ -115,7 +115,14 @@
         <!-- 1st card -->
         <div class="col-md-6 col-xl-4">
           <div class="card">
+            {% if report.report_status == 'Reported' %}
             <div class="card-status bg-red"></div>
+            {% elif report.report_status == 'Handling' %}
+            <div class="card-status bg-blue"></div>
+            {% elif report.report_status == 'Closed' %}
+            <div class="card-status bg-green"></div>
+            {% endif %}
+            
             <div class="card-header">
               <h3 class="card-title">{{ report.report_reporter_name }}</h3>
               <div class="card-options">
