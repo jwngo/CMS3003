@@ -2,6 +2,7 @@ from .FacebookAPIManager import facebookShare
 from .TelegramAPIManager import telegram_post
 #from TwitterAPIManager import twitterShare
 from .FirebaseAPIManager import getIncidentFromFirebase
+from apscheduler.schedulers.background import BackgroundScheduler
 import PIL
 from PIL import Image
 import requests
@@ -37,10 +38,13 @@ hospital_info = 'List of Hospitals and polyclinlcs: see the image below\n'
 #send shelter info every 24 hours
 def send_info_24hrs():
     message = 'Crisis Management System: Useful information and safety tips.\n1.Install smoke alarms on every level of your home, inside bedrooms and outside sleeping areas.\n2.In haze, stay in doors, put on protection when going out and requently wash your hands and face after outdoor activities.\n3.During event of terrorism, stay calm, follow the advice of local emergency officials and check for news and instructions.'+ shelter_info + hospital_info
-    while true:
-        facebookShare(message, image)
-        telegram_post(message, url)
-        time.sleep(hrs_24)
+    facebookShare(message, image)
+    telegram_post(message, url)
+    
+def start():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(send_info_24hrs, 'interval', seconds = hrs_24)
+    scheduler.start()
 
 
 #call notify() when sending the incident to firebase
@@ -108,5 +112,3 @@ def get_message(incident):
 
     alert_message = message + incident_level +' incident in ' + incident_region + ', '+ incident_address +', types of incident:' + printed_types_of_incident + '.\n'
     return alert_message
-
-    
