@@ -34,7 +34,7 @@ SMS is also designed to only be sent to subscribers in the same region as the oc
 
 The full documentation and more details, which includes the System Architecure design, Use Case Diagram,
 Data Flow Diagram, ER Diagram, CRUDL, Context Diagram, Dialog Map and SRS document can be found
-![here](https://okkarmin.github.io/CMSAPI.github.io/#/Diagrams)
+[here](https://okkarmin.github.io/CMSAPI.github.io/#/Diagrams)
 
 
 
