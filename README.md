@@ -18,6 +18,7 @@ This is a project done for a course in Nanyang Technological University.
 ### Main features
 Provides all users with a dashboard of all incidents reports in **real-time**, 
 **asynchronously,** without a need to refresh the page.
+
 Provides all users with a map of all incidents in **real-time**, **asynchronously**,
 without a need to refresh the page.
 
