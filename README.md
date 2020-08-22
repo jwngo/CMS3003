@@ -12,6 +12,9 @@ or Map View, in real time. The system is designed to handle situations
 like Fire, Terrorism, Gas Leak and Car accidents. More situations 
 can be added easily due to its architecture design properties.
 
+![List View](README_src/COListOfIncidents.png)
+![Map View](README_src/COViewMap.png)
+
 This is a project done for a course in Nanyang Technological University. 
 
 
