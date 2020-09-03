@@ -83,9 +83,3 @@ pipenv shell
 cd cms
 python manage.py runserver
 ``` 
-
-After commiting, please make a **pull request** instead of 
-```bash 
-git push origin master
-``` 
-to prevent merge conflicts! 
